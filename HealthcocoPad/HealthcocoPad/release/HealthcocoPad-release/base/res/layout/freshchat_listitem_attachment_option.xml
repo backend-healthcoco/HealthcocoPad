@@ -1,0 +1,25 @@
+
+ˆ
+;
+android*http://schemas.android.com/apk/res/android+androidx.appcompat.widget.AppCompatTextView"£
+*http://schemas.android.com/apk/res/android
+paddingEnd)?android:attr/listPreferredItemPaddingEnd"(´‡„25
+3¾‡„(android:attr/listPreferredItemPaddingEnd0@"U
+*http://schemas.android.com/apk/res/androidgravitycenter_vertical"(¯„2:8"©
+*http://schemas.android.com/apk/res/androidpaddingRight+?android:attr/listPreferredItemPaddingRight"(Ø„27
+5¤‡„*android:attr/listPreferredItemPaddingRight0@"¤
+*http://schemas.android.com/apk/res/android	minHeight*?android:attr/listPreferredItemHeightSmall"(À‚„26
+4‡‡„)android:attr/listPreferredItemHeightSmall0@"
+*http://schemas.android.com/apk/res/androidtextAppearance$?android:attr/textAppearanceListItem"(´€„20
+.‡„#android:attr/textAppearanceListItem0"O
+*http://schemas.android.com/apk/res/android	ellipsizemarquee"(«„2:0"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ"¤
+*http://schemas.android.com/apk/res/android	textColor*?android:attr/textColorAlertDialogListItem"(˜„26
+4††„)android:attr/textColorAlertDialogListItem0"¦
+*http://schemas.android.com/apk/res/androidpaddingLeft*?android:attr/listPreferredItemPaddingLeft"(Ö„26
+4£‡„)android:attr/listPreferredItemPaddingLeft0@"©
+*http://schemas.android.com/apk/res/androidpaddingStart+?android:attr/listPreferredItemPaddingStart"(³‡„27
+5½‡„*android:attr/listPreferredItemPaddingStart0@"™
+*http://schemas.android.com/apk/res/androidid)@+id/attachment_alert_dialog_list_item_tv"(Ğ„23
+1Ù€¤ø'id/attachment_alert_dialog_list_item_tv0

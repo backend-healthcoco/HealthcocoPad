@@ -8,8 +8,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
-        classpath 'com.google.gms:google-services:4.3.5'
+        classpath "com.android.tools.build:gradle:8.4.2"
+        classpath 'com.google.gms:google-services:4.4.3'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -18,7 +18,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.android.application' version '7.4.0' apply false
+    id 'com.android.application' version '8.4.0' apply false
     // Make sure that you have the Google services Gradle plugin dependency
     id("com.google.gms.google-services") version "4.3.15" apply false
 

@@ -1,7 +1,6 @@
 package com.orm.query;
 
 import com.orm.app.ClientApp;
-import com.orm.dsl.BuildConfig;
 import com.orm.model.TestRecord;
 
 import org.junit.Test;
@@ -12,7 +11,7 @@ import org.robolectric.annotation.Config;
 import static junit.framework.Assert.assertEquals;
 
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(sdk = 18, constants = BuildConfig.class, application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
+@Config(sdk = 18,   application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
 public final class SelectTest {
 
     @Test

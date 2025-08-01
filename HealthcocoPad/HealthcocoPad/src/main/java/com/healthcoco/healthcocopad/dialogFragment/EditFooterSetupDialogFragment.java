@@ -230,29 +230,26 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_cross:
-                dismiss();
-                break;
-            case R.id.bt_save:
-                validateData();
-                break;
-            case R.id.tv_text_style_bold:
-                tvTextStyleBold.setSelected(!tvTextStyleBold.isSelected());
-                break;
-            case R.id.tv_text_style_ittalic:
-                tvTextStyleIttalic.setSelected(!tvTextStyleIttalic.isSelected());
-                break;
-            case R.id.iv_footer_image:
-                if (!Util.isNullOrBlank(imageString))
-                    mActivity.openEnlargedImageDialogFragment(imageString);
-                else if (!Util.isNullOrBlank(footerSetup.getFooterImageUrl()))
-                    mActivity.openEnlargedImageDialogFragment(footerSetup.getFooterImageUrl());
-                break;
-            case R.id.bt_select_footer_image:
-                mActivity.openDialogFragment(DialogType.SELECT_IMAGE, this);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_cross) {
+            dismiss();
+        } else if (id == R.id.bt_save) {
+            validateData();
+        } else if (id == R.id.tv_text_style_bold) {
+            tvTextStyleBold.setSelected(!tvTextStyleBold.isSelected());
+        } else if (id == R.id.tv_text_style_ittalic) {
+            tvTextStyleIttalic.setSelected(!tvTextStyleIttalic.isSelected());
+        } else if (id == R.id.iv_footer_image) {
+            if (!Util.isNullOrBlank(imageString)) {
+                mActivity.openEnlargedImageDialogFragment(imageString);
+            } else if (!Util.isNullOrBlank(footerSetup.getFooterImageUrl())) {
+                mActivity.openEnlargedImageDialogFragment(footerSetup.getFooterImageUrl());
+            }
+        } else if (id == R.id.bt_select_footer_image) {
+            mActivity.openDialogFragment(DialogType.SELECT_IMAGE, this);
         }
+
     }
 
     private void validateData() {

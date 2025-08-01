@@ -1,0 +1,18 @@
+
+Ô
+;
+android*http://schemas.android.com/apk/res/android*LinearLayout"`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ*Á
+¸6com.healthcoco.healthcocopad.views.TextViewFontAwesome"P
+*http://schemas.android.com/apk/res/androidlayout_margin3dp"(ö„2:h"`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ"r
+*http://schemas.android.com/apk/res/androidtextSize@dimen/bullet_size"(•„2
+é€œødimen/bullet_size0@"¥
+*http://schemas.android.com/apk/res/android	textColor+@drawable/bullet_white_translucent_selector"(˜„26
+4Ñ ø*drawable/bullet_white_translucent_selector0"c
+*http://schemas.android.com/apk/res/androidid@+id/tv_bullet"(Ğ„2
+…Œ¤øid/tv_bullet0"f
+*http://schemas.android.com/apk/res/androidtext@string/bullet"(Ï‚„2
+ÙÈøstring/bullet01*

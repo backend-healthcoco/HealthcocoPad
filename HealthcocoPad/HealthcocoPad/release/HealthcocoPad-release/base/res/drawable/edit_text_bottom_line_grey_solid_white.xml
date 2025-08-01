@@ -1,0 +1,17 @@
+
+«
+;
+android*http://schemas.android.com/apk/res/androidH
+layer-list*°
+§item*
+•shape*‹
+‚solid"y
+*http://schemas.android.com/apk/res/androidcolor@color/grey_item_border"(¥ƒ„2"
+ §‚˜øcolor/grey_item_border0>*¬
+£item"’
+*http://schemas.android.com/apk/res/androidbottom#@dimen/edit_text_bottom_line_stroke"(°ƒ„2.
+,Êœø"dimen/edit_text_bottom_line_stroke0@*…
+}shape*t
+lsolid"c
+*http://schemas.android.com/apk/res/androidcolor@color/white"(¥ƒ„2
+á†˜øcolor/white03@H

@@ -99,13 +99,12 @@ public class VerifyOtpDialogFragment extends HealthCocoDialogFragment implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_verify:
-                validateData();
-                break;
-            case R.id.bt_regenerate_otp:
-                generateOtp();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_verify) {
+            validateData();
+        } else if (id == R.id.bt_regenerate_otp) {
+            generateOtp();
         }
     }
 

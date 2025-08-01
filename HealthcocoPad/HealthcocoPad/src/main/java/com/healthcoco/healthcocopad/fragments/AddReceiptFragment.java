@@ -201,23 +201,20 @@ public class AddReceiptFragment extends HealthCocoFragment implements LocalDoInB
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-                hideKeyboard(view);
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    validateData();
-                else
-                    Util.showToast(mActivity, getResources().getString(R.string.user_offline));
-                break;
-            case R.id.bt_delete:
-                showConfirmDeleteInviceItem();
-                break;
-            case R.id.tv_received_date:
-                openReceivedDatePickerDialog();
-                break;
-            default:
-                break;
+        if (v.getId() == R.id.container_right_action) {
+            hideKeyboard(view);
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                validateData();
+            } else {
+                Util.showToast(mActivity, getResources().getString(R.string.user_offline));
+            }
+
+        } else if (v.getId() == R.id.bt_delete) {
+            showConfirmDeleteInviceItem();
+
+        } else if (v.getId() == R.id.tv_received_date) {
+            openReceivedDatePickerDialog();
         }
     }
 
@@ -410,69 +407,80 @@ public class AddReceiptFragment extends HealthCocoFragment implements LocalDoInB
 
     @Override
     public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-            case R.id.edit_pay_now:
-                if (!Util.isNullOrBlank(s)) {
-                    if (s.length() == 1 && s.equals("0"))
-                        editPayNow.setText("");
-                    if (invoice != null) {
-                        if (!Util.isNullOrBlank(editTextPayFromAdvance.getText().toString())) {
-                            double v1 = Double.parseDouble(Util.getFormattedDoubleNumber(invoice.getBalanceAmount())) - Double.parseDouble(editTextPayFromAdvance.getText().toString());
-                            if (selectedPatient.getTotalRemainingAdvanceAmount() >= invoice.getBalanceAmount())
-                                editTextPayFromAdvance.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(invoice.getBalanceAmount()))});
-                            else
-                                editTextPayFromAdvance.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(selectedPatient.getTotalRemainingAdvanceAmount()))});
-                            tvTextDueAfterAdvance.setText(String.valueOf(Util.formatDoubleNumber(v1)));
-                            editPayNow.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(v1))});
-                        } else {
-                            editTextPayFromAdvance.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(invoice.getBalanceAmount()))});
-                            editPayNow.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(invoice.getBalanceAmount()))});
-                        }
-                    }
-                } else {
-                    if (invoice != null && invoice.getBalanceAmount() > 0) {
-                        if (!Util.isNullOrBlank(editTextPayFromAdvance.getText().toString())) {
-                            double v1 = Double.parseDouble(Util.getFormattedDoubleNumber(invoice.getBalanceAmount())) - Double.parseDouble(editTextPayFromAdvance.getText().toString());
-                            tvTextDueAfterAdvance.setText(String.valueOf(Util.formatDoubleNumber(v1)));
-                        } else
-                            tvTextDueAfterAdvance.setText(Util.formatDoubleNumber(invoice.getBalanceAmount()));
-                        if (selectedPatient != null && selectedPatient.getTotalRemainingAdvanceAmount() > 0) {
-                            tvAdvanceLeft.setText(" \u20B9 " + Util.formatDoubleNumber(selectedPatient.getTotalRemainingAdvanceAmount()));
-                        }
-                    }
-                }
-                break;
-            case R.id.editText_pay_from_advance:
-                if (!Util.isNullOrBlank(s)) {
-                    if (s.length() == 1 && s.equals("0"))
-                        editTextPayFromAdvance.setText("");
-                    double intDueAfterAdvance = Double.parseDouble(Util.getFormattedDoubleNumber(invoice.getBalanceAmount())) - Double.parseDouble(s);
-                    double intAdvanceLeft = Double.parseDouble(Util.getFormattedDoubleNumber(selectedPatient.getTotalRemainingAdvanceAmount())) - Double.parseDouble(s);
-                    tvTextDueAfterAdvance.setText(String.valueOf(Util.formatDoubleNumber(intDueAfterAdvance)));
-                    tvAdvanceLeft.setText(" \u20B9 " + Util.formatDoubleNumber(intAdvanceLeft));
-                    if (!Util.isNullOrBlank(editPayNow.getText().toString())) {
+        if (v.getId() == R.id.edit_pay_now) {
+            if (!Util.isNullOrBlank(s)) {
+                if (s.length() == 1 && s.equals("0"))
+                    editPayNow.setText("");
+
+                if (invoice != null) {
+                    if (!Util.isNullOrBlank(editTextPayFromAdvance.getText().toString())) {
+                        double v1 = Double.parseDouble(Util.getFormattedDoubleNumber(invoice.getBalanceAmount()))
+                                - Double.parseDouble(editTextPayFromAdvance.getText().toString());
+
                         if (selectedPatient.getTotalRemainingAdvanceAmount() >= invoice.getBalanceAmount())
                             editTextPayFromAdvance.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(invoice.getBalanceAmount()))});
                         else
                             editTextPayFromAdvance.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(selectedPatient.getTotalRemainingAdvanceAmount()))});
-                        double v2 = Double.parseDouble(Util.getFormattedDoubleNumber(invoice.getBalanceAmount())) - Double.parseDouble(s);
-                        editPayNow.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(v2))});
-                    } else {
-                        if (selectedPatient.getTotalRemainingAdvanceAmount() >= invoice.getBalanceAmount())
-                            editTextPayFromAdvance.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(invoice.getBalanceAmount()))});
-                        else
-                            editTextPayFromAdvance.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(selectedPatient.getTotalRemainingAdvanceAmount()))});
-                        editPayNow.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(intDueAfterAdvance))});
-                    }
-                } else {
-                    if (!Util.isNullOrBlank(editPayNow.getText().toString())) {
-                        double v1 = Double.parseDouble(Util.getFormattedDoubleNumber(invoice.getBalanceAmount())) - Double.parseDouble(editPayNow.getText().toString());
+
                         tvTextDueAfterAdvance.setText(String.valueOf(Util.formatDoubleNumber(v1)));
-                    } else
-                        tvTextDueAfterAdvance.setText(Util.formatDoubleNumber(invoice.getBalanceAmount()));
-                    tvAdvanceLeft.setText(" \u20B9 " + Util.formatDoubleNumber(selectedPatient.getTotalRemainingAdvanceAmount()));
+                        editPayNow.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(v1))});
+                    } else {
+                        editTextPayFromAdvance.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(invoice.getBalanceAmount()))});
+                        editPayNow.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(invoice.getBalanceAmount()))});
+                    }
                 }
-                break;
+
+            } else {
+                if (invoice != null && invoice.getBalanceAmount() > 0) {
+                    if (!Util.isNullOrBlank(editTextPayFromAdvance.getText().toString())) {
+                        double v1 = Double.parseDouble(Util.getFormattedDoubleNumber(invoice.getBalanceAmount()))
+                                - Double.parseDouble(editTextPayFromAdvance.getText().toString());
+                        tvTextDueAfterAdvance.setText(String.valueOf(Util.formatDoubleNumber(v1)));
+                    } else {
+                        tvTextDueAfterAdvance.setText(Util.formatDoubleNumber(invoice.getBalanceAmount()));
+                    }
+                    if (selectedPatient != null && selectedPatient.getTotalRemainingAdvanceAmount() > 0) {
+                        tvAdvanceLeft.setText(" \u20B9 " + Util.formatDoubleNumber(selectedPatient.getTotalRemainingAdvanceAmount()));
+                    }
+                }
+            }
+
+        } else if (v.getId() == R.id.editText_pay_from_advance) {
+            if (!Util.isNullOrBlank(s)) {
+                if (s.length() == 1 && s.equals("0"))
+                    editTextPayFromAdvance.setText("");
+
+                double intDueAfterAdvance = Double.parseDouble(Util.getFormattedDoubleNumber(invoice.getBalanceAmount())) - Double.parseDouble(s);
+                double intAdvanceLeft = Double.parseDouble(Util.getFormattedDoubleNumber(selectedPatient.getTotalRemainingAdvanceAmount())) - Double.parseDouble(s);
+                tvTextDueAfterAdvance.setText(String.valueOf(Util.formatDoubleNumber(intDueAfterAdvance)));
+                tvAdvanceLeft.setText(" \u20B9 " + Util.formatDoubleNumber(intAdvanceLeft));
+
+                if (!Util.isNullOrBlank(editPayNow.getText().toString())) {
+                    if (selectedPatient.getTotalRemainingAdvanceAmount() >= invoice.getBalanceAmount())
+                        editTextPayFromAdvance.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(invoice.getBalanceAmount()))});
+                    else
+                        editTextPayFromAdvance.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(selectedPatient.getTotalRemainingAdvanceAmount()))});
+
+                    double v2 = Double.parseDouble(Util.getFormattedDoubleNumber(invoice.getBalanceAmount())) - Double.parseDouble(s);
+                    editPayNow.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(v2))});
+                } else {
+                    if (selectedPatient.getTotalRemainingAdvanceAmount() >= invoice.getBalanceAmount())
+                        editTextPayFromAdvance.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(invoice.getBalanceAmount()))});
+                    else
+                        editTextPayFromAdvance.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(selectedPatient.getTotalRemainingAdvanceAmount()))});
+
+                    editPayNow.setFilters(new InputFilter[]{new InputFilterMinMax("0", Util.getFormattedDoubleNumber(intDueAfterAdvance))});
+                }
+
+            } else {
+                if (!Util.isNullOrBlank(editPayNow.getText().toString())) {
+                    double v1 = Double.parseDouble(Util.getFormattedDoubleNumber(invoice.getBalanceAmount())) - Double.parseDouble(editPayNow.getText().toString());
+                    tvTextDueAfterAdvance.setText(String.valueOf(Util.formatDoubleNumber(v1)));
+                } else {
+                    tvTextDueAfterAdvance.setText(Util.formatDoubleNumber(invoice.getBalanceAmount()));
+                }
+                tvAdvanceLeft.setText(" \u20B9 " + Util.formatDoubleNumber(selectedPatient.getTotalRemainingAdvanceAmount()));
+            }
         }
     }
 

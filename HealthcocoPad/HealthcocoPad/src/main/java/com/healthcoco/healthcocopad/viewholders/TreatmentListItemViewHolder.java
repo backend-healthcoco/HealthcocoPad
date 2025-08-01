@@ -243,53 +243,58 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_email:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    if (detailCombinedItemListener != null)
-                        detailCombinedItemListener.sendEmail("");
-                    else
-                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_TREATMENT, AddUpdateNameDialogType.EMAIL,
-                                treatments.getUniqueId(), treatments.getDoctorId(), treatments.getLocationId(), treatments.getHospitalId());
-                else onNetworkUnavailable(null);
-                break;
+        int id = v.getId();
 
-            case R.id.bt_discard:
-                if (commonEmrClickListener != null) {
-                    LogUtils.LOGD(TAG, "Discard");
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        int msgId = R.string.confirm_discard_clinical_notes_message;
-                        int titleId = R.string.confirm_discard_treatment_title;
-                        showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
-                    } else onNetworkUnavailable(null);
-                }
-                break;
-            case R.id.bt_generate_invoice:
+        if (id == R.id.bt_email) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                if (detailCombinedItemListener != null)
+                    detailCombinedItemListener.sendEmail("");
+                else
+                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_TREATMENT, AddUpdateNameDialogType.EMAIL,
+                            treatments.getUniqueId(), treatments.getDoctorId(), treatments.getLocationId(), treatments.getHospitalId());
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_discard) {
+            if (commonEmrClickListener != null) {
+                LogUtils.LOGD(TAG, "Discard");
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
-                    listItemClickListeners.onInvoiceClicked(treatments);
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_edit:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    listItemClickListeners.onAddTreatmentClicked(treatments);
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_print:
-                LogUtils.LOGD(TAG, "Print");
-                if (detailCombinedItemListener != null) {
-                    detailCombinedItemListener.doPrint("");
+                    int msgId = R.string.confirm_discard_clinical_notes_message;
+                    int titleId = R.string.confirm_discard_treatment_title;
+                    showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
                 } else {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        mActivity.showLoading(false);
-                        WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_TREATMENT_PDF_URL, treatments.getUniqueId(), this, this);
-                    } else onNetworkUnavailable(null);
+                    onNetworkUnavailable(null);
                 }
-                break;
+            }
+        } else if (id == R.id.bt_generate_invoice) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                listItemClickListeners.onInvoiceClicked(treatments);
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_edit) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                listItemClickListeners.onAddTreatmentClicked(treatments);
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_print) {
+            LogUtils.LOGD(TAG, "Print");
+            if (detailCombinedItemListener != null) {
+                detailCombinedItemListener.doPrint("");
+            } else {
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    mActivity.showLoading(false);
+                    WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_TREATMENT_PDF_URL, treatments.getUniqueId(), this, this);
+                } else {
+                    onNetworkUnavailable(null);
+                }
+            }
         }
     }
 
@@ -343,10 +348,8 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (viewId) {
-                    case R.id.bt_discard:
-                        onDiscardedClicked();
-                        break;
+                if (viewId == R.id.bt_discard) {
+                    onDiscardedClicked();
                 }
             }
         });

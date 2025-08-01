@@ -154,10 +154,10 @@ public class ChangePinFragment extends HealthCocoFragment implements LocalDoInBa
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_submit:
-                validateData();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.tv_submit) {
+            validateData();
         }
     }
 

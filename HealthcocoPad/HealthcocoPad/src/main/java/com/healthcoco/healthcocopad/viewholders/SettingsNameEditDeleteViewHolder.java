@@ -64,13 +64,10 @@ public class SettingsNameEditDeleteViewHolder extends HealthCocoViewHolder imple
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_edit:
-                editDeleteListener.onEditClicked(itemType, objData);
-                break;
-            case R.id.bt_delete:
-                editDeleteListener.onDeleteClicked(itemType, objData);
-                break;
+        if (v.getId() == R.id.bt_edit) {
+            editDeleteListener.onEditClicked(itemType, objData);
+        } else if (v.getId() == R.id.bt_delete) {
+            editDeleteListener.onDeleteClicked(itemType, objData);
         }
     }
 }

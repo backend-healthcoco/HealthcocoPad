@@ -424,43 +424,77 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         Util.checkNetworkStatus(mActivity);
         if (!HealthCocoConstants.isNetworkOnline)
             onNetworkUnavailable(null);
-        switch (v.getId()) {
-            case R.id.bt_edit_clinic_image:
-                if (clinicDetailResponse != null)
-                    mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_EDIT_CLINIC_IMAGE, HealthCocoConstants.TAG_UNIQUE_ID, clinicDetailResponse.getUniqueId(), REQUEST_CODE_CLINIC_PROFILE);
-                break;
-            case R.id.bt_edit_clinic_hours:
-                if (clinicDetailResponse != null) {
-                    openDialogFragment(new AddEditClinicHoursDialogFragment(), AddEditClinicHoursDialogFragment.TAG_CLINIC_HOURS, clinicDetailResponse, REQUEST_CODE_CLINIC_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_HOURS);
+        int id = v.getId();
+
+        if (id == R.id.bt_edit_clinic_image) {
+            if (clinicDetailResponse != null) {
+                mActivity.openCommonOpenUpActivity(
+                        CommonOpenUpFragmentType.ADD_EDIT_CLINIC_IMAGE,
+                        HealthCocoConstants.TAG_UNIQUE_ID,
+                        clinicDetailResponse.getUniqueId(),
+                        REQUEST_CODE_CLINIC_PROFILE
+                );
+            }
+
+        } else if (id == R.id.bt_edit_clinic_hours) {
+            if (clinicDetailResponse != null) {
+                openDialogFragment(
+                        new AddEditClinicHoursDialogFragment(),
+                        AddEditClinicHoursDialogFragment.TAG_CLINIC_HOURS,
+                        clinicDetailResponse,
+                        REQUEST_CODE_CLINIC_PROFILE,
+                        CommonOpenUpFragmentType.ADD_EDIT_CLINIC_HOURS
+                );
+            }
+
+        } else if (id == R.id.bt_edit_address) {
+            if (clinicDetailResponse != null) {
+                openDialogFragment(
+                        new AddEditClinicAddressDialogFragment(),
+                        AddEditClinicAddressDialogFragment.TAG_CLINIC_ADDRESS,
+                        clinicDetailResponse,
+                        REQUEST_CODE_CLINIC_PROFILE,
+                        CommonOpenUpFragmentType.ADD_EDIT_CLINIC_ADDRESS
+                );
+            }
+
+        } else if (id == R.id.bt_edit_contact) {
+            if (clinicDetailResponse != null) {
+                openDialogFragment(
+                        new AddEditClinicContactDialogFragment(),
+                        AddEditClinicContactDialogFragment.TAG_CONTACT,
+                        clinicDetailResponse,
+                        REQUEST_CODE_CLINIC_PROFILE,
+                        CommonOpenUpFragmentType.ADD_EDIT_CLINIC_CONTACT
+                );
+            }
+
+        } else if (id == R.id.parent_logo) {
+            LogUtils.LOGD(TAG, "logo Clicked");
+            if (clinicDetailResponse != null) {
+                if (isEditEnabled) {
+                    if (clinicDetailResponse.getLocation() != null
+                            && !Util.isNullOrBlank(clinicDetailResponse.getLocation().getLogoThumbnailUrl())) {
+                        openDialogFragment(DialogType.SELECT_LOGO_IMAGE, this);
+                    } else {
+                        openDialogFragment(DialogType.SELECT_IMAGE, this);
+                    }
+                } else {
+                    onOptionsItemSelected(OptionsType.PREVIEW);
                 }
-                break;
-            case R.id.bt_edit_address:
-                if (clinicDetailResponse != null) {
-                    openDialogFragment(new AddEditClinicAddressDialogFragment(), AddEditClinicAddressDialogFragment.TAG_CLINIC_ADDRESS, clinicDetailResponse, REQUEST_CODE_CLINIC_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_ADDRESS);
-                }
-                break;
-            case R.id.bt_edit_contact:
-                if (clinicDetailResponse != null) {
-                    openDialogFragment(new AddEditClinicContactDialogFragment(), AddEditClinicContactDialogFragment.TAG_CONTACT, clinicDetailResponse, REQUEST_CODE_CLINIC_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_CONTACT);
-                }
-                break;
-            case R.id.parent_logo:
-                LogUtils.LOGD(TAG, "logo Clicked");
-                if (clinicDetailResponse != null) {
-                    if (isEditEnabled) {
-                        if (clinicDetailResponse.getLocation() != null
-                                && !Util.isNullOrBlank(clinicDetailResponse.getLocation().getLogoThumbnailUrl()))
-                            openDialogFragment(DialogType.SELECT_LOGO_IMAGE, this);
-                        else
-                            openDialogFragment(DialogType.SELECT_IMAGE, this);
-                    } else onOptionsItemSelected(OptionsType.PREVIEW);
-                }
-                break;
-            case R.id.bt_enlarged_map:
-                if (clinicDetailResponse != null && !Util.isNullOrBlank(clinicDetailResponse.getUniqueId()))
-                    openMapViewActivity(CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT, clinicDetailResponse.getUniqueId(), MapType.CLINIC_PROFILE, 0);
-                break;
+            }
+
+        } else if (id == R.id.bt_enlarged_map) {
+            if (clinicDetailResponse != null && !Util.isNullOrBlank(clinicDetailResponse.getUniqueId())) {
+                openMapViewActivity(
+                        CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT,
+                        clinicDetailResponse.getUniqueId(),
+                        MapType.CLINIC_PROFILE,
+                        0
+                );
+            }
         }
+
     }
 
     private void addSubItemSession() {

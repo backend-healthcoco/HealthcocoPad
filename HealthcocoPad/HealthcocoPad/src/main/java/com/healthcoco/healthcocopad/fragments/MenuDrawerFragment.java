@@ -167,24 +167,21 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.item_profile_header:
-                openFragment(FragmentType.PROFILE);
-                ((HomeActivity) mActivity).initFragment(FragmentType.PROFILE);
-                break;
-            case R.id.tv_clinic_name:
-                if (clinicProfile.size() > 1) {
-                    openClinicListDialogFragment();
-                }
-                break;
-            case R.id.iv_image:
-                if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getImageUrl())) {
-                    mActivity.openEnlargedImageDialogFragment(doctorProfile.getImageUrl());
-                }
-                break;
-            case R.id.manage_clinic_layout:
+        int id = view.getId();
+
+        if (id == R.id.item_profile_header) {
+            openFragment(FragmentType.PROFILE);
+            ((HomeActivity) mActivity).initFragment(FragmentType.PROFILE);
+        } else if (id == R.id.tv_clinic_name) {
+            if (clinicProfile.size() > 1) {
                 openClinicListDialogFragment();
-                break;
+            }
+        } else if (id == R.id.iv_image) {
+            if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getImageUrl())) {
+                mActivity.openEnlargedImageDialogFragment(doctorProfile.getImageUrl());
+            }
+        } else if (id == R.id.manage_clinic_layout) {
+            openClinicListDialogFragment();
         }
     }
 

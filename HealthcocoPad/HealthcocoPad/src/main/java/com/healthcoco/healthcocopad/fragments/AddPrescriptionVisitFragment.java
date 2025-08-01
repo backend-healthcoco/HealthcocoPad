@@ -283,10 +283,8 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_header_two_interaction:
-                confirmDrugInteractionsAlert();
-                break;
+        if (v.getId() == R.id.bt_header_two_interaction) {
+            confirmDrugInteractionsAlert();
         }
     }
 

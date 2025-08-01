@@ -106,9 +106,7 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
                 }
             }
         }
-        if (objData.getQuantity() != null)
-
-        {
+        if (objData.getQuantity() != null) {
             String formattedQtyPerDay = String.valueOf(objData.getQuantity().getValue());
             etQtyPerDay.setText(formattedQtyPerDay);
         } else etQtyPerDay.setText("1");
@@ -128,15 +126,11 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
 
         addTreatmentFieldsDetail(objData);
 
-        if (objData.getStatus() != null)
-
-        {
+        if (objData.getStatus() != null) {
             tvTreatmentStatus.setVisibility(View.VISIBLE);
             tvTreatmentStatus.setTag(objData.getStatus());
             tvTreatmentStatus.setText(objData.getStatus().getTreamentStatus());
-        } else
-
-        {
+        } else {
             tvTreatmentStatus.setTag(PatientTreatmentStatus.NOT_STARTED);
             tvTreatmentStatus.setText(PatientTreatmentStatus.NOT_STARTED.getTreamentStatus());
         }
@@ -196,18 +190,16 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_delete:
-                selectedTreatmentItemClickListener.onDeleteItemClicked(objData);
-                break;
-            case R.id.container_treatment_item:
-                selectedTreatmentItemClickListener.onTreatmentItemClicked(objData);
-                break;
-            case R.id.tv_tooth_numbers:
-                SelectToothDetailDialogFragment selectToothDetailDialogFragment = new SelectToothDetailDialogFragment(this, getTreatmentItem().getTreatmentFields());
-                selectToothDetailDialogFragment.show(mActivity.getSupportFragmentManager(),
-                        selectToothDetailDialogFragment.getClass().getSimpleName());
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_delete) {
+            selectedTreatmentItemClickListener.onDeleteItemClicked(objData);
+        } else if (id == R.id.container_treatment_item) {
+            selectedTreatmentItemClickListener.onTreatmentItemClicked(objData);
+        } else if (id == R.id.tv_tooth_numbers) {
+            SelectToothDetailDialogFragment selectToothDetailDialogFragment = new SelectToothDetailDialogFragment(this, getTreatmentItem().getTreatmentFields());
+            selectToothDetailDialogFragment.show(mActivity.getSupportFragmentManager(),
+                    selectToothDetailDialogFragment.getClass().getSimpleName());
         }
     }
 
@@ -336,48 +328,32 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
 
     @Override
     public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-//            case R.id.edit_cost:
-//                double costValue = 0;
-//                if (!Util.isNullOrBlank(s))
-//                    costValue = Double.parseDouble(s);
-//                objData.setCost(costValue);
-//                tvTotalRuppes.setText(String.valueOf(Util.formatDoubleNumber(getFinalCost())));
-//                if (objData.getQuantity() != null && objData.getQuantity().getValue() > 0)
-//                    costValue = costValue * objData.getQuantity().getValue();
-//                selectedTreatmentItemClickListener.onTotalValueTypeDetailChanged(SelectedTreatmentsListFragment.TotalValueType.TOTAL_COST, objData.getCustomUniqueId(), costValue);
-//                break;
-            case R.id.edit_cost:
-            case R.id.edit_discount:
-            case R.id.edit_qty_per_day:
-                setValidatedDoubleValue(v, s);
-                tvTotalRuppes.setText(String.valueOf(Util.formatDoubleNumber(getFinalCost())));
-                break;
-            case R.id.tv_total_ruppes:
-                LogUtils.LOGD(TAG, "TextChange total Cost " + s);
-                setValidatedDoubleValue(tvTotalRuppes, s);
-                TotalTreatmentCostDiscountValues totalTreatmentCostDiscountValues = new TotalTreatmentCostDiscountValues();
-                totalTreatmentCostDiscountValues.setTotalGrandTotal(getValidatedValue(tvTotalRuppes));
+        int id = v.getId();
 
-                //getting n setting cost as per quantity
-                double costPriceValue = getValidatedValue(etCost);
-                double quantity = getValidatedValue(etQtyPerDay);
+        if (id == R.id.edit_cost || id == R.id.edit_discount || id == R.id.edit_qty_per_day) {
+            setValidatedDoubleValue(v, s);
+            tvTotalRuppes.setText(String.valueOf(Util.formatDoubleNumber(getFinalCost())));
+        } else if (id == R.id.tv_total_ruppes) {
+            LogUtils.LOGD(TAG, "TextChange total Cost " + s);
+            setValidatedDoubleValue(tvTotalRuppes, s);
 
-                if (quantity > 0) {
-                    totalTreatmentCostDiscountValues.setTotalCost(costPriceValue * quantity);
-                } else
-                    totalTreatmentCostDiscountValues.setTotalCost(costPriceValue);
+            TotalTreatmentCostDiscountValues totalTreatmentCostDiscountValues = new TotalTreatmentCostDiscountValues();
+            totalTreatmentCostDiscountValues.setTotalGrandTotal(getValidatedValue(tvTotalRuppes));
 
-//                getDiscountUnitType(tvDiscountType);
-                selectedTreatmentItemClickListener.onTotalValueTypeDetailChanged(objData.getTreatmentServiceId(), totalTreatmentCostDiscountValues);
-//                selectedTreatmentItemClickListener.onTotalValueTypeDetailChanged(SelectedTreatmentsListFragment.TotalValueType.TOTAL_GRAND_TOTAL, objData.getCustomUniqueId(), parseDouble(s));
-                break;
-            case R.id.tv_discount_type:
-                setValidatedDoubleValue(tvDiscountType, s);
-                break;
-            case R.id.edit_text_treatment_note:
-                objData.setNote(s);
-                break;
+            double costPriceValue = getValidatedValue(etCost);
+            double quantity = getValidatedValue(etQtyPerDay);
+
+            if (quantity > 0) {
+                totalTreatmentCostDiscountValues.setTotalCost(costPriceValue * quantity);
+            } else {
+                totalTreatmentCostDiscountValues.setTotalCost(costPriceValue);
+            }
+
+            selectedTreatmentItemClickListener.onTotalValueTypeDetailChanged(objData.getTreatmentServiceId(), totalTreatmentCostDiscountValues);
+        } else if (id == R.id.tv_discount_type) {
+            setValidatedDoubleValue(tvDiscountType, s);
+        } else if (id == R.id.edit_text_treatment_note) {
+            objData.setNote(s);
         }
     }
 
@@ -385,55 +361,48 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
         double doubleValue = 0;
         if (value != null && value instanceof String && !Util.isNullOrBlank(value) && !(view.getId() == tvDiscountType.getId()))
             doubleValue = Double.parseDouble(value);
-        switch (view.getId()) {
-            case R.id.edit_cost:
-                objData.setCost(doubleValue);
-                break;
-            case R.id.tv_total_ruppes:
-                objData.setFinalCost(doubleValue);
-                break;
-            case R.id.edit_qty_per_day:
-                Quantity quantity = objData.getQuantity();
-                if (quantity == null)
-                    quantity = new Quantity();
-                quantity.setValue((int) doubleValue);
-                objData.setQuantity(quantity);
-                break;
-            case R.id.edit_discount:
-                Discount discountValue = objData.getDiscount();
-                if (discountValue == null)
-                    discountValue = new Discount();
-                discountValue.setValue(doubleValue);
-                objData.setDiscount(discountValue);
-                break;
-            case R.id.tv_discount_type:
-                Discount discountUnit = objData.getDiscount();
-                if (discountUnit == null)
-                    discountUnit = new Discount();
-                discountUnit.setUnit(UnitType.getUnitType(mActivity, value));
-                objData.setDiscount(discountUnit);
-                break;
-        }
+        int id = view.getId();
 
+        if (id == R.id.edit_cost) {
+            objData.setCost(doubleValue);
+        } else if (id == R.id.tv_total_ruppes) {
+            objData.setFinalCost(doubleValue);
+        } else if (id == R.id.edit_qty_per_day) {
+            Quantity quantity = objData.getQuantity();
+            if (quantity == null)
+                quantity = new Quantity();
+            quantity.setValue((int) doubleValue);
+            objData.setQuantity(quantity);
+        } else if (id == R.id.edit_discount) {
+            Discount discountValue = objData.getDiscount();
+            if (discountValue == null)
+                discountValue = new Discount();
+            discountValue.setValue(doubleValue);
+            objData.setDiscount(discountValue);
+        } else if (id == R.id.tv_discount_type) {
+            Discount discountUnit = objData.getDiscount();
+            if (discountUnit == null)
+                discountUnit = new Discount();
+            discountUnit.setUnit(UnitType.getUnitType(mActivity, value));
+            objData.setDiscount(discountUnit);
+        }
         return doubleValue;
     }
 
     private double getValidatedValue(View view) {
         double doubleValue = 0;
-        switch (view.getId()) {
-            case R.id.edit_cost:
-                doubleValue = objData.getCost();
-                break;
-            case R.id.tv_total_ruppes:
-                doubleValue = objData.getFinalCost();
-                break;
-            case R.id.edit_qty_per_day:
-                Quantity quantity = objData.getQuantity();
-                if (quantity != null)
-                    doubleValue = quantity.getValue();
-                break;
-        }
+        int id = view.getId();
 
+        if (id == R.id.edit_cost) {
+            doubleValue = objData.getCost();
+        } else if (id == R.id.tv_total_ruppes) {
+            doubleValue = objData.getFinalCost();
+        } else if (id == R.id.edit_qty_per_day) {
+            Quantity quantity = objData.getQuantity();
+            if (quantity != null) {
+                doubleValue = quantity.getValue();
+            }
+        }
         return doubleValue;
     }
 

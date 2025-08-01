@@ -265,34 +265,32 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         if (!Util.isNullOrEmptyList(visibleButtonIds)) {
             for (Integer viewId :
                     visibleButtonIds) {
-                switch (viewId) {
-                    case R.id.bt_open_visit:
-                        btOpen.setVisibility(View.VISIBLE);
-                        break;
-                    case R.id.bt_email_visit:
-                        btEmail.setVisibility(View.VISIBLE);
-                        break;
-                    case R.id.bt_sms_visit:
-                        btSms.setVisibility(View.VISIBLE);
-                        break;
-                    case R.id.bt_history_visit:
-                        btHistory.setVisibility(View.VISIBLE);
-                        break;
-                    case R.id.bt_save_as_template_visit:
-                        btSaveAsTemplate.setVisibility(View.GONE);
-                        break;
-                    case R.id.bt_clone_visit:
-                        btClone.setVisibility(View.VISIBLE);
-                        break;
-                    case R.id.bt_print_visit:
-                        btPrint.setVisibility(View.VISIBLE);
-                        break;
-                    case R.id.bt_edit_visit:
-                        btEdit.setVisibility(View.VISIBLE);
-                        break;
-                    case R.id.bt_discard:
-                        btEdit.setVisibility(View.VISIBLE);
-                        break;
+                if (viewId == R.id.bt_open_visit) {
+                    btOpen.setVisibility(View.VISIBLE);
+
+                } else if (viewId == R.id.bt_email_visit) {
+                    btEmail.setVisibility(View.VISIBLE);
+
+                } else if (viewId == R.id.bt_sms_visit) {
+                    btSms.setVisibility(View.VISIBLE);
+
+                } else if (viewId == R.id.bt_history_visit) {
+                    btHistory.setVisibility(View.VISIBLE);
+
+                } else if (viewId == R.id.bt_save_as_template_visit) {
+                    btSaveAsTemplate.setVisibility(View.GONE);
+
+                } else if (viewId == R.id.bt_clone_visit) {
+                    btClone.setVisibility(View.VISIBLE);
+
+                } else if (viewId == R.id.bt_print_visit) {
+                    btPrint.setVisibility(View.VISIBLE);
+
+                } else if (viewId == R.id.bt_edit_visit) {
+                    btEdit.setVisibility(View.VISIBLE);
+
+                } else if (viewId == R.id.bt_discard) {
+                    btEdit.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -312,46 +310,40 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_sms_visit:
-                listItemClickListener.sendSms(visitDetail.getUniqueId());
-                break;
-            case R.id.bt_edit_visit:
-                listItemClickListener.editVisit(visitDetail.getUniqueId());
-                break;
-            case R.id.bt_email_visit:
-                listItemClickListener.sendEmail(visitDetail.getUniqueId());
-                break;
-            case R.id.bt_print_visit:
-                listItemClickListener.doPrint(visitDetail.getUniqueId());
-                break;
-            case R.id.bt_save_as_template_visit:
-                for (Prescription prescription :
-                        visitDetail.getPrescriptions()) {
-                    listItemClickListener.saveAsTemplate(prescription);
-                }
-                break;
-            case R.id.bt_clone_visit:
-                listItemClickListener.cloneVisit(visitDetail.getUniqueId());
-                break;
-            case R.id.bt_open_visit:
-                for (Records records :
-                        visitDetail.getRecords()) {
-                    listItemClickListener.openRecord(records);
-                }
-                break;
-            case R.id.bt_discard_visit:
-                LogUtils.LOGD(TAG, "Discard");
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    int msgId = R.string.confirm_discard_clinical_notes_message;
-                    int titleId = R.string.confirm_discard_visit_title;
-                    showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_send_whatsapp:
-                sendWhatsappMsg();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_sms_visit) {
+            listItemClickListener.sendSms(visitDetail.getUniqueId());
+        } else if (id == R.id.bt_edit_visit) {
+            listItemClickListener.editVisit(visitDetail.getUniqueId());
+        } else if (id == R.id.bt_email_visit) {
+            listItemClickListener.sendEmail(visitDetail.getUniqueId());
+        } else if (id == R.id.bt_print_visit) {
+            listItemClickListener.doPrint(visitDetail.getUniqueId());
+        } else if (id == R.id.bt_save_as_template_visit) {
+            for (Prescription prescription : visitDetail.getPrescriptions()) {
+                listItemClickListener.saveAsTemplate(prescription);
+            }
+        } else if (id == R.id.bt_clone_visit) {
+            listItemClickListener.cloneVisit(visitDetail.getUniqueId());
+        } else if (id == R.id.bt_open_visit) {
+            for (Records records : visitDetail.getRecords()) {
+                listItemClickListener.openRecord(records);
+            }
+        } else if (id == R.id.bt_discard_visit) {
+            LogUtils.LOGD(TAG, "Discard");
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                int msgId = R.string.confirm_discard_clinical_notes_message;
+                int titleId = R.string.confirm_discard_visit_title;
+                showConfirmationAlert(id,
+                        mActivity.getResources().getString(titleId),
+                        mActivity.getResources().getString(msgId));
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_send_whatsapp) {
+            sendWhatsappMsg();
         }
     }
 
@@ -439,10 +431,8 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (viewId) {
-                    case R.id.bt_discard_visit:
-                        discardVisit();
-                        break;
+                if (viewId == R.id.bt_discard_visit) {
+                    discardVisit();
                 }
             }
         });

@@ -120,10 +120,10 @@ public class ExperienceDetailListViewHolder extends LinearLayout implements View
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_delete:
-                experienceDetailItemListener.onDeleteExperienceDetailClicked(this, objData);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_delete) {
+            experienceDetailItemListener.onDeleteExperienceDetailClicked(this, objData);
         }
     }
 

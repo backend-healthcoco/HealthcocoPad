@@ -161,15 +161,9 @@ public class PatientReceiptDetailFragment extends HealthCocoFragment implements 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-
-            case R.id.fl_bt_add_receipts:
-                openAddReceiptFragment();
-                break;
-            default:
-                break;
+        if (v.getId() == R.id.fl_bt_add_receipts) {
+            openAddReceiptFragment();
         }
-
     }
 
     private void notifyAdapter(ArrayList<ReceiptResponse> receiptResponseArrayList) {

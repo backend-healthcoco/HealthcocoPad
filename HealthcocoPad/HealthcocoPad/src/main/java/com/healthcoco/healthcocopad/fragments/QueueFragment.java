@@ -457,47 +457,44 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_next_date:
-                isFromCalendar = false;
-                long nextDateTimeInMillis = DateTimeUtil.getNextDate(selectedMonthDayYearInMillis);
-                selectedMonthDayYearInMillis = nextDateTimeInMillis;
-                tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedMonthDayYearInMillis));
-                break;
-            case R.id.bt_previuos_date:
-                isFromCalendar = false;
-                long previousDateTimeInMillis = DateTimeUtil.getPreviousDate(selectedMonthDayYearInMillis);
-                selectedMonthDayYearInMillis = previousDateTimeInMillis;
-                tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedMonthDayYearInMillis));
-                break;
-            case R.id.fl_bt_add_appointment:
-                bookWalkInAppointment();
-                break;
-            case R.id.bt_refresh:
-                resetListAndPagingAttributes();
-                getCalendarEventsList(true);
-                break;
-            case R.id.tv_selected_date:
-                openDatePickerDialog(tvSelectedDate);
-                break;
-            case R.id.bt_filter:
-                drawerLayout.openDrawer(GravityCompat.END);
-                break;
-            case R.id.bt_queue:
-                resetCaledarView(CalendarViewType.QUEUE);
-                break;
-            case R.id.bt_one_day:
-                resetCaledarView(CalendarViewType.ONE_DAY);
-                break;
-            case R.id.bt_three_day:
-                resetCaledarView(CalendarViewType.THREE_DAY);
-                break;
-            case R.id.fl_bt_today:
-                isFromCalendar = false;
-                selectedMonthDayYearInMillis = DateTimeUtil.getCurrentDateLong();
-                tvSelectedDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN));
-                break;
+        if (v.getId() == R.id.bt_next_date) {
+            isFromCalendar = false;
+            long nextDateTimeInMillis = DateTimeUtil.getNextDate(selectedMonthDayYearInMillis);
+            selectedMonthDayYearInMillis = nextDateTimeInMillis;
+            tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedMonthDayYearInMillis));
 
+        } else if (v.getId() == R.id.bt_previuos_date) {
+            isFromCalendar = false;
+            long previousDateTimeInMillis = DateTimeUtil.getPreviousDate(selectedMonthDayYearInMillis);
+            selectedMonthDayYearInMillis = previousDateTimeInMillis;
+            tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedMonthDayYearInMillis));
+
+        } else if (v.getId() == R.id.fl_bt_add_appointment) {
+            bookWalkInAppointment();
+
+        } else if (v.getId() == R.id.bt_refresh) {
+            resetListAndPagingAttributes();
+            getCalendarEventsList(true);
+
+        } else if (v.getId() == R.id.tv_selected_date) {
+            openDatePickerDialog(tvSelectedDate);
+
+        } else if (v.getId() == R.id.bt_filter) {
+            drawerLayout.openDrawer(GravityCompat.END);
+
+        } else if (v.getId() == R.id.bt_queue) {
+            resetCaledarView(CalendarViewType.QUEUE);
+
+        } else if (v.getId() == R.id.bt_one_day) {
+            resetCaledarView(CalendarViewType.ONE_DAY);
+
+        } else if (v.getId() == R.id.bt_three_day) {
+            resetCaledarView(CalendarViewType.THREE_DAY);
+
+        } else if (v.getId() == R.id.fl_bt_today) {
+            isFromCalendar = false;
+            selectedMonthDayYearInMillis = DateTimeUtil.getCurrentDateLong();
+            tvSelectedDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN));
         }
     }
 
@@ -508,27 +505,27 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
 
     @Override
     public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-            case R.id.tv_selected_date:
-                LogUtils.LOGD(TAG, "TextVieew Selected Date ");
+        if (v.getId() == R.id.tv_selected_date) {
+            LogUtils.LOGD(TAG, "TextView Selected Date ");
 
-                if (!DateTimeUtil.isCurrentDateSelected(DATE_FORMAT_USED_IN_THIS_SCREEN,
-                        Util.getValidatedValueOrNull(tvSelectedDate))) {
-                    if (!isInitialLoading) {
-                        if (DateTimeUtil.isCurrentMonthSelected(curentMonthDayYearInMillis, selectedMonthDayYearInMillis)) {
-                            refreshQueueData();
-                        } else {
-                            curentMonthDayYearInMillis = selectedMonthDayYearInMillis;
-                            resetListAndPagingAttributes();
-                            getCalendarEventsList(true);
-                        }
-                        changeFloatingButtonStatus(selectedMonthDayYearInMillis);
+            if (!DateTimeUtil.isCurrentDateSelected(DATE_FORMAT_USED_IN_THIS_SCREEN,
+                    Util.getValidatedValueOrNull(tvSelectedDate))) {
+                if (!isInitialLoading) {
+                    if (DateTimeUtil.isCurrentMonthSelected(curentMonthDayYearInMillis, selectedMonthDayYearInMillis)) {
+                        refreshQueueData();
+                    } else {
+                        curentMonthDayYearInMillis = selectedMonthDayYearInMillis;
+                        resetListAndPagingAttributes();
+                        getCalendarEventsList(true);
                     }
-                } else {
-                    tvSelectedDate.setText(R.string.today);
-                    btToday.setVisibility(View.GONE);
+                    changeFloatingButtonStatus(selectedMonthDayYearInMillis);
                 }
-                break;
+            } else {
+                tvSelectedDate.setText(R.string.today);
+                btToday.setVisibility(View.GONE);
+            }
+        } else {
+            // You can put code here to handle other cases if needed.
         }
         calendarFragment.gotoDate(selectedMonthDayYearInMillis, isFromCalendar);
     }

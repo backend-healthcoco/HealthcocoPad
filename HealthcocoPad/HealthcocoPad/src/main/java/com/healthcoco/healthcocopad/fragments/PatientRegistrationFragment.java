@@ -468,40 +468,40 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-                if (isPnumChange)
-                    checkForPnumExist();
-                else {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline)
-                        validateData();
-                    else
-                        onNetworkUnavailable(null);
+        int id = v.getId();
+
+        if (id == R.id.container_right_action) {
+            if (isPnumChange) {
+                checkForPnumExist();
+            } else {
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    validateData();
+                } else {
+                    onNetworkUnavailable(null);
                 }
-                break;
-            case R.id.tv_birthday:
-                openBirthDatePickerDialog();
-                break;
-            case R.id.bt_delete_blood_group:
-                autotvBloodGroup.setText("");
-                btDeleteBloodGroup.setVisibility(View.GONE);
-                break;
-            case R.id.tv_referred_by:
-                if (!Util.isNullOrEmptyList(referenceList))
-                    commonListDialog = openCommonListDialogFragment(this, CommonListDialogType.REFERRED_BY, referenceList);
-                else
-                    Util.showToast(mActivity, R.string.no_referred_by_found);
-                break;
-            case R.id.bt_contact_profile:
-                openDialogFragment(DialogType.SELECT_IMAGE, this);
-                break;
-            case R.id.bt_delete_referred_by:
-                tvReferredBy.setText("");
-                break;
-            case R.id.bt_add_note:
-                mActivity.openAddUpdateNameDialogFragment(WebServiceType.LOCAL_STRING_SAVE, AddUpdateNameDialogType.LOCAL_STRING_SAVE, this, null, "", REQUEST_CODE_REGISTER_PATIENT);
-                break;
+            }
+        } else if (id == R.id.tv_birthday) {
+            openBirthDatePickerDialog();
+        } else if (id == R.id.bt_delete_blood_group) {
+            autotvBloodGroup.setText("");
+            btDeleteBloodGroup.setVisibility(View.GONE);
+        } else if (id == R.id.tv_referred_by) {
+            if (!Util.isNullOrEmptyList(referenceList)) {
+                commonListDialog = openCommonListDialogFragment(this, CommonListDialogType.REFERRED_BY, referenceList);
+            } else {
+                Util.showToast(mActivity, R.string.no_referred_by_found);
+            }
+        } else if (id == R.id.bt_contact_profile) {
+            openDialogFragment(DialogType.SELECT_IMAGE, this);
+        } else if (id == R.id.bt_delete_referred_by) {
+            tvReferredBy.setText("");
+        } else if (id == R.id.bt_add_note) {
+            mActivity.openAddUpdateNameDialogFragment(
+                    WebServiceType.LOCAL_STRING_SAVE,
+                    AddUpdateNameDialogType.LOCAL_STRING_SAVE,
+                    this, null, "", REQUEST_CODE_REGISTER_PATIENT
+            );
         }
     }
 
@@ -1089,23 +1089,23 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 
     @Override
     public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-            case R.id.edit_mobile_number:
-                LogUtils.LOGD(TAG, "Edit Mobile Number");
-//                editName.setText("");
-//                HealthCocoConstants.SELECTED_PATIENTS_USER_ID = null;
-                if (Util.isValidMobileNo(s)) {
-                    getExistingPatientsList(s);
-                }
-                break;
-            case R.id.edit_pnum:
-                if (!isEditPatient && selectedPatient == null && !doctorClinicProfile.getPidHasDate())
+        int id = v.getId();
+
+        if (id == R.id.edit_mobile_number) {
+            LogUtils.LOGD(TAG, "Edit Mobile Number");
+            // editName.setText("");
+            // HealthCocoConstants.SELECTED_PATIENTS_USER_ID = null;
+            if (Util.isValidMobileNo(s)) {
+                getExistingPatientsList(s);
+            }
+        } else if (id == R.id.edit_pnum) {
+            if (!isEditPatient && selectedPatient == null && !doctorClinicProfile.getPidHasDate()) {
+                isPnumChange = true;
+            } else if (isEditPatient && selectedPatient != null) {
+                if (!s.equals(selectedPatient.getPnum())) {
                     isPnumChange = true;
-                else if (isEditPatient && selectedPatient != null)
-                    if (!s.equals(selectedPatient.getPnum())) {
-                        isPnumChange = true;
-                    }
-                break;
+                }
+            }
         }
     }
 

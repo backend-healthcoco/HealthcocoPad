@@ -131,25 +131,21 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
                 showOptionsWindow(v);
             else doctorListPopupWindowListener.onEmptyListFound();
         }
-        switch (v.getId()) {
-            case R.id.layout_select_all:
-                selectAll = (!cbSelectAll.isChecked());
-//                setSelectAllSelected(!cbSelectAll.isChecked());
-                popupViewAdapter.notifyDataSetChanged();
-                isInitialLaunch = false;
-                break;
-            case R.id.tv_clear_all:
-                selectAll = false;
-//                setSelectAllSelected(false);
-                isInitialLaunch = false;
-                popupViewAdapter.notifyDataSetChanged();
-                break;
-            case R.id.tv_apply:
-                doctorListPopupWindowListener.onDoctorSelected(new ArrayList<RegisteredDoctorProfile>(requestLinkedHashMapForValidate.values()));
-                isInitialLaunch = false;
-                dismiss();
-                break;
-
+        int id = v.getId();
+        if (id == R.id.layout_select_all) {
+            selectAll = !cbSelectAll.isChecked();
+            // setSelectAllSelected(!cbSelectAll.isChecked());
+            popupViewAdapter.notifyDataSetChanged();
+            isInitialLaunch = false;
+        } else if (id == R.id.tv_clear_all) {
+            selectAll = false;
+            // setSelectAllSelected(false);
+            isInitialLaunch = false;
+            popupViewAdapter.notifyDataSetChanged();
+        } else if (id == R.id.tv_apply) {
+            doctorListPopupWindowListener.onDoctorSelected(new ArrayList<>(requestLinkedHashMapForValidate.values()));
+            isInitialLaunch = false;
+            dismiss();
         }
     }
 

@@ -224,12 +224,8 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_save:
-//                validateData();
-                break;
-            default:
-                break;
+        if (v.getId() == R.id.bt_save) {
+            // validateData();
         }
     }
 

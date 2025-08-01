@@ -212,31 +212,31 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
         if (weekdayType != null) {
             LogUtils.LOGD(TAG, "AddSession Clicked " + weekdayType);
         } else {
-            switch (v.getId()) {
-                case R.id.bt_save:
-                    if (HealthCocoConstants.isNetworkOnline)
-                        validateData();
-                    else
-                        Util.showToast(mActivity, R.string.user_offline);
-                    break;
-                case R.id.bt_delete:
-                    showConfirmationAlert(v);
-                    break;
-                case R.id.tv_time_from:
-                    openTimePickerDialog(null, (TextView) v);
-                    break;
-                case R.id.tv_time_to:
-                    LinearLayout parent = (LinearLayout) v.getParent();
-                    if (parent != null) {
-                        TextView tvFromTime = (TextView) parent.findViewById(R.id.tv_time_from);
-                        String selectedFromTime = Util.getValidatedValueOrNull(tvFromTime);
-                        if (!Util.isNullOrBlank(selectedFromTime))
-                            openTimePickerDialog(selectedFromTime, (TextView) v);
-                        else {
-                            Util.showToast(mActivity, R.string.please_select_from_time);
-                        }
+            int id = v.getId();
+
+            if (id == R.id.bt_save) {
+                if (HealthCocoConstants.isNetworkOnline)
+                    validateData();
+                else
+                    Util.showToast(mActivity, R.string.user_offline);
+
+            } else if (id == R.id.bt_delete) {
+                showConfirmationAlert(v);
+
+            } else if (id == R.id.tv_time_from) {
+                openTimePickerDialog(null, (TextView) v);
+
+            } else if (id == R.id.tv_time_to) {
+                LinearLayout parent = (LinearLayout) v.getParent();
+                if (parent != null) {
+                    TextView tvFromTime = (TextView) parent.findViewById(R.id.tv_time_from);
+                    String selectedFromTime = Util.getValidatedValueOrNull(tvFromTime);
+                    if (!Util.isNullOrBlank(selectedFromTime)) {
+                        openTimePickerDialog(selectedFromTime, (TextView) v);
+                    } else {
+                        Util.showToast(mActivity, R.string.please_select_from_time);
                     }
-                    break;
+                }
             }
         }
     }

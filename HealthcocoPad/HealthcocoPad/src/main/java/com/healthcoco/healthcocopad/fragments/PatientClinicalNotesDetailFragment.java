@@ -417,10 +417,8 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fl_bt_add_notes:
-                openAddNewClinicalNotesScreen();
-                break;
+        if (v.getId() == R.id.fl_bt_add_notes) {
+            openAddNewClinicalNotesScreen();
         }
     }
 }

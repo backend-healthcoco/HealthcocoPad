@@ -136,25 +136,24 @@ public class GroupsListDialogFragment extends HealthCocoDialogFragment implement
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_add:
-                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", HealthCocoConstants.REQUEST_CODE_GROUPS_LIST);
-                break;
-            case R.id.bt_save:
-                if (selectedPatient != null) {
-                    mActivity.showLoading(false);
-                    AssignGroupRequest assignGroupRequest = new AssignGroupRequest();
-                    assignGroupRequest.setGroupIds(new ArrayList<>(groupListToAssign.keySet()));
-                    if (selectedPatient != null)
-                        assignGroupRequest.setPatientId(selectedPatient.getUserId());
-                    assignGroupRequest.setDoctorId(user.getUniqueId());
-                    assignGroupRequest.setLocationId(user.getForeignLocationId());
-                    assignGroupRequest.setHospitalId(user.getForeignHospitalId());
-                    WebDataServiceImpl.getInstance(mApp).assignGroup(AssignGroupRequest.class, assignGroupRequest, this, this);
-                }
-                getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_GROUPS_LIST, new Intent().putExtra(HealthCocoConstants.TAG_GROUP_IDS_LIST, new ArrayList<>(groupListToAssign.keySet())));
-                dismiss();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_add) {
+            mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", HealthCocoConstants.REQUEST_CODE_GROUPS_LIST);
+        } else if (id == R.id.bt_save) {
+            if (selectedPatient != null) {
+                mActivity.showLoading(false);
+                AssignGroupRequest assignGroupRequest = new AssignGroupRequest();
+                assignGroupRequest.setGroupIds(new ArrayList<>(groupListToAssign.keySet()));
+                assignGroupRequest.setPatientId(selectedPatient.getUserId());
+                assignGroupRequest.setDoctorId(user.getUniqueId());
+                assignGroupRequest.setLocationId(user.getForeignLocationId());
+                assignGroupRequest.setHospitalId(user.getForeignHospitalId());
+                WebDataServiceImpl.getInstance(mApp).assignGroup(AssignGroupRequest.class, assignGroupRequest, this, this);
+            }
+            getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_GROUPS_LIST,
+                    new Intent().putExtra(HealthCocoConstants.TAG_GROUP_IDS_LIST, new ArrayList<>(groupListToAssign.keySet())));
+            dismiss();
         }
     }
 

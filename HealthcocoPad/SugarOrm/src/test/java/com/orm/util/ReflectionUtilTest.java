@@ -6,7 +6,6 @@ import android.database.Cursor;
 import com.orm.SugarContext;
 import com.orm.SugarRecord;
 import com.orm.app.ClientApp;
-import com.orm.dsl.BuildConfig;
 import com.orm.model.TestRecord;
 import com.orm.model.foreignnull.OriginRecord;
 import com.orm.query.Select;
@@ -26,7 +25,7 @@ import java.util.List;
  * @author jonatan.salas
  */
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(sdk = 18, constants = BuildConfig.class, application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
+@Config(sdk = 18  , application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
 public final class ReflectionUtilTest {
 
     @Test(expected = IllegalAccessException.class)

@@ -121,33 +121,28 @@ public class CommonHealthFeedsViewHolder extends HealthCocoViewHolder implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_total_share:
-            case R.id.bt_share:
-//                mActivity.shareText(mActivity.getResources().getString(R.string.share_healthcoco_subject),
-//                        mActivity.getResources().getString(R.string.share_healthcoco_message)
-//                                + mActivity.getResources().getString(R.string.link_bit_share));
-                break;
-            case R.id.tv_total_likes:
-            case R.id.bt_like:
-//                if (patientDetails1 != null)
-//                    performLikeOperation(patientDetails1.getUserId());
-//                else {
-//                    mActivity.openLoginSignupActivity(HealthCocoConstants.REQUEST_CODE_DOCTOR_PROFILE);
-//                    Util.showToast(mActivity, R.string.please_login_first);
-//                }
-                break;
-            case R.id.iv_fav:
-//                if (patientDetails2 != null)
-//                    performFavoritesOperation(patientDetails2.getUserId());
-//                else {
-//                    mActivity.openLoginSignupActivity(HealthCocoConstants.REQUEST_CODE_DOCTOR_PROFILE);
-//                    Util.showToast(mActivity, R.string.please_login_first);
-//                }
-                break;
-            case R.id.container_blog_item:
-                openBlogDetailFragment();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.tv_total_share || id == R.id.bt_share) {
+            // mActivity.shareText(mActivity.getResources().getString(R.string.share_healthcoco_subject),
+            //        mActivity.getResources().getString(R.string.share_healthcoco_message)
+            //                + mActivity.getResources().getString(R.string.link_bit_share));
+        } else if (id == R.id.tv_total_likes || id == R.id.bt_like) {
+            // if (patientDetails1 != null)
+            //     performLikeOperation(patientDetails1.getUserId());
+            // else {
+            //     mActivity.openLoginSignupActivity(HealthCocoConstants.REQUEST_CODE_DOCTOR_PROFILE);
+            //     Util.showToast(mActivity, R.string.please_login_first);
+            // }
+        } else if (id == R.id.iv_fav) {
+            // if (patientDetails2 != null)
+            //     performFavoritesOperation(patientDetails2.getUserId());
+            // else {
+            //     mActivity.openLoginSignupActivity(HealthCocoConstants.REQUEST_CODE_DOCTOR_PROFILE);
+            //     Util.showToast(mActivity, R.string.please_login_first);
+            // }
+        } else if (id == R.id.container_blog_item) {
+            openBlogDetailFragment();
         }
     }
 

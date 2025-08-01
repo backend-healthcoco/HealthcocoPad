@@ -214,17 +214,24 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    validateData();
-                else
-                    onNetworkUnavailable(null);
-                break;
-            case R.id.bt_add_note:
-                mActivity.openAddUpdateNameDialogFragment(WebServiceType.LOCAL_STRING_SAVE, AddUpdateNameDialogType.LOCAL_STRING_SAVE, this, null, "", REQUEST_CODE_REGISTER_PATIENT);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.container_right_action) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                validateData();
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_add_note) {
+            mActivity.openAddUpdateNameDialogFragment(
+                    WebServiceType.LOCAL_STRING_SAVE,
+                    AddUpdateNameDialogType.LOCAL_STRING_SAVE,
+                    this,
+                    null,
+                    "",
+                    REQUEST_CODE_REGISTER_PATIENT
+            );
         }
     }
 

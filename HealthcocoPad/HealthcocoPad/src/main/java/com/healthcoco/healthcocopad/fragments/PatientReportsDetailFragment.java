@@ -194,28 +194,9 @@ public class PatientReportsDetailFragment extends HealthCocoFragment implements 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fl_bt_add_report:
-                openDialogFragment(new UploadReportDialogFragment(), REQUEST_CODE_UPLOAD_REPORT);
-//                openDialogFragment(DialogType.SELECT_IMAGE, this);
-
-//                try {
-//                    String action = "";
-//                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
-//                        action = Intent.ACTION_GET_CONTENT;
-//                    else
-//                        action = Intent.ACTION_OPEN_DOCUMENT;
-//                    Intent intent = new Intent(action);
-//                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-//                    intent.setType("*/*");
-//                    intent.putExtra(Intent.EXTRA_MIME_TYPES, ACCEPT_MIME_TYPES);
-//                    startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_FILE);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-                break;
-            default:
-                break;
+        if (v.getId() == R.id.fl_bt_add_report) {
+            openDialogFragment(new UploadReportDialogFragment(), REQUEST_CODE_UPLOAD_REPORT);
+            // The commented-out code is left as is if you want to keep it for reference
         }
     }
 

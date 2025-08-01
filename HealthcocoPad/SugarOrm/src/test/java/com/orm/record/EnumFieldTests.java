@@ -1,7 +1,6 @@
 package com.orm.record;
 
 import com.orm.app.ClientApp;
-import com.orm.dsl.BuildConfig;
 import com.orm.model.EnumFieldAnnotatedModel;
 import com.orm.model.EnumFieldExtendedModel;
 
@@ -20,7 +19,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(sdk = 18, constants = BuildConfig.class, application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
+@Config(sdk = 18  , application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
 public final class EnumFieldTests {
 
     @Test

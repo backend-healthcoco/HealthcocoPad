@@ -95,18 +95,21 @@ public class PatientEducationVideosListViewHolder extends HealthCocoViewHolder i
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_edit:
-                itemClickListeners.onEditClicked(patientEducationVideo);
-                break;
-            case R.id.iv_discard:
-                showConfirmationAlert(mActivity.getResources().getString(R.string.confirm_discard_clinical_notes_message),
-                        mActivity.getResources().getString(R.string.confirm_discard_video));
-                break;
-            case R.id.iv_thumbnail:
-                itemClickListeners.onVideoClicked(patientEducationVideo);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.iv_edit) {
+            itemClickListeners.onEditClicked(patientEducationVideo);
+
+        } else if (id == R.id.iv_discard) {
+            showConfirmationAlert(
+                    mActivity.getResources().getString(R.string.confirm_discard_clinical_notes_message),
+                    mActivity.getResources().getString(R.string.confirm_discard_video)
+            );
+
+        } else if (id == R.id.iv_thumbnail) {
+            itemClickListeners.onVideoClicked(patientEducationVideo);
         }
+
     }
 
     private void showConfirmationAlert(String title, String msg) {

@@ -1,0 +1,37 @@
+
+™
+;
+android*http://schemas.android.com/apk/res/android	LinearLayout"h
+*http://schemas.android.com/apk/res/android
+background@color/white"	(Ô„2
+á†˜øcolor/white0"L
+*http://schemas.android.com/apk/res/androidgravitycenter"	(¯„2:8"K
+*http://schemas.android.com/apk/res/androidpadding10dp"	(Õ„2:h"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"	(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"	(õ„2:0şÿÿÿÿÿÿÿÿ"R
+*http://schemas.android.com/apk/res/androidorientationvertical"	(Ä„2:0"S
+*http://schemas.android.com/apk/res/androidlayout_gravitycenter"	(³„2:8*ş
+õTextView"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ" 
+*http://schemas.android.com/apk/res/androidtextSize)@dimen/text_size_templates_list_drug_name"(•„24
+2ˆœø(dimen/text_size_templates_list_drug_name0@"g
+*http://schemas.android.com/apk/res/android	textColor@color/black"(˜„2
+£€˜øcolor/black0"_
+*http://schemas.android.com/apk/res/androidid@+id/tv_name"(Ğ„2
+¤ø
+id/tv_name0"7
+*http://schemas.android.com/apk/res/androidtext(Ï‚„H*×
+ÎTextView"U
+*http://schemas.android.com/apk/res/androidgravitycenter|start"(¯„2:8“€€"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ"”
+*http://schemas.android.com/apk/res/androidtextSize#@dimen/text_size_drugs_generic_name"(•„2.
+,Ù‡œø"dimen/text_size_drugs_generic_name0@"N
+*http://schemas.android.com/apk/res/androidtextAllCapstrue"(Œ‡„2:@"y
+*http://schemas.android.com/apk/res/android	textColor@color/grey_dark_text"(˜„2 
+¢‚˜øcolor/grey_dark_text0"S
+*http://schemas.android.com/apk/res/androidlayout_marginTop5dp"(ø„2:h
+"o
+*http://schemas.android.com/apk/res/androidid@+id/tv_generic_name"(Ğ„2
+×Œ¤øid/tv_generic_name0B	

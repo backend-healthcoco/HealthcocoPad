@@ -129,13 +129,10 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_add:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VACCINATION, null, null, HealthCocoConstants.REQUEST_CODE_VACCINATION_LIST);
-                break;
-            case R.id.tv_change_date:
-                openDatePickerDialog();
-                break;
+        if (v.getId() == R.id.bt_add) {
+            openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VACCINATION, null, null, HealthCocoConstants.REQUEST_CODE_VACCINATION_LIST);
+        } else if (v.getId() == R.id.tv_change_date) {
+            openDatePickerDialog();
         }
     }
 

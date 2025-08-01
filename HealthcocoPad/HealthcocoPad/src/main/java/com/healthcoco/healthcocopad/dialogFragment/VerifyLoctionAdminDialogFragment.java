@@ -123,10 +123,8 @@ public class VerifyLoctionAdminDialogFragment extends HealthCocoDialogFragment i
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_save:
-                validateData();
-                break;
+        if (v.getId() == R.id.bt_save) {
+            validateData();
         }
     }
 

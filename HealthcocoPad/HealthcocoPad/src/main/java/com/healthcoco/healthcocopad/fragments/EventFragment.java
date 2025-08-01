@@ -482,38 +482,37 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_next_date:
-                long nextDateTimeInMillis = DateTimeUtil.getNextDate(selectedMonthDayYearInMillis);
-                selectedMonthDayYearInMillis = nextDateTimeInMillis;
-                tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedMonthDayYearInMillis));
-                break;
-            case R.id.bt_previuos_date:
-                long previousDateTimeInMillis = DateTimeUtil.getPreviousDate(selectedMonthDayYearInMillis);
-                selectedMonthDayYearInMillis = previousDateTimeInMillis;
-                tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedMonthDayYearInMillis));
-                break;
-            case R.id.fl_bt_add_event:
-                bookWalkInAppointment();
-                break;
-            case R.id.bt_refresh:
-                resetListAndPagingAttributes();
-                getEventsList(true);
-                break;
-            case R.id.tv_selected_date:
-                openDatePickerDialog(tvSelectedDate);
-                break;
-            case R.id.bt_one_day:
-                resetCaledarView(CalendarViewType.ONE_DAY);
-                break;
-            case R.id.bt_three_day:
-                resetCaledarView(CalendarViewType.THREE_DAY);
-                break;
-            case R.id.fl_bt_today:
-                selectedMonthDayYearInMillis = DateTimeUtil.getCurrentDateLong();
-                tvSelectedDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN));
-                break;
+        int id = v.getId();
 
+        if (id == R.id.bt_next_date) {
+            long nextDateTimeInMillis = DateTimeUtil.getNextDate(selectedMonthDayYearInMillis);
+            selectedMonthDayYearInMillis = nextDateTimeInMillis;
+            tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedMonthDayYearInMillis));
+
+        } else if (id == R.id.bt_previuos_date) {
+            long previousDateTimeInMillis = DateTimeUtil.getPreviousDate(selectedMonthDayYearInMillis);
+            selectedMonthDayYearInMillis = previousDateTimeInMillis;
+            tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedMonthDayYearInMillis));
+
+        } else if (id == R.id.fl_bt_add_event) {
+            bookWalkInAppointment();
+
+        } else if (id == R.id.bt_refresh) {
+            resetListAndPagingAttributes();
+            getEventsList(true);
+
+        } else if (id == R.id.tv_selected_date) {
+            openDatePickerDialog(tvSelectedDate);
+
+        } else if (id == R.id.bt_one_day) {
+            resetCaledarView(CalendarViewType.ONE_DAY);
+
+        } else if (id == R.id.bt_three_day) {
+            resetCaledarView(CalendarViewType.THREE_DAY);
+
+        } else if (id == R.id.fl_bt_today) {
+            selectedMonthDayYearInMillis = DateTimeUtil.getCurrentDateLong();
+            tvSelectedDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN));
         }
     }
 
@@ -524,27 +523,27 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
 
     @Override
     public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-            case R.id.tv_selected_date:
-                LogUtils.LOGD(TAG, "TextView Selected Date ");
+        int id = v.getId();
 
-                if (!DateTimeUtil.isCurrentDateSelected(DATE_FORMAT_USED_IN_THIS_SCREEN,
-                        Util.getValidatedValueOrNull(tvSelectedDate))) {
-                    if (!isInitialLoading) {
-                        if (DateTimeUtil.isCurrentMonthSelected(curentMonthDayYearInMillis, selectedMonthDayYearInMillis)) {
-                            getListFromLocal(true);
-                        } else {
-                            curentMonthDayYearInMillis = selectedMonthDayYearInMillis;
-                            resetListAndPagingAttributes();
-                            getEventsList(true);
-                        }
-                        changeFloatingButtonStatus(selectedMonthDayYearInMillis);
+        if (id == R.id.tv_selected_date) {
+            LogUtils.LOGD(TAG, "TextView Selected Date ");
+
+            if (!DateTimeUtil.isCurrentDateSelected(DATE_FORMAT_USED_IN_THIS_SCREEN,
+                    Util.getValidatedValueOrNull(tvSelectedDate))) {
+                if (!isInitialLoading) {
+                    if (DateTimeUtil.isCurrentMonthSelected(curentMonthDayYearInMillis, selectedMonthDayYearInMillis)) {
+                        getListFromLocal(true);
+                    } else {
+                        curentMonthDayYearInMillis = selectedMonthDayYearInMillis;
+                        resetListAndPagingAttributes();
+                        getEventsList(true);
                     }
-                } else {
-                    tvSelectedDate.setText(R.string.today);
-                    btToday.setVisibility(View.GONE);
+                    changeFloatingButtonStatus(selectedMonthDayYearInMillis);
                 }
-                break;
+            } else {
+                tvSelectedDate.setText(R.string.today);
+                btToday.setVisibility(View.GONE);
+            }
         }
     }
 

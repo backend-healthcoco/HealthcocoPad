@@ -1,0 +1,23 @@
+
+§
+
+;
+android*http://schemas.android.com/apk/res/android!TextView"…
+*http://schemas.android.com/apk/res/androidlayout_marginBottom@dimen/emr_item_margin"(ú„2!
+Ğœødimen/emr_item_margin0@"M
+*http://schemas.android.com/apk/res/android
+visibilitygone"(Ü„2:0"¼
+*http://schemas.android.com/apk/res/android
+background6@drawable/background_grey_header_normal_green_selected"(Ô„2A
+?† ø5drawable/background_grey_header_normal_green_selected0"U
+*http://schemas.android.com/apk/res/androidgravitycenter|start"(¯„2:8“€€"J
+*http://schemas.android.com/apk/res/androidpadding8dp"(Õ„2:h"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ"°
+*http://schemas.android.com/apk/res/androidtextSize1@dimen/text_size_doctor_profile_item_header_child"(•„2<
+:Ñ‡œø0dimen/text_size_doctor_profile_item_header_child0@"y
+*http://schemas.android.com/apk/res/android	textColor@color/grey_dark_text"(˜„2 
+¢‚˜øcolor/grey_dark_text0"g
+*http://schemas.android.com/apk/res/androidid@+id/header_text"(Ğ„2
+Ô†¤øid/header_text0"I
+*http://schemas.android.com/apk/res/androidtextWed, May 11,2016(Ï‚„!

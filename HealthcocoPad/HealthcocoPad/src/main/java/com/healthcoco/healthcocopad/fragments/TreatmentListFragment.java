@@ -159,10 +159,8 @@ public class TreatmentListFragment extends HealthCocoFragment implements View.On
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_add_treatment:
-                openAddNewTreatmentsFragment();
-                break;
+        if (v.getId() == R.id.bt_add_treatment) {
+            openAddNewTreatmentsFragment();
         }
     }
 

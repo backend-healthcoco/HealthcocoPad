@@ -117,29 +117,26 @@ public class SelectedDiagramDetailFragment extends HealthCocoFragment implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-                byte[] signatureArray = ivSelectedImage.captureSignature();
-                try {
-                    if (signatureArray != null) {
-                        addDiagram(signatureArray);
-                        ImageUtil.DIAGRAM_SELECTED_BYTE_ARRAY = signatureArray;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+        if (v.getId() == R.id.container_right_action) {
+            byte[] signatureArray = ivSelectedImage.captureSignature();
+            try {
+                if (signatureArray != null) {
+                    addDiagram(signatureArray);
+                    ImageUtil.DIAGRAM_SELECTED_BYTE_ARRAY = signatureArray;
                 }
-                break;
-            case R.id.bt_color:
-                if (containerColorPallete.getVisibility() == View.GONE)
-                    containerColorPallete.setVisibility(View.VISIBLE);
-                else
-                    containerColorPallete.setVisibility(View.GONE);
-                break;
-            case R.id.bt_erase:
-                onColorselected(ColorType.TRANSPARENT);
-                break;
-            default:
-                break;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else if (v.getId() == R.id.bt_color) {
+            if (containerColorPallete.getVisibility() == View.GONE) {
+                containerColorPallete.setVisibility(View.VISIBLE);
+            } else {
+                containerColorPallete.setVisibility(View.GONE);
+            }
+
+        } else if (v.getId() == R.id.bt_erase) {
+            onColorselected(ColorType.TRANSPARENT);
         }
     }
 

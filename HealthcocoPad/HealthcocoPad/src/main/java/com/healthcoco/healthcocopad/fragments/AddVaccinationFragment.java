@@ -224,10 +224,8 @@ public class AddVaccinationFragment extends HealthCocoFragment implements TextWa
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-                validateData();
-                break;
+        if (v.getId() == R.id.container_right_action) {
+            validateData();
         }
     }
 

@@ -136,13 +136,12 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_proceed:
-                validateData();
-                break;
-            case R.id.bt_skip:
-                openRegistrationFragment(null);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_proceed) {
+            validateData();
+        } else if (id == R.id.bt_skip) {
+            openRegistrationFragment(null);
         }
     }
 

@@ -156,11 +156,9 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
 
     @Override
     public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-            case R.id.tv_selected_date:
-                LogUtils.LOGD(TAG, "TextVieew Selected Date ");
-                getAppointmentSlotNew(DATE_FORMAT_USED_IN_THIS_SCREEN, s);
-                break;
+        if (v.getId() == R.id.tv_selected_date) {
+            LogUtils.LOGD(TAG, "TextView Selected Date ");
+            getAppointmentSlotNew(DATE_FORMAT_USED_IN_THIS_SCREEN, s);
         }
     }
 
@@ -252,22 +250,21 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_done:
-                if (user != null) {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        validateData();
-                    } else
-                        Util.showToast(mActivity, R.string.user_offline);
+        int id = v.getId();
+
+        if (id == R.id.bt_done) {
+            if (user != null) {
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    validateData();
+                } else {
+                    Util.showToast(mActivity, R.string.user_offline);
                 }
-                break;
-            case R.id.tv_selected_date:
-                openDatePickerDialog((TextView) v);
-                break;
-            case R.id.tv_selected_time:
-                openTimePickerDialog(null, (TextView) v);
-                break;
+            }
+        } else if (id == R.id.tv_selected_date) {
+            openDatePickerDialog((TextView) v);
+        } else if (id == R.id.tv_selected_time) {
+            openTimePickerDialog(null, (TextView) v);
         }
     }
 

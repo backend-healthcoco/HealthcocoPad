@@ -134,33 +134,47 @@ public class ReceiptListItemViewHolder extends HealthCocoViewHolder implements V
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_discard:
-                LogUtils.LOGD(TAG, "Discard");
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    int msgId = R.string.confirm_discard_clinical_notes_message;
-                    int titleId = R.string.confirm_discard_receipt_title;
-                    showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_email:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_RECEIPT, AddUpdateNameDialogType.EMAIL,
-                            receiptResponse.getUniqueId(), receiptResponse.getDoctorId(), receiptResponse.getLocationId(), receiptResponse.getHospitalId());
-//                mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_RECEIPT, AddUpdateNameDialogType.EMAIL, receiptResponse.getUniqueId());
-                else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_print:
-            case R.id.tv_print:
-                LogUtils.LOGD(TAG, "Print");
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    mActivity.showLoading(false);
-                    WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_RECEIPT_PDF_URL, receiptResponse.getUniqueId(), this, this);
-                } else onNetworkUnavailable(null);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_discard) {
+            LogUtils.LOGD(TAG, "Discard");
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                int msgId = R.string.confirm_discard_clinical_notes_message;
+                int titleId = R.string.confirm_discard_receipt_title;
+                showConfirmationAlert(id, mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_email) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                mActivity.openAddUpdateNameDialogFragment(
+                        WebServiceType.SEND_EMAIL_RECEIPT,
+                        AddUpdateNameDialogType.EMAIL,
+                        receiptResponse.getUniqueId(),
+                        receiptResponse.getDoctorId(),
+                        receiptResponse.getLocationId(),
+                        receiptResponse.getHospitalId()
+                );
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_print || id == R.id.tv_print) {
+            LogUtils.LOGD(TAG, "Print");
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                mActivity.showLoading(false);
+                WebDataServiceImpl.getInstance(mApp).getPdfUrl(
+                        String.class,
+                        WebServiceType.GET_RECEIPT_PDF_URL,
+                        receiptResponse.getUniqueId(),
+                        this,
+                        this
+                );
+            } else {
+                onNetworkUnavailable(null);
+            }
         }
     }
 
@@ -176,10 +190,8 @@ public class ReceiptListItemViewHolder extends HealthCocoViewHolder implements V
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (viewId) {
-                    case R.id.bt_discard:
-                        onDiscardedClicked(receiptResponse);
-                        break;
+                if (viewId == R.id.bt_discard) {
+                    onDiscardedClicked(receiptResponse);
                 }
             }
         });

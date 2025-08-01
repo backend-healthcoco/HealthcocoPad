@@ -172,15 +172,9 @@ public class PatientInvoiceDetailFragment extends HealthCocoFragment implements 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-
-            case R.id.fl_bt_add_invoice:
-                openAddInvoiceFragment();
-                break;
-            default:
-                break;
+        if (v.getId() == R.id.fl_bt_add_invoice) {
+            openAddInvoiceFragment();
         }
-
     }
 
     private void notifyAdapter(ArrayList<Invoice> invoiceArrayList) {

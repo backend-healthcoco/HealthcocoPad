@@ -9,14 +9,13 @@ plugins {
 }
 android {
     namespace 'com.healthcoco.healthcocopad'
-    compileSdk 33
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.healthcoco.healthcocopad"
-        minSdkVersion 31
-        targetSdkVersion 33
-        compileSdk 33
-        versionCode 29
+        minSdk 31
+        targetSdk 35
+        versionCode 30
         versionName "@string/app_version_name"
         multiDexEnabled true
     }
@@ -46,8 +45,8 @@ android {
         checkReleaseBuilds false
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 

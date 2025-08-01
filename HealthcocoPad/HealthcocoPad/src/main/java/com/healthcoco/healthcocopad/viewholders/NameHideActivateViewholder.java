@@ -339,16 +339,14 @@ public class NameHideActivateViewholder extends HealthCocoViewHolder implements 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_hide:
-                hideActivateListener.onHideClicked(nameHideActivateType, objData);
-                break;
-            case R.id.bt_activate:
-                hideActivateListener.onActivateClicked(nameHideActivateType, objData);
-                break;
-            case R.id.bt_edit:
-                hideActivateListener.onEditClicked(nameHideActivateType, objData);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_hide) {
+            hideActivateListener.onHideClicked(nameHideActivateType, objData);
+        } else if (id == R.id.bt_activate) {
+            hideActivateListener.onActivateClicked(nameHideActivateType, objData);
+        } else if (id == R.id.bt_edit) {
+            hideActivateListener.onEditClicked(nameHideActivateType, objData);
         }
     }
 }

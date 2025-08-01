@@ -181,13 +181,13 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_kiosk_home:
-                kioskTabListener.onHomeButtonClick(KioskScreenType.KIOSK.ordinal());
-                break;
-            case R.id.tv_forgot_pin:
-                mActivity.openVerifyAdminFragment(this, HealthCocoConstants.REQUEST_CODE_LOCATION_ADMIN, SuggestionType.PASSWORD);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_kiosk_home) {
+            kioskTabListener.onHomeButtonClick(KioskScreenType.KIOSK.ordinal());
+
+        } else if (id == R.id.tv_forgot_pin) {
+            mActivity.openVerifyAdminFragment(this, HealthCocoConstants.REQUEST_CODE_LOCATION_ADMIN, SuggestionType.PASSWORD);
         }
     }
 

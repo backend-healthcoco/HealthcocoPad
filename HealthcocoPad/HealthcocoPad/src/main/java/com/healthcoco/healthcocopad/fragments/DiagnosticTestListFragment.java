@@ -182,13 +182,12 @@ public class DiagnosticTestListFragment extends HealthCocoFragment implements Di
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_add_lab_tests:
-                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DIAGNOSTIC_TESTS, AddUpdateNameDialogType.ADD_DIAGNOSTIC_TEST, null, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId());
-                break;
-            case R.id.bt_search:
-                commonListDialog = openCommonListSolarDialogFragment(this, CommonListDialogType.DIAGNOSTIC_TESTS);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_add_lab_tests) {
+            mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DIAGNOSTIC_TESTS, AddUpdateNameDialogType.ADD_DIAGNOSTIC_TEST, null, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId());
+        } else if (id == R.id.bt_search) {
+            commonListDialog = openCommonListSolarDialogFragment(this, CommonListDialogType.DIAGNOSTIC_TESTS);
         }
     }
 

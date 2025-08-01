@@ -541,22 +541,20 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-                validateData();
-                break;
-            case R.id.fl_bt_swap:
-                showToggleConfirmationAlert();
-                break;
-            case R.id.tv_date:
-                openDatePickerDialog();
-                break;
-            case R.id.layout_next_review:
-                if (visit != null && visit.getAppointmentRequest() != null && visit.getAppointmentId() != null && !isFromClone) {
-                    showNextReviewReschedulealert();
-                } else
-                    openDialogFragment(new NextReviewOnDialogFragment(), REQUEST_CODE_NEXT_REVIEW);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.container_right_action) {
+            validateData();
+        } else if (id == R.id.fl_bt_swap) {
+            showToggleConfirmationAlert();
+        } else if (id == R.id.tv_date) {
+            openDatePickerDialog();
+        } else if (id == R.id.layout_next_review) {
+            if (visit != null && visit.getAppointmentRequest() != null && visit.getAppointmentId() != null && !isFromClone) {
+                showNextReviewReschedulealert();
+            } else {
+                openDialogFragment(new NextReviewOnDialogFragment(), REQUEST_CODE_NEXT_REVIEW);
+            }
         }
     }
 

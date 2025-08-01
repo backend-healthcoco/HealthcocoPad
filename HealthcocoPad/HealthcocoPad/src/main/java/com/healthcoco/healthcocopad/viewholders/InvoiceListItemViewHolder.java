@@ -195,50 +195,57 @@ public class InvoiceListItemViewHolder extends HealthCocoViewHolder implements V
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_edit:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    invoiceItemClickListeners.onEditInvoiceClicked(invoice);
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_pay:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    invoiceItemClickListeners.onPayInvoiceClicked(invoice);
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_options:
-                popupWindow.showOptionsWindow(v);
-                break;
-            case R.id.bt_discard:
-                LogUtils.LOGD(TAG, "Discard");
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    int msgId = R.string.confirm_discard_clinical_notes_message;
-                    int titleId = R.string.confirm_discard_invoice_title;
-                    showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_print:
-            case R.id.tv_print:
-                LogUtils.LOGD(TAG, "Print");
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    mActivity.showLoading(false);
-                    WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_INVOICE_PDF_URL, invoice.getUniqueId(), this, this);
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.tv_email:
-            case R.id.bt_email:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_INVOICE, AddUpdateNameDialogType.EMAIL,
-                            invoice.getUniqueId(), invoice.getDoctorId(), invoice.getLocationId(), invoice.getHospitalId());
+        int id = v.getId();
 
-//                mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_INVOICE, AddUpdateNameDialogType.EMAIL, invoice.getUniqueId());
-                else onNetworkUnavailable(null);
-                break;
+        if (id == R.id.bt_edit) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                invoiceItemClickListeners.onEditInvoiceClicked(invoice);
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_pay) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                invoiceItemClickListeners.onPayInvoiceClicked(invoice);
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_options) {
+            popupWindow.showOptionsWindow(v);
+        } else if (id == R.id.bt_discard) {
+            LogUtils.LOGD(TAG, "Discard");
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                int msgId = R.string.confirm_discard_clinical_notes_message;
+                int titleId = R.string.confirm_discard_invoice_title;
+                showConfirmationAlert(id, mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_print || id == R.id.tv_print) {
+            LogUtils.LOGD(TAG, "Print");
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                mActivity.showLoading(false);
+                WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_INVOICE_PDF_URL, invoice.getUniqueId(), this, this);
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.tv_email || id == R.id.bt_email) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                mActivity.openAddUpdateNameDialogFragment(
+                        WebServiceType.SEND_EMAIL_INVOICE,
+                        AddUpdateNameDialogType.EMAIL,
+                        invoice.getUniqueId(),
+                        invoice.getDoctorId(),
+                        invoice.getLocationId(),
+                        invoice.getHospitalId()
+                );
+            } else {
+                onNetworkUnavailable(null);
+            }
         }
     }
 
@@ -254,10 +261,8 @@ public class InvoiceListItemViewHolder extends HealthCocoViewHolder implements V
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (viewId) {
-                    case R.id.bt_discard:
-                        onDiscardedClicked(invoice);
-                        break;
+                if (viewId == R.id.bt_discard) {
+                    onDiscardedClicked(invoice);
                 }
             }
         });

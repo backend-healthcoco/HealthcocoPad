@@ -996,14 +996,12 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_delete:
-                View parentView = (View) v.getParent();
-                String diagramUniqueId = (String) parentView.getTag();
-                if (parentView != null && !Util.isNullOrBlank(diagramUniqueId)) {
-                    showConfirmationAlert(null, getResources().getString(R.string.confirm_delete_diagram), parentView, diagramUniqueId);
-                }
-                break;
+        if (v.getId() == R.id.bt_delete) {
+            View parentView = (View) v.getParent();
+            String diagramUniqueId = (String) parentView.getTag();
+            if (parentView != null && !Util.isNullOrBlank(diagramUniqueId)) {
+                showConfirmationAlert(null, getResources().getString(R.string.confirm_delete_diagram), parentView, diagramUniqueId);
+            }
         }
     }
 
@@ -1095,48 +1093,47 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
 
     @Override
     public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-            case R.id.edit_height:
-                if (!Util.isNullOrBlank(s)
-                        && !Util.isNullOrBlank(editWeight.getText().toString().trim())
-                        && !Util.isNullOrBlank(s)) {
-                    try {
-                        float weight = Float.parseFloat(editWeight.getText().toString().trim());
-                        float height = Float.parseFloat(s);
-                        //BMI = weight in KG / square of (height in metre)
-                        float bmiValue = Util.calculateBMI(weight, Float.parseFloat(s) / 100);
+        int id = v.getId();
 
-                        editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
-
-                        // BSA = squareroot of (weight X height / 3600)
-                        float bsaValue = Util.calculateBSA(weight, height);
-                        editBsa.setText(Util.getFormattedFloatNumber(bsaValue));
-                    } catch (Exception e) {
-                        editHeight.setText(s.substring(0, s.length() - 1));
-                    }
-                } else {
-                    editBmi.setText("");
-                    editBsa.setText("");
-                }
-                break;
-            case R.id.edit_weight:
-                if (!Util.isNullOrBlank(s)
-                        && !Util.isNullOrBlank(editHeight.getText().toString().trim())
-                        && !Util.isNullOrBlank(s)) {
-                    float weight = Float.parseFloat(s);
-                    float height = Float.parseFloat(editHeight.getText().toString().trim());
-                    //BMI = weight in KG / square of (height in metre)
+        if (id == R.id.edit_height) {
+            if (!Util.isNullOrBlank(s)
+                    && !Util.isNullOrBlank(editWeight.getText().toString().trim())
+                    && !Util.isNullOrBlank(s)) {
+                try {
+                    float weight = Float.parseFloat(editWeight.getText().toString().trim());
+                    float height = Float.parseFloat(s);
+                    // BMI = weight in KG / square of (height in metre)
                     float bmiValue = Util.calculateBMI(weight, height / 100);
+
                     editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
 
-                    // BSA = squareroot of (weight X height / 3600)
+                    // BSA = square root of (weight X height / 3600)
                     float bsaValue = Util.calculateBSA(weight, height);
                     editBsa.setText(Util.getFormattedFloatNumber(bsaValue));
-                } else {
-                    editBmi.setText("");
-                    editBsa.setText("");
+                } catch (Exception e) {
+                    editHeight.setText(s.substring(0, s.length() - 1));
                 }
-                break;
+            } else {
+                editBmi.setText("");
+                editBsa.setText("");
+            }
+        } else if (id == R.id.edit_weight) {
+            if (!Util.isNullOrBlank(s)
+                    && !Util.isNullOrBlank(editHeight.getText().toString().trim())
+                    && !Util.isNullOrBlank(s)) {
+                float weight = Float.parseFloat(s);
+                float height = Float.parseFloat(editHeight.getText().toString().trim());
+                // BMI = weight in KG / square of (height in metre)
+                float bmiValue = Util.calculateBMI(weight, height / 100);
+                editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
+
+                // BSA = square root of (weight X height / 3600)
+                float bsaValue = Util.calculateBSA(weight, height);
+                editBsa.setText(Util.getFormattedFloatNumber(bsaValue));
+            } else {
+                editBmi.setText("");
+                editBsa.setText("");
+            }
         }
     }
 

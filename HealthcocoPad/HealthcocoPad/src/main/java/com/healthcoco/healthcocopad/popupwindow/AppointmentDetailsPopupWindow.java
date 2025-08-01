@@ -229,65 +229,48 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         if (anchorView != null && anchorView.getId() == v.getId()) {
             showOptionsWindowAtLeftCenter(v);
         }
-        switch (v.getId()) {
-            case R.id.bt_add_visit:
-                onVisitClicked();
-//                dismiss();
-                break;
+        int id = v.getId();
 
-            case R.id.bt_add_invoice:
-                onInvoiceClicked();
-//                dismiss();
-                break;
+        if (id == R.id.bt_add_visit) {
+            onVisitClicked();
+//    dismiss();
+        } else if (id == R.id.bt_add_invoice) {
+            onInvoiceClicked();
+//    dismiss();
+        } else if (id == R.id.layout_patient_details) {
+            onPatientDatailsClicked();
+//    dismiss();
+        } else if (id == R.id.bt_add_receipt) {
+            onReceiptClicked();
+//    dismiss();
+        } else if (id == R.id.bt_edit_appointment) {
+            onEditClicked();
+            dismiss();
+        } else if (id == R.id.bt_discard_appointment) {
+            onCancelClicked();
+//    dismiss();
+        } else if (id == R.id.bt_print_patient_card) {
+            if (pidHasDate != null)
+                if (!pidHasDate && (!Util.isNullOrBlank(calendarEvents.getPatient().getPnum())))
+                    calendarEvents.getPatient().setPid(Util.getValidatedValue(calendarEvents.getPatient().getPnum()));
 
-            case R.id.layout_patient_details:
-                onPatientDatailsClicked();
-//                dismiss();
-                break;
-
-            case R.id.bt_add_receipt:
-                onReceiptClicked();
-//                dismiss();
-                break;
-
-            case R.id.bt_edit_appointment:
-                onEditClicked();
-                dismiss();
-                break;
-
-            case R.id.bt_discard_appointment:
-                onCancelClicked();
-//                dismiss();
-                break;
-
-            case R.id.bt_print_patient_card:
-                if (pidHasDate != null)
-                    if (!pidHasDate && (!Util.isNullOrBlank(calendarEvents.getPatient().getPnum())))
-                        calendarEvents.getPatient().setPid(Util.getValidatedValue(calendarEvents.getPatient().getPnum()));
-
-                mActivity.openPatientCardFragment(calendarEvents);
-                dismiss();
-                break;
-
-            case R.id.bt_dismiss:
-                dismiss();
-                break;
-            case R.id.tv_appointment_status:
-                mActivity.openChangeAppointmentStatusDialogFragment(calendarEvents.getAppointmentId());
-                break;
-            case R.id.bt_send_whastapp:
-                String formattedAppointmentMessage = "Patient Detail: " + "\n "
-                        + Util.getValidatedValue(selectedPatient.getFirstName()) + " " + Util.getValidatedValue(selectedPatient.getLastName()) + "\n "
-                        + Util.getValidatedValue(selectedPatient.getGender()) + " " + Util.getValidatedValue(Util.getFormattedAge(selectedPatient.getDob())) + "\n "
-                        + "Your appointment with " + calendarEvents.getDoctorName()
-                        + " has been scheduled @ "
-                        + DateTimeUtil.getFormattedTime(0, Math.round(calendarEvents.getTime().getFromTime())) + ", "
-                        + DateTimeUtil.getFormattedDateTime(PatientAppointmentDetailFragment.DATE_FORMAT_USED_IN_THIS_SCREEN, calendarEvents.getFromDate())
-                        + ", " + " at" + "  " + calendarEvents.getLocationName() + "\n "
-                        + "Powered by Healthcoco";
-                mActivity.sendMsgToWhatsapp(formattedAppointmentMessage, selectedPatient.getMobileNumber());
-                break;
-
+            mActivity.openPatientCardFragment(calendarEvents);
+            dismiss();
+        } else if (id == R.id.bt_dismiss) {
+            dismiss();
+        } else if (id == R.id.tv_appointment_status) {
+            mActivity.openChangeAppointmentStatusDialogFragment(calendarEvents.getAppointmentId());
+        } else if (id == R.id.bt_send_whastapp) {
+            String formattedAppointmentMessage = "Patient Detail: " + "\n "
+                    + Util.getValidatedValue(selectedPatient.getFirstName()) + " " + Util.getValidatedValue(selectedPatient.getLastName()) + "\n "
+                    + Util.getValidatedValue(selectedPatient.getGender()) + " " + Util.getValidatedValue(Util.getFormattedAge(selectedPatient.getDob())) + "\n "
+                    + "Your appointment with " + calendarEvents.getDoctorName()
+                    + " has been scheduled @ "
+                    + DateTimeUtil.getFormattedTime(0, Math.round(calendarEvents.getTime().getFromTime())) + ", "
+                    + DateTimeUtil.getFormattedDateTime(PatientAppointmentDetailFragment.DATE_FORMAT_USED_IN_THIS_SCREEN, calendarEvents.getFromDate())
+                    + ", " + " at" + "  " + calendarEvents.getLocationName() + "\n "
+                    + "Powered by Healthcoco";
+            mActivity.sendMsgToWhatsapp(formattedAppointmentMessage, selectedPatient.getMobileNumber());
         }
     }
 

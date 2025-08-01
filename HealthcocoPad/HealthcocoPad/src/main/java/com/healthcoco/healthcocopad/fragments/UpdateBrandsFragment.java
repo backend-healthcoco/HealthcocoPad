@@ -130,23 +130,26 @@ public class UpdateBrandsFragment extends HealthCocoFragment implements View.OnC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_next:
-                if (!Util.isNullOrEmptyList(brandLinkedHashMap)) {
-                    openCommonOpenUpActivityUsingParcel(CommonOpenUpFragmentType.UPDATE_VACCINE_BRAND_GROUP, HealthCocoConstants.REQUEST_CODE_UPDATA_BRAND_GROUP,
-                            new String[]{UpdateVaccineBrandGroupFragment.TAG_VACCINE_BRAND_DATA, TAG_VACCINE_DATA, TAG_BRAND_DATA, TAG_SELECTED_BRAND_DATA},
-                            new Object[]{brandLinkedHashMap, vaccineCustomResponse, responseList, vaccineBrandHashmap});
-                } else {
-                    UpdateVaccinationCommonFragment updateVaccinationCommonFragment = (UpdateVaccinationCommonFragment) getFragmentManager().findFragmentByTag(UpdateVaccinationCommonFragment.class.getSimpleName());
-                    if (updateVaccinationCommonFragment != null)
-                        updateVaccinationCommonFragment.openVaccineFragment(true, vaccineIdsList);
-                }
-                break;
-            case R.id.iv_cancel_brand:
-                VaccineBrand tag = (VaccineBrand) v.getTag();
-                brandLinkedHashMap.remove(tag.getUniqueId());
-                notifySelectedBrandContainer();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_next) {
+            if (!Util.isNullOrEmptyList(brandLinkedHashMap)) {
+                openCommonOpenUpActivityUsingParcel(
+                        CommonOpenUpFragmentType.UPDATE_VACCINE_BRAND_GROUP,
+                        HealthCocoConstants.REQUEST_CODE_UPDATA_BRAND_GROUP,
+                        new String[]{UpdateVaccineBrandGroupFragment.TAG_VACCINE_BRAND_DATA, TAG_VACCINE_DATA, TAG_BRAND_DATA, TAG_SELECTED_BRAND_DATA},
+                        new Object[]{brandLinkedHashMap, vaccineCustomResponse, responseList, vaccineBrandHashmap}
+                );
+            } else {
+                UpdateVaccinationCommonFragment updateVaccinationCommonFragment =
+                        (UpdateVaccinationCommonFragment) getFragmentManager().findFragmentByTag(UpdateVaccinationCommonFragment.class.getSimpleName());
+                if (updateVaccinationCommonFragment != null)
+                    updateVaccinationCommonFragment.openVaccineFragment(true, vaccineIdsList);
+            }
+        } else if (id == R.id.iv_cancel_brand) {
+            VaccineBrand tag = (VaccineBrand) v.getTag();
+            brandLinkedHashMap.remove(tag.getUniqueId());
+            notifySelectedBrandContainer();
         }
     }
 

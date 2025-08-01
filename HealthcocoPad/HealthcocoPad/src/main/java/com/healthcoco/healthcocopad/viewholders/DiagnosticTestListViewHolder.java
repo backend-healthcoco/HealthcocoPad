@@ -57,13 +57,12 @@ public class DiagnosticTestListViewHolder extends HealthCocoViewHolder implement
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_delete_diagnostic_test:
-                itemListener.onDeleteItemClicked(diagnosticTest);
-                break;
-            case R.id.tv_name:
-                itemListener.onDiagnosticTestClicked(diagnosticTest);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_delete_diagnostic_test) {
+            itemListener.onDeleteItemClicked(diagnosticTest);
+        } else if (id == R.id.tv_name) {
+            itemListener.onDiagnosticTestClicked(diagnosticTest);
         }
     }
 }

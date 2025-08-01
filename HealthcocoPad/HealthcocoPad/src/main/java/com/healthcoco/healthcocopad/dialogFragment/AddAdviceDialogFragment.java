@@ -65,16 +65,16 @@ public class AddAdviceDialogFragment extends HealthCocoDialogFragment implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_cancel:
-                dismiss();
-                break;
-            case R.id.bt_save:
-                Intent intent = new Intent();
-                intent.putExtra(AddEditNormalVisitPrescriptionFragment.TAG_ADVICE_STRING, editAdvice.getText().toString());
-                getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_ADD_ADVICE, HealthCocoConstants.RESULT_CODE_ADD_ADVICE, intent);
-                dismiss();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_cancel) {
+            dismiss();
+        } else if (id == R.id.bt_save) {
+            Intent intent = new Intent();
+            intent.putExtra(AddEditNormalVisitPrescriptionFragment.TAG_ADVICE_STRING, editAdvice.getText().toString());
+            getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_ADD_ADVICE, HealthCocoConstants.RESULT_CODE_ADD_ADVICE, intent);
+            dismiss();
         }
+
     }
 }

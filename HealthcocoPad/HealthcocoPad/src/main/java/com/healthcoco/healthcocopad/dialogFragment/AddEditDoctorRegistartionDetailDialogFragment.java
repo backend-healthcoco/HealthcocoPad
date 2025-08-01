@@ -105,20 +105,18 @@ public class AddEditDoctorRegistartionDetailDialogFragment extends HealthCocoDia
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_save:
-                Object object = validateData(true);
-                if (object instanceof Boolean && (Boolean) object) {
-                    addEditRegistrationDetails();
-                }
+        int id = v.getId();
 
-                break;
-            case R.id.bt_add_more:
-                Object object1 = validateData(false);
-                if (object1 instanceof Boolean && (Boolean) object1) {
-                    addRegistrationItem(null, true);
-                }
-                break;
+        if (id == R.id.bt_save) {
+            Object object = validateData(true);
+            if (object instanceof Boolean && (Boolean) object) {
+                addEditRegistrationDetails();
+            }
+        } else if (id == R.id.bt_add_more) {
+            Object object1 = validateData(false);
+            if (object1 instanceof Boolean && (Boolean) object1) {
+                addRegistrationItem(null, true);
+            }
         }
     }
 

@@ -106,24 +106,24 @@ public class UpdateVaccinationCommonFragment extends HealthCocoFragment implemen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_brands:
-                if (containerVaccine.getVisibility() == View.VISIBLE) {
-                    containerBrands.setVisibility(View.VISIBLE);
-                    containerVaccine.setVisibility(View.GONE);
+        int id = v.getId();
+
+        if (id == R.id.bt_brands) {
+            if (containerVaccine.getVisibility() == View.VISIBLE) {
+                containerBrands.setVisibility(View.VISIBLE);
+                containerVaccine.setVisibility(View.GONE);
+            }
+            setBrandVaccineState(false);
+
+        } else if (id == R.id.bt_vaccine) {
+            if (containerBrands.getVisibility() == View.VISIBLE) {
+                containerVaccine.setVisibility(View.VISIBLE);
+                containerBrands.setVisibility(View.GONE);
+                if (!Util.isNullOrEmptyList(vaccineIdsList)) {
+                    updateVaccineFragment.setSelectedVaccineDate(new ArrayList<>(vaccineIdsList.keySet()));
                 }
-                setBrandVaccineState(false);
-                break;
-            case R.id.bt_vaccine:
-                if (containerBrands.getVisibility() == View.VISIBLE) {
-                    containerVaccine.setVisibility(View.VISIBLE);
-                    containerBrands.setVisibility(View.GONE);
-                    if (!Util.isNullOrEmptyList(vaccineIdsList)) {
-                        updateVaccineFragment.setSelectedVaccineDate(new ArrayList<>(vaccineIdsList.keySet()));
-                    }
-                }
-                setBrandVaccineState(true);
-                break;
+            }
+            setBrandVaccineState(true);
         }
     }
 

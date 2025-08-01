@@ -69,13 +69,13 @@ public class AddEditGeneralNotesDialogFragment extends HealthCocoDialogFragment 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_save:
-                Intent intent = new Intent();
-                intent.putExtra(SettingPrintSetupFragment.TAG_GENERAL_NOTES, (Util.getValidatedValue(editNote.getText().toString())));
-                getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_GENERAL_NOTE, intent);
-                dismiss();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_save) {
+            Intent intent = new Intent();
+            intent.putExtra(SettingPrintSetupFragment.TAG_GENERAL_NOTES, Util.getValidatedValue(editNote.getText().toString()));
+            getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_GENERAL_NOTE, intent);
+            dismiss();
         }
     }
 }

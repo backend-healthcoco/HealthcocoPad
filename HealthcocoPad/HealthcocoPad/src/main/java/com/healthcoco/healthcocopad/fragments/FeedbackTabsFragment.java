@@ -169,13 +169,12 @@ public class FeedbackTabsFragment extends HealthCocoFragment implements ViewPage
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_cross:
-                prevButtonOnClick();
-                break;
-            case R.id.bt_save:
-                nextButtonOnClick();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_cross) {
+            prevButtonOnClick();
+        } else if (id == R.id.bt_save) {
+            nextButtonOnClick();
         }
     }
 

@@ -249,34 +249,29 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_cross:
-                dismiss();
-                break;
-            case R.id.bt_save:
-                validateData();
-                break;
-            case R.id.tv_top_left_text:
-                tvTopLeftText.setSelected(true);
-                tvTopRightText.setSelected(false);
-                lvTopLeftText.setVisibility(View.VISIBLE);
-                lvTopRightText.setVisibility(View.GONE);
-                break;
-            case R.id.tv_top_right_text:
-                tvTopRightText.setSelected(true);
-                tvTopLeftText.setSelected(false);
-                lvTopLeftText.setVisibility(View.GONE);
-                lvTopRightText.setVisibility(View.VISIBLE);
-                break;
-            case R.id.iv_header_image:
-                if (!Util.isNullOrBlank(imageString))
-                    mActivity.openEnlargedImageDialogFragment(imageString);
-                else if (!Util.isNullOrBlank(headerSetup.getHeaderImageUrl()))
-                    mActivity.openEnlargedImageDialogFragment(headerSetup.getHeaderImageUrl());
-                break;
-            case R.id.bt_select_header_image:
-                openDialogFragment(DialogType.SELECT_IMAGE, this);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_cross) {
+            dismiss();
+        } else if (id == R.id.bt_save) {
+            validateData();
+        } else if (id == R.id.tv_top_left_text) {
+            tvTopLeftText.setSelected(true);
+            tvTopRightText.setSelected(false);
+            lvTopLeftText.setVisibility(View.VISIBLE);
+            lvTopRightText.setVisibility(View.GONE);
+        } else if (id == R.id.tv_top_right_text) {
+            tvTopRightText.setSelected(true);
+            tvTopLeftText.setSelected(false);
+            lvTopLeftText.setVisibility(View.GONE);
+            lvTopRightText.setVisibility(View.VISIBLE);
+        } else if (id == R.id.iv_header_image) {
+            if (!Util.isNullOrBlank(imageString))
+                mActivity.openEnlargedImageDialogFragment(imageString);
+            else if (!Util.isNullOrBlank(headerSetup.getHeaderImageUrl()))
+                mActivity.openEnlargedImageDialogFragment(headerSetup.getHeaderImageUrl());
+        } else if (id == R.id.bt_select_header_image) {
+            openDialogFragment(DialogType.SELECT_IMAGE, this);
         }
     }
 

@@ -72,11 +72,12 @@ public class AddEditVaccineNoteDialogFragment extends HealthCocoDialogFragment i
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_save:
-                addEditVaccineNoteListener.getVaccineNote(Util.getValidatedValue(editNote.getText().toString()));
-                dismiss();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_save) {
+            addEditVaccineNoteListener.getVaccineNote(Util.getValidatedValue(editNote.getText().toString()));
+            dismiss();
         }
+
     }
 }

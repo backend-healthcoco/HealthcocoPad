@@ -2,7 +2,6 @@ package com.orm.record;
 
 import com.orm.app.ClientApp;
 import com.orm.SugarRecord;
-import com.orm.dsl.BuildConfig;
 import com.orm.model.NestedMixedBAModel;
 import com.orm.model.RelationshipMixedAModel;
 import com.orm.model.SimpleAnnotatedModel;
@@ -21,7 +20,7 @@ import static com.orm.SugarRecord.listAll;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(sdk = 18, constants = BuildConfig.class, application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
+@Config(sdk = 18  , application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
 public final class NestedMixedBATests {
 
     @Test

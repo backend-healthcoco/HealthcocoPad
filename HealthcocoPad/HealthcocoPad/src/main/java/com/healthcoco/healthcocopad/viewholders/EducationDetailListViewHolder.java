@@ -132,16 +132,16 @@ public class EducationDetailListViewHolder extends LinearLayout implements View.
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_qualification:
-                itemClickListener.onQualificationClicked(tvQualification, objData);
-                break;
-            case R.id.tv_college_university:
-                itemClickListener.onCollegeUniversityClicked(tvCollegeUniversity, objData);
-                break;
-            case R.id.bt_delete:
-                itemClickListener.onDeleteEducationDetailClicked(this, objData);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.tv_qualification) {
+            itemClickListener.onQualificationClicked(tvQualification, objData);
+
+        } else if (id == R.id.tv_college_university) {
+            itemClickListener.onCollegeUniversityClicked(tvCollegeUniversity, objData);
+
+        } else if (id == R.id.bt_delete) {
+            itemClickListener.onDeleteEducationDetailClicked(this, objData);
         }
     }
 

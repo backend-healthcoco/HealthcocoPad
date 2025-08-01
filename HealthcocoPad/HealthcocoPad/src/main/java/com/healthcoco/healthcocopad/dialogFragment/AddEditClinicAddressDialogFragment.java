@@ -215,14 +215,13 @@ public class AddEditClinicAddressDialogFragment extends HealthCocoDialogFragment
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_save:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    validateData();
-                else
-                    onNetworkUnavailable(null);
-                break;
+        if (v.getId() == R.id.bt_save) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                validateData();
+            } else {
+                onNetworkUnavailable(null);
+            }
         }
     }
 

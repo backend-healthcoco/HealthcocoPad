@@ -1,7 +1,6 @@
 package com.orm.record;
 
 import com.orm.app.ClientApp;
-import com.orm.dsl.BuildConfig;
 import com.orm.helper.NamingHelper;
 import com.orm.model.SimpleExtendedModel;
 
@@ -38,7 +37,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(sdk = 18, constants = BuildConfig.class, application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
+@Config(sdk = 18  , application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
 public final class SimpleExtendedModelTests {
     private String id = "id = ?";
 

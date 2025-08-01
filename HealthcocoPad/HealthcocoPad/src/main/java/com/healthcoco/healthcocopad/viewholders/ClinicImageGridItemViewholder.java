@@ -76,13 +76,10 @@ public class ClinicImageGridItemViewholder extends HealthCocoViewHolder implemen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_add:
-                addEditClinicImageListener.onAddClinicImageClicked();
-                break;
-            case R.id.bt_delete:
-                addEditClinicImageListener.onDeleteImageClicked(clinicImage);
-                break;
+        if (v.getId() == R.id.bt_add) {
+            addEditClinicImageListener.onAddClinicImageClicked();
+        } else if (v.getId() == R.id.bt_delete) {
+            addEditClinicImageListener.onDeleteImageClicked(clinicImage);
         }
     }
 

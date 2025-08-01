@@ -93,15 +93,15 @@ public class GrowthChartViewHolder extends HealthcocoComonRecylcerViewHolder imp
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_edit_growth_chart:
-                if (growthChartListItemListener != null)
-                    growthChartListItemListener.editGrowthChart(objDta);
-                break;
-            case R.id.bt_discard_growth_chart:
-                if (growthChartListItemListener != null)
-                    growthChartListItemListener.discardGrowthChart(objDta);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_edit_growth_chart) {
+            if (growthChartListItemListener != null)
+                growthChartListItemListener.editGrowthChart(objDta);
+
+        } else if (id == R.id.bt_discard_growth_chart) {
+            if (growthChartListItemListener != null)
+                growthChartListItemListener.discardGrowthChart(objDta);
         }
     }
 }

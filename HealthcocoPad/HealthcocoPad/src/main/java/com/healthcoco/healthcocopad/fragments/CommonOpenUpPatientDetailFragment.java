@@ -668,10 +668,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case container_right_action:
-                openGlobalRecordAccessDialogFragment();
-                break;
+        if (v.getId() == container_right_action) {
+            openGlobalRecordAccessDialogFragment();
         }
     }
 

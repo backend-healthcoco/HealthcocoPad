@@ -1,7 +1,6 @@
 package com.orm.record;
 
 import com.orm.app.ClientApp;
-import com.orm.dsl.BuildConfig;
 import com.orm.model.BigDecimalFieldAnnotatedModel;
 import com.orm.model.BigDecimalFieldExtendedModel;
 
@@ -20,7 +19,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(sdk = 18, constants = BuildConfig.class, application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
+@Config(sdk = 18  , application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
 public final class BigDecimalFieldTests {
     private BigDecimal decimal = new BigDecimal(1234.5678901234567890123456789);
 

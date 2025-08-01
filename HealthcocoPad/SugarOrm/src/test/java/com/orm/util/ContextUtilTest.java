@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.orm.app.ClientApp;
 import com.orm.SugarContext;
-import com.orm.dsl.BuildConfig;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +18,7 @@ import static com.orm.util.ContextUtil.*;
  * @author jonatan.salas
  */
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(sdk = 18, constants = BuildConfig.class, application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
+@Config(sdk = 18  , application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
 public final class ContextUtilTest {
 
     @Test(expected = IllegalAccessException.class)

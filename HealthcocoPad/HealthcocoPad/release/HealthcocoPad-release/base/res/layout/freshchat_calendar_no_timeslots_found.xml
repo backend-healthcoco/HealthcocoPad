@@ -1,0 +1,22 @@
+
+ƒ
+;
+android*http://schemas.android.com/apk/res/android RelativeLayout"M
+*http://schemas.android.com/apk/res/android
+visibilitygone"(Ü„2:0"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent"(õ„2:0ÿÿÿÿÿÿÿÿÿ"
+*http://schemas.android.com/apk/res/androidid+@+id/freshchat_calendar_no_timeslots_layout"(Ğ„25
+3»…¤ø)id/freshchat_calendar_no_timeslots_layout0*Ü
+Ó+androidx.appcompat.widget.AppCompatTextView"~style0?attr/freshchatCalendarNoTimeSlotsFoundTextStyle"2?
+=¢„ø/attr/freshchatCalendarNoTimeSlotsFoundTextStyle0ÿÿ"£
+*http://schemas.android.com/apk/res/androidid.@+id/freschat_calendar_no_timeslots_found_view"(Ğ„28
+6™…¤ø,id/freschat_calendar_no_timeslots_found_view0D* 
+—+androidx.appcompat.widget.AppCompatTextView"Z
+*http://schemas.android.com/apk/res/androidlayout_centerHorizontaltrue"(ƒ„2:@"pstyle)?attr/freshchatCalendarOutlineButtonStyle"28
+6¤„ø(attr/freshchatCalendarOutlineButtonStyle0ÿÿ"[
+*http://schemas.android.com/apk/res/androidlayout_alignParentBottomtrue"(ƒ„2:@"Ÿ
+*http://schemas.android.com/apk/res/androidid,@+id/freshchat_calendar_cancel_invite_button"(Ğ„26
+4¬…¤ø*id/freshchat_calendar_cancel_invite_button0"š
+*http://schemas.android.com/apk/res/androidtext(@string/freshchat_calendar_cancel_invite"(Ï‚„23
+1¸„Èø'string/freshchat_calendar_cancel_invite0C 

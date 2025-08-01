@@ -1,0 +1,27 @@
+
+Š
+;
+android*http://schemas.android.com/apk/res/android*%androidx.core.widget.NestedScrollView"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent"(õ„2:0ÿÿÿÿÿÿÿÿÿ*Ş
+ÕLinearLayout"P
+*http://schemas.android.com/apk/res/androidpaddingRight24dp"(Ø„2:h0"W
+*http://schemas.android.com/apk/res/androidfocusableInTouchModetrue"(Û„2:@"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent"(õ„2:0ÿÿÿÿÿÿÿÿÿ"R
+*http://schemas.android.com/apk/res/androidorientationvertical"(Ä„2:0"Q
+*http://schemas.android.com/apk/res/androidpaddingBottom16dp"(Ù„2:h "O
+*http://schemas.android.com/apk/res/androidpaddingLeft24dp"(Ö„2:h0"L
+*http://schemas.android.com/apk/res/android	focusabletrue"(Ú„2:@"N
+*http://schemas.android.com/apk/res/android
+paddingTop16dp"(×„2:h *¶
+­+androidx.appcompat.widget.AppCompatTextView"~style0?attr/freshchatCalendarEmailRequestDescTextStyle"2?
+=”„ø/attr/freshchatCalendarEmailRequestDescTextStyle0ÿÿq*È
+¿+androidx.appcompat.widget.AppCompatEditText"zstyle.?attr/freshchatCalendarEnterEmailEditTextStyle"2=
+;•„ø-attr/freshchatCalendarEnterEmailEditTextStyle0ÿÿ"“
+*http://schemas.android.com/apk/res/androidid&@+id/freshchat_calendar_email_edittext"(Ğ„20
+.µ…¤ø$id/freshchat_calendar_email_edittext0F*º
+±)androidx.appcompat.widget.AppCompatButton"tstyle+?attr/freshchatCalendarEmailNextButtonStyle"2:
+8“„ø*attr/freshchatCalendarEmailNextButtonStyle0ÿÿ"
+*http://schemas.android.com/apk/res/androidid#@+id/freshchat_calendar_next_button"(Ğ„2-
++º…¤ø!id/freshchat_calendar_next_button0C&*

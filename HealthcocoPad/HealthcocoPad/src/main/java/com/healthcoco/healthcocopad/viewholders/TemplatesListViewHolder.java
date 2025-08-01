@@ -88,19 +88,16 @@ public class TemplatesListViewHolder extends HealthCocoViewHolder implements OnC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_template:
-                if (!isFromSettingsScreen)
-                    templateListItemListener.onItemClicked(template);
-                break;
-            case R.id.bt_edit:
-                templateListItemListener.onEditClicked(template);
-                break;
-            case R.id.bt_delete:
-                templateListItemListener.onDeleteClicked(template);
-                break;
-            default:
-                break;
+        int id = v.getId();
+
+        if (id == R.id.container_template) {
+            if (!isFromSettingsScreen) {
+                templateListItemListener.onItemClicked(template);
+            }
+        } else if (id == R.id.bt_edit) {
+            templateListItemListener.onEditClicked(template);
+        } else if (id == R.id.bt_delete) {
+            templateListItemListener.onDeleteClicked(template);
         }
     }
 }

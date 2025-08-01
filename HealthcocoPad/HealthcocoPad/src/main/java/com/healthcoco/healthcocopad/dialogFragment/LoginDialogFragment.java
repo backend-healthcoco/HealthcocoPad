@@ -123,31 +123,37 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.bt_cancel:
-                getDialog().cancel();
-                break;
-            case R.id.bt_login:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    validateData();
-                } else Util.showToast(mActivity, R.string.user_offline);
-                break;
-            case R.id.bt_forgot_password:
-                openResetPasswordDialogFragment(Util.getValidatedValue(String.valueOf(editUserName.getText())));
-                break;
-            case R.id.tv_terms_of_service:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
-                } else Util.showToast(mActivity, R.string.user_offline);
-                break;
-            case R.id.tv_privacy_policy:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.PRIVACY_POLICY.ordinal(), 0);
-                } else Util.showToast(mActivity, R.string.user_offline);
-                break;
+        int id = view.getId();
+
+        if (id == R.id.bt_cancel) {
+            getDialog().cancel();
+
+        } else if (id == R.id.bt_login) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                validateData();
+            } else {
+                Util.showToast(mActivity, R.string.user_offline);
+            }
+
+        } else if (id == R.id.bt_forgot_password) {
+            openResetPasswordDialogFragment(Util.getValidatedValue(String.valueOf(editUserName.getText())));
+
+        } else if (id == R.id.tv_terms_of_service) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
+            } else {
+                Util.showToast(mActivity, R.string.user_offline);
+            }
+
+        } else if (id == R.id.tv_privacy_policy) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.PRIVACY_POLICY.ordinal(), 0);
+            } else {
+                Util.showToast(mActivity, R.string.user_offline);
+            }
         }
     }
 

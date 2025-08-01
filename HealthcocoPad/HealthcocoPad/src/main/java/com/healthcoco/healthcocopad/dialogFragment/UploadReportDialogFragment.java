@@ -128,31 +128,31 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_select_image:
-                openDialogFragment(DialogType.SELECT_IMAGE, this);
-                break;
-            case R.id.tv_select_file:
-                try {
-                    String action = "";
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
-                        action = Intent.ACTION_GET_CONTENT;
-                    else
-                        action = Intent.ACTION_OPEN_DOCUMENT;
-                    Intent intent = new Intent(action);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-                    intent.putExtra(Intent.EXTRA_MIME_TYPES, ACCEPT_MIME_TYPES);
-                    startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_FILE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        int id = v.getId();
 
-                break;
-            case R.id.bt_save:
-                Util.checkNetworkStatus(mActivity);
-                validateData();
-                break;
+        if (id == R.id.tv_select_image) {
+            openDialogFragment(DialogType.SELECT_IMAGE, this);
+
+        } else if (id == R.id.tv_select_file) {
+            try {
+                String action = "";
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+                    action = Intent.ACTION_GET_CONTENT;
+                else
+                    action = Intent.ACTION_OPEN_DOCUMENT;
+
+                Intent intent = new Intent(action);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, ACCEPT_MIME_TYPES);
+                startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_FILE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else if (id == R.id.bt_save) {
+            Util.checkNetworkStatus(mActivity);
+            validateData();
         }
     }
 

@@ -260,10 +260,10 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fl_bt_add_video:
-                openDialogFragment(new UploadVideoDialogFragment(), HealthCocoConstants.REQUEST_CODE_ADD_VIDEO);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.fl_bt_add_video) {
+            openDialogFragment(new UploadVideoDialogFragment(), HealthCocoConstants.REQUEST_CODE_ADD_VIDEO);
         }
     }
 

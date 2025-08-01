@@ -100,20 +100,17 @@ public class AddEditDoctorAwardAndPublicationDialogFragment extends HealthCocoDi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_save:
-                Object object = validateData(true);
-                if (object instanceof Boolean && (Boolean) object) {
-                    addEditAwardsPublicationDetails();
-                }
+        if (v.getId() == R.id.bt_save) {
+            Object object = validateData(true);
+            if (object instanceof Boolean && (Boolean) object) {
+                addEditAwardsPublicationDetails();
+            }
 
-                break;
-            case R.id.bt_add_more:
-                Object object1 = validateData(false);
-                if (object1 instanceof Boolean && (Boolean) object1) {
-                    addEditAwardsPublicationItem(null, true);
-                }
-                break;
+        } else if (v.getId() == R.id.bt_add_more) {
+            Object object1 = validateData(false);
+            if (object1 instanceof Boolean && (Boolean) object1) {
+                addEditAwardsPublicationItem(null, true);
+            }
         }
     }
 

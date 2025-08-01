@@ -250,30 +250,27 @@ public class SelectToothDetailDialogFragment extends HealthCocoDialogFragment im
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.imageview_cross:
-                dismiss();
-                break;
-            case R.id.button_done:
-                setResultData();
-                break;
-            case R.id.tv_toggle_chart:
-                initViews();
-                if (mainContainerAdultChart.getVisibility() == View.VISIBLE) {
-                    mainContainerBabyChart.setVisibility(View.VISIBLE);
-                    mainContainerAdultChart.setVisibility(View.GONE);
-                    tvToggleChart.setText(getResources().getString(R.string.toggle_to_adult_chart));
-                    stringHashMap.clear();
-                } else {
-                    mainContainerBabyChart.setVisibility(View.GONE);
-                    mainContainerAdultChart.setVisibility(View.VISIBLE);
-                    tvToggleChart.setText(getResources().getString(R.string.toggle_to_baby_chart));
-                    stringHashMap.clear();
-                }
-                break;
-            case R.id.layout_tooth_item:
-                setToothItemInLayout(v);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.imageview_cross) {
+            dismiss();
+        } else if (id == R.id.button_done) {
+            setResultData();
+        } else if (id == R.id.tv_toggle_chart) {
+            initViews();
+            if (mainContainerAdultChart.getVisibility() == View.VISIBLE) {
+                mainContainerBabyChart.setVisibility(View.VISIBLE);
+                mainContainerAdultChart.setVisibility(View.GONE);
+                tvToggleChart.setText(getResources().getString(R.string.toggle_to_adult_chart));
+                stringHashMap.clear();
+            } else {
+                mainContainerBabyChart.setVisibility(View.GONE);
+                mainContainerAdultChart.setVisibility(View.VISIBLE);
+                tvToggleChart.setText(getResources().getString(R.string.toggle_to_baby_chart));
+                stringHashMap.clear();
+            }
+        } else if (id == R.id.layout_tooth_item) {
+            setToothItemInLayout(v);
         }
     }
 

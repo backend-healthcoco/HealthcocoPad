@@ -142,16 +142,16 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_skip:
-                openRegistrationFragment(null, null, false);
-                break;
-            case R.id.bt_register_new_patient:
-                if (list.size() < 9) {
-                    openRegistrationFragment(String.valueOf(editMobileNumber.getText()), null, false);
-                } else
-                    Util.showAlert(mActivity, R.string.alert_nine_patients_already_registered);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_skip) {
+            openRegistrationFragment(null, null, false);
+        } else if (id == R.id.bt_register_new_patient) {
+            if (list.size() < 9) {
+                openRegistrationFragment(String.valueOf(editMobileNumber.getText()), null, false);
+            } else {
+                Util.showAlert(mActivity, R.string.alert_nine_patients_already_registered);
+            }
         }
     }
 
@@ -283,15 +283,14 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
 
     @Override
     public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-            case R.id.edit_mobile_number:
-                LogUtils.LOGD(TAG, "Edit Mobile Number");
-                if (Util.isValidMobileNo(s)) {
-                    mActivity.hideSoftKeyboard();
-                    validateData();
-                } else layoutRegisterNew.setVisibility(View.GONE);
-
-                break;
+        if (v.getId() == R.id.edit_mobile_number) {
+            LogUtils.LOGD(TAG, "Edit Mobile Number");
+            if (Util.isValidMobileNo(s)) {
+                mActivity.hideSoftKeyboard();
+                validateData();
+            } else {
+                layoutRegisterNew.setVisibility(View.GONE);
+            }
         }
     }
 }

@@ -71,34 +71,30 @@ public class AboutUsFragment extends HealthCocoFragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_privacy_policy:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.PRIVACY_POLICY.ordinal(), 0);
-                break;
-            case R.id.bt_terms_and_conditions:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
-                break;
-            case R.id.bt_google_plus:
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(LINK_GOOGLE_PLUS)));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.bt_twitter:
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(LINK_TWITTER)));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.bt_linked_in:
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(LINK_LINKED_IN)));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_privacy_policy) {
+            openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.PRIVACY_POLICY.ordinal(), 0);
+        } else if (id == R.id.bt_terms_and_conditions) {
+            openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
+        } else if (id == R.id.bt_google_plus) {
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(LINK_GOOGLE_PLUS)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (id == R.id.bt_twitter) {
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(LINK_TWITTER)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (id == R.id.bt_linked_in) {
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(LINK_LINKED_IN)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

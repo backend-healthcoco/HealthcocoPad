@@ -602,28 +602,23 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_edit_patient_profile_past_history:
-                openHisoryFragment(HistoryFilterType.MEDICAL_HISTORY);
-                break;
-            case R.id.bt_edit_patient_profile_family_history:
-                openHisoryFragment(HistoryFilterType.FAMILY_HISTORY);
-                break;
-            case R.id.bt_edit_patient_profile_personal_history:
-                openDialogFragment(new AddEditPersonalHistoryDetailDialogFragment(), AddEditPersonalHistoryDetailDialogFragment.TAG_PERSONAL_HISTORY, historyDetailsResponse, REQUEST_CODE_PATIENT_PROFILE, null);
-                break;
-            case R.id.bt_edit_patient_profile_drug_and_allergy:
-                openDialogFragment(new AddEditDrugAndAllergyDetailDialogFragment(), AddEditDrugAndAllergyDetailDialogFragment.TAG_DRUGS_AND_ALLERGIES, historyDetailsResponse, REQUEST_CODE_PATIENT_PROFILE, null);
-                break;
-            case R.id.bt_edit_patient_profile_groups:
-            case R.id.bt_edit_patient_profile_patient_data:
-            case R.id.bt_edit_patient_profile_notes:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    openRegistrationFragment(HealthCocoConstants.SELECTED_PATIENTS_USER_ID, REQUEST_CODE_PATIENT_PROFILE, true);
-                else
-                    onNetworkUnavailable(null);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_edit_patient_profile_past_history) {
+            openHisoryFragment(HistoryFilterType.MEDICAL_HISTORY);
+        } else if (id == R.id.bt_edit_patient_profile_family_history) {
+            openHisoryFragment(HistoryFilterType.FAMILY_HISTORY);
+        } else if (id == R.id.bt_edit_patient_profile_personal_history) {
+            openDialogFragment(new AddEditPersonalHistoryDetailDialogFragment(), AddEditPersonalHistoryDetailDialogFragment.TAG_PERSONAL_HISTORY, historyDetailsResponse, REQUEST_CODE_PATIENT_PROFILE, null);
+        } else if (id == R.id.bt_edit_patient_profile_drug_and_allergy) {
+            openDialogFragment(new AddEditDrugAndAllergyDetailDialogFragment(), AddEditDrugAndAllergyDetailDialogFragment.TAG_DRUGS_AND_ALLERGIES, historyDetailsResponse, REQUEST_CODE_PATIENT_PROFILE, null);
+        } else if (id == R.id.bt_edit_patient_profile_groups || id == R.id.bt_edit_patient_profile_patient_data || id == R.id.bt_edit_patient_profile_notes) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                openRegistrationFragment(HealthCocoConstants.SELECTED_PATIENTS_USER_ID, REQUEST_CODE_PATIENT_PROFILE, true);
+            } else {
+                onNetworkUnavailable(null);
+            }
         }
     }
 

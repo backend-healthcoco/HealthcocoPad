@@ -1,0 +1,12 @@
+
+”
+;
+android*http://schemas.android.com/apk/res/android*LinearLayout"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ"…
+*http://schemas.android.com/apk/res/androidid@+id/freshchat_contact_us_group"(Ğ„2)
+'ä…¤øid/freshchat_contact_us_group0*ù
+ğTextView"`style!?attr/freshchatContactUsTextStyle"	20
+.Â„ø attr/freshchatContactUsTextStyle0ÿÿ"
+*http://schemas.android.com/apk/res/androidid@+id/freshchat_contact_us_btn"	(Ğ„2'
+%ã…¤øid/freshchat_contact_us_btn0	5*

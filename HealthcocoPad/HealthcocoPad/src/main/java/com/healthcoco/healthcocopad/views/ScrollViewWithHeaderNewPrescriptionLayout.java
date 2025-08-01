@@ -113,20 +113,21 @@ public class ScrollViewWithHeaderNewPrescriptionLayout extends ScrollView implem
                         Boolean isVisible = headerVisibilityHashmap.get(v.getId());
                         if (isVisible != null && isVisible) {
                             TextView textView = (TextView) tvHeader.getChildAt(0);
-                            if (textView != null)
-                                switch (v.getId()) {
-                                    case R.id.tv_header_one:
-                                        textView.setText(R.string.lab_test);
-                                        btHeaderInteraction.setVisibility(View.INVISIBLE);
-                                        etDuration.setVisibility(View.INVISIBLE);
-                                        break;
-                                    case R.id.tv_header_two:
-                                        textView.setText(R.string.drugs);
-                                        btHeaderInteraction.setVisibility(View.VISIBLE);
-                                        etDuration.setVisibility(View.VISIBLE);
-                                        break;
+                            if (textView != null) {
+                                int id = v.getId();
+
+                                if (id == R.id.tv_header_one) {
+                                    textView.setText(R.string.lab_test);
+                                    btHeaderInteraction.setVisibility(View.INVISIBLE);
+                                    etDuration.setVisibility(View.INVISIBLE);
+                                } else if (id == R.id.tv_header_two) {
+                                    textView.setText(R.string.drugs);
+                                    btHeaderInteraction.setVisibility(View.VISIBLE);
+                                    etDuration.setVisibility(View.VISIBLE);
                                 }
-                            tvHeader.setVisibility(View.VISIBLE);
+
+                                tvHeader.setVisibility(View.VISIBLE);
+                            }
                         }
 //                        v.setVisibility(View.INVISIBLE);
 //                        tvHeader.setText(((TextView) v).getText());

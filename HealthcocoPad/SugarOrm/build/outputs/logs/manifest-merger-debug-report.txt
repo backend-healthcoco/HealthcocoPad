@@ -1,0 +1,21 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/src/main/AndroidManifest.xml:2:1-7:12
+INJECTED from /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/src/main/AndroidManifest.xml:2:1-7:12
+	package
+		ADDED from /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/src/main/AndroidManifest.xml:3:11-32
+		INJECTED from /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/src/main/AndroidManifest.xml:5:11-38
+	xmlns:android
+		ADDED from /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/src/main/AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/src/main/AndroidManifest.xml:4:11-34
+uses-sdk
+INJECTED from /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/src/main/AndroidManifest.xml
+INJECTED from /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/src/main/AndroidManifest.xml

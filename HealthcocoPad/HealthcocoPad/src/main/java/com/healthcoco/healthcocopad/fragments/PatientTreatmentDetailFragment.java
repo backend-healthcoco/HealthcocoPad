@@ -174,15 +174,11 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-
-            case R.id.fl_bt_add_treatment:
-                openAddTreatmentFragment();
-                break;
-            default:
-                break;
+        if (v.getId() == R.id.fl_bt_add_treatment) {
+            openAddTreatmentFragment();
+        } else {
+            // no action for other ids
         }
-
     }
 
     private void notifyAdapter(ArrayList<Treatments> treatmentArrayList) {

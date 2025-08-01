@@ -301,19 +301,19 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_selected_date:
-                openDatePickerDialog((TextView) v);
-                break;
-            case R.id.tv_submit:
-                if (user != null) {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        validateData();
-                    } else
-                        Util.showToast(mActivity, R.string.user_offline);
+        int id = v.getId();
+
+        if (id == R.id.tv_selected_date) {
+            openDatePickerDialog((TextView) v);
+        } else if (id == R.id.tv_submit) {
+            if (user != null) {
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    validateData();
+                } else {
+                    Util.showToast(mActivity, R.string.user_offline);
                 }
-                break;
+            }
         }
     }
 
@@ -434,14 +434,13 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
 
     @Override
     public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-            case R.id.tv_selected_date:
-                LogUtils.LOGD(TAG, "TextVieew Selected Date ");
-                getAppointmentSlotNew(DATE_FORMAT_USED_IN_THIS_SCREEN, s);
-                if (!DateTimeUtil.isCurrentDateSelected(DATE_FORMAT_USED_IN_THIS_SCREEN,
-                        Util.getValidatedValueOrNull(tvSelectedDate))) {
-                }
-                break;
+        if (v.getId() == R.id.tv_selected_date) {
+            LogUtils.LOGD(TAG, "TextVieew Selected Date ");
+            getAppointmentSlotNew(DATE_FORMAT_USED_IN_THIS_SCREEN, s);
+            if (!DateTimeUtil.isCurrentDateSelected(DATE_FORMAT_USED_IN_THIS_SCREEN,
+                    Util.getValidatedValueOrNull(tvSelectedDate))) {
+                // your code here if needed
+            }
         }
     }
 

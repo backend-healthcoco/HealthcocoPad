@@ -171,14 +171,12 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
     @Override
     public void onClick(View v) {
         mActivity.hideSoftKeyboard();
-        switch (v.getId()) {
-            case R.id.bt_save:
-                nextButtonOnClick();
-                break;
-            case R.id.bt_cross:
-                prevButtonOnClick();
-                break;
+        int id = v.getId();
 
+        if (id == R.id.bt_save) {
+            nextButtonOnClick();
+        } else if (id == R.id.bt_cross) {
+            prevButtonOnClick();
         }
     }
 

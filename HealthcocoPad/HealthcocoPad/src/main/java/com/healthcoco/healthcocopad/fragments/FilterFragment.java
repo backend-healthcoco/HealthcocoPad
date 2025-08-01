@@ -190,30 +190,33 @@ public class FilterFragment extends HealthCocoFragment implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_add_to_group:
-                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", HealthCocoConstants.REQUEST_CODE_GROUPS_LIST);
-                break;
-            case R.id.tv_all_patients:
-                senBroadCastToContactsFragment(FilterItemType.ALL_PATIENTS, null);
-                setSelectedItem(FilterItemType.ALL_PATIENTS);
-                refreshHomeScreenTitle(getResources().getString(R.string.my_patients));
-                break;
-            case R.id.tv_recently_visited:
-                senBroadCastToContactsFragment(FilterItemType.RECENTLY_VISITED, null);
-                setSelectedItem(FilterItemType.RECENTLY_VISITED);
-                refreshHomeScreenTitle(getResources().getString(R.string.recently_visited));
-                break;
-            case R.id.tv_most_visited:
-                senBroadCastToContactsFragment(FilterItemType.MOST_VISITED, null);
-                setSelectedItem(FilterItemType.MOST_VISITED);
-                refreshHomeScreenTitle(getResources().getString(R.string.most_visited));
-                break;
-            case R.id.tv_recently_added:
-                senBroadCastToContactsFragment(FilterItemType.RECENTLY_ADDED, null);
-                setSelectedItem(FilterItemType.RECENTLY_ADDED);
-                refreshHomeScreenTitle(getResources().getString(R.string.recently_added));
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_add_to_group) {
+            mActivity.openAddUpdateNameDialogFragment(
+                    WebServiceType.ADD_NEW_GROUP,
+                    AddUpdateNameDialogType.GROUPS,
+                    this,
+                    user,
+                    "",
+                    HealthCocoConstants.REQUEST_CODE_GROUPS_LIST
+            );
+        } else if (id == R.id.tv_all_patients) {
+            senBroadCastToContactsFragment(FilterItemType.ALL_PATIENTS, null);
+            setSelectedItem(FilterItemType.ALL_PATIENTS);
+            refreshHomeScreenTitle(getResources().getString(R.string.my_patients));
+        } else if (id == R.id.tv_recently_visited) {
+            senBroadCastToContactsFragment(FilterItemType.RECENTLY_VISITED, null);
+            setSelectedItem(FilterItemType.RECENTLY_VISITED);
+            refreshHomeScreenTitle(getResources().getString(R.string.recently_visited));
+        } else if (id == R.id.tv_most_visited) {
+            senBroadCastToContactsFragment(FilterItemType.MOST_VISITED, null);
+            setSelectedItem(FilterItemType.MOST_VISITED);
+            refreshHomeScreenTitle(getResources().getString(R.string.most_visited));
+        } else if (id == R.id.tv_recently_added) {
+            senBroadCastToContactsFragment(FilterItemType.RECENTLY_ADDED, null);
+            setSelectedItem(FilterItemType.RECENTLY_ADDED);
+            refreshHomeScreenTitle(getResources().getString(R.string.recently_added));
         }
     }
 

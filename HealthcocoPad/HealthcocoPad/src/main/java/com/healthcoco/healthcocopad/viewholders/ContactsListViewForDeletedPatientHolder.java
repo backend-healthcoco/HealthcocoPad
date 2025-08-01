@@ -129,18 +129,16 @@ public class ContactsListViewForDeletedPatientHolder extends HealthCocoViewHolde
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_restore:
-                if (objData.getDoctorId().equals(onItemClickListener.getUser().getUniqueId())) {
-                    if (!Util.isNullOrBlank(objData.getUserId()))
-                        showDeletePatientConfirmationAlert();
-                    else
-                        Util.showToast(mActivity, R.string.no_mobile_number_found);
-                }
-                break;
-            default:
-                break;
+        int id = v.getId();
+        if (id == R.id.bt_restore) {
+            if (objData.getDoctorId().equals(onItemClickListener.getUser().getUniqueId())) {
+                if (!Util.isNullOrBlank(objData.getUserId()))
+                    showDeletePatientConfirmationAlert();
+                else
+                    Util.showToast(mActivity, R.string.no_mobile_number_found);
+            }
         }
+// no else needed for default
     }
 
     @Override

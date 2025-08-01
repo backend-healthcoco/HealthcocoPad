@@ -1,0 +1,15 @@
+
+§
+;
+android*http://schemas.android.com/apk/res/androidJTextView"˜
+*http://schemas.android.com/apk/res/android
+background$@drawable/freshchat_drop_down_box_bg"(Ô„2/
+-§‚ ø#drawable/freshchat_drop_down_box_bg0"L
+*http://schemas.android.com/apk/res/android	clickabletrue"(å„2:@"fstyle$?attr/freshchatDropDownHintTextStyle"23
+1É„ø#attr/freshchatDropDownHintTextStyle0ÿÿ"L
+*http://schemas.android.com/apk/res/android	focusabletrue"(Ú„2:@"
+*http://schemas.android.com/apk/res/androidid$@+id/freshchat_drop_down_input_frame"(Ğ„2.
+,ú…¤ø"id/freshchat_drop_down_input_frame0"¬
+*http://schemas.android.com/apk/res/android
+foreground-?attr/freshchatActionSelectableItemBackground"(‰‚„2:
+8ÿƒø,attr/freshchatActionSelectableItemBackground0J

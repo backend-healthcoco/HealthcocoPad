@@ -1,0 +1,10 @@
+
+¦
+;
+android*http://schemas.android.com/apk/res/androidCpaths*2
+*
+files-path"	path."name	int_files*;
+3external-files-path"	path."name	ext_files*2
+*
+cache-path"	path."name	int_cache*;
+3external-cache-path"	path."name	ext_cacheC

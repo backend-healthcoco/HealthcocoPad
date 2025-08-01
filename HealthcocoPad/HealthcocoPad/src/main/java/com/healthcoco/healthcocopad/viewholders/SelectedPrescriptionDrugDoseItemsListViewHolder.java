@@ -155,21 +155,16 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_drug_duration_unit:
-                commonListDialog = openCommonListWithTitleDialogFragment(this, CommonListDialogType.DURATION, receivedDurationUnitList);
-                break;
-            case R.id.tv_frequency:
-                commonListDialog = openCommonListWithTitleDialogFragment(this, CommonListDialogType.FREQUENCY, receivedFrequencyDosageList);
-                break;
-            case R.id.tv_directions:
-                commonListDialog = openCommonListWithTitleDialogFragment(this, CommonListDialogType.DIRECTION, receivedDirectionsList);
-                break;
-            case R.id.bt_delete:
-                addNewPrescriptionListener.onDeleteItemClicked(objData);
-                break;
-            default:
-                break;
+        int id = v.getId();
+
+        if (id == R.id.tv_drug_duration_unit) {
+            commonListDialog = openCommonListWithTitleDialogFragment(this, CommonListDialogType.DURATION, receivedDurationUnitList);
+        } else if (id == R.id.tv_frequency) {
+            commonListDialog = openCommonListWithTitleDialogFragment(this, CommonListDialogType.FREQUENCY, receivedFrequencyDosageList);
+        } else if (id == R.id.tv_directions) {
+            commonListDialog = openCommonListWithTitleDialogFragment(this, CommonListDialogType.DIRECTION, receivedDirectionsList);
+        } else if (id == R.id.bt_delete) {
+            addNewPrescriptionListener.onDeleteItemClicked(objData);
         }
     }
 

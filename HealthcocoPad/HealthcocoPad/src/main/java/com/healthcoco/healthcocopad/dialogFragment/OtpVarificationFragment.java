@@ -192,19 +192,14 @@ public class OtpVarificationFragment extends HealthCocoDialogFragment implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_verify:
-                validateData();
-                break;
-            case R.id.tv_cancel:
-                dismiss();
-                break;
-            case R.id.bt_cross:
-                dismiss();
-                break;
-            case R.id.tv_resend:
-                generateOtp();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.tv_verify) {
+            validateData();
+        } else if (id == R.id.tv_cancel || id == R.id.bt_cross) {
+            dismiss();
+        } else if (id == R.id.tv_resend) {
+            generateOtp();
         }
     }
 
@@ -249,39 +244,39 @@ public class OtpVarificationFragment extends HealthCocoDialogFragment implements
         public void afterTextChanged(Editable editable) {
             // TODO Auto-generated method stub
             String text = editable.toString();
-            switch (view.getId()) {
-                case R.id.edit_first_digit:
-                    if (text.length() == 1)
-                        editSecondDigit.requestFocus();
-                    break;
-                case R.id.edit_second_digit:
-                    if (text.length() == 1)
-                        editThirdDigit.requestFocus();
-                    if (text.length() == 0)
-                        editFirstDigit.requestFocus();
-                    break;
-                case R.id.edit_third_digit:
-                    if (text.length() == 1)
-                        editForthDigit.requestFocus();
-                    if (text.length() == 0)
-                        editSecondDigit.requestFocus();
-                    break;
-                case R.id.edit_forth_digit:
-                    if (text.length() == 1)
-                        editFifthDigit.requestFocus();
-                    if (text.length() == 0)
-                        editThirdDigit.requestFocus();
-                    break;
-                case R.id.edit_fifth_digit:
-                    if (text.length() == 1)
-                        editSixthDigit.requestFocus();
-                    if (text.length() == 0)
-                        editForthDigit.requestFocus();
-                    break;
-                case R.id.edit_sixth_digit:
-                    if (text.length() == 0)
-                        editFifthDigit.requestFocus();
-                    break;
+            int id = view.getId();
+
+            if (id == R.id.edit_first_digit) {
+                if (text.length() == 1)
+                    editSecondDigit.requestFocus();
+
+            } else if (id == R.id.edit_second_digit) {
+                if (text.length() == 1)
+                    editThirdDigit.requestFocus();
+                if (text.length() == 0)
+                    editFirstDigit.requestFocus();
+
+            } else if (id == R.id.edit_third_digit) {
+                if (text.length() == 1)
+                    editForthDigit.requestFocus();
+                if (text.length() == 0)
+                    editSecondDigit.requestFocus();
+
+            } else if (id == R.id.edit_forth_digit) {
+                if (text.length() == 1)
+                    editFifthDigit.requestFocus();
+                if (text.length() == 0)
+                    editThirdDigit.requestFocus();
+
+            } else if (id == R.id.edit_fifth_digit) {
+                if (text.length() == 1)
+                    editSixthDigit.requestFocus();
+                if (text.length() == 0)
+                    editForthDigit.requestFocus();
+
+            } else if (id == R.id.edit_sixth_digit) {
+                if (text.length() == 0)
+                    editFifthDigit.requestFocus();
             }
         }
 

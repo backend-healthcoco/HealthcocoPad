@@ -88,18 +88,19 @@ public class TreatmentCustomListFragment extends HealthCocoFragment implements V
         CustomListData currentCustomListData = null;
         if (!Util.isNullOrEmptyList(list)) {
             for (TreatmentService treatmentService : list) {
+                headerDataList = new ArrayList<TreatmentService>();
                 if (!currentHeader.equalsIgnoreCase(treatmentService.getCategory())) {
                     if (currentCustomListData != null && headerDataList != null) {
                         currentCustomListData.setHeaderDataList(headerDataList);
                         sksListData.add(currentCustomListData);
                     }
                     currentCustomListData = new CustomListData();
-                    headerDataList = new ArrayList<TreatmentService>();
                     currentHeader = treatmentService.getCategory();
                     currentCustomListData.setHeader("" + currentHeader);
                     headerDataList.add(treatmentService);
-                } else
+                } else {
                     headerDataList.add(treatmentService);
+                }
             }
             if (currentCustomListData != null) {
                 currentCustomListData.setHeaderDataList(headerDataList);
@@ -182,10 +183,8 @@ public class TreatmentCustomListFragment extends HealthCocoFragment implements V
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_add_treatment:
-                openAddNewTreatmentsFragment();
-                break;
+        if (v.getId() == R.id.bt_add_treatment) {
+            openAddNewTreatmentsFragment();
         }
     }
 

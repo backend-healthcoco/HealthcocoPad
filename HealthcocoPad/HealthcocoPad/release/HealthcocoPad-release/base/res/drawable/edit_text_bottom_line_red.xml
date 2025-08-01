@@ -1,0 +1,17 @@
+
+›
+;
+android*http://schemas.android.com/apk/res/androidH
+layer-list* 
+—item*
+…shape*|
+tsolid"k
+*http://schemas.android.com/apk/res/androidcolor@color/red_error"(¥ƒ„2
+Ê†˜øcolor/red_error07*¬
+£item"’
+*http://schemas.android.com/apk/res/androidbottom#@dimen/edit_text_bottom_line_stroke"(°ƒ„2.
+,Êœø"dimen/edit_text_bottom_line_stroke0@*…
+}shape*t
+lsolid"c
+*http://schemas.android.com/apk/res/androidcolor@color/white"(¥ƒ„2
+á†˜øcolor/white03@H

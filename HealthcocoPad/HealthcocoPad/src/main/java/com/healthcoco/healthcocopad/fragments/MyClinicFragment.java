@@ -334,17 +334,15 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.bt_edit_visiting_hours:
-                openDialogFragment(new AddEditClinicHoursDialogFragment(), HealthCocoConstants.TAG_CLINIC_PROFILE, selectedClinicProfile, REQUEST_CODE_MY_CLINIC, CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_PROFILE_CLINIC_HOURS);
-                break;
-            case R.id.bt_edit_appointment_details:
-                openDialogFragment(new AddEditAppointmentDetailDialogFragment(), HealthCocoConstants.TAG_CLINIC_PROFILE, selectedClinicProfile, REQUEST_CODE_MY_CLINIC, CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_APPOINTMENT_DETAIL);
-                break;
-            case R.id.bt_enlarged_map:
-                if (selectedClinicProfile != null && !Util.isNullOrBlank(selectedClinicProfile.getUniqueId()))
-                    openMapViewActivity(CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT, selectedClinicProfile.getUniqueId(), MapType.DOCTOR_PROFILE_CLINIC, 0);
-                break;
+        int id = view.getId();
+        if (id == R.id.bt_edit_visiting_hours) {
+            openDialogFragment(new AddEditClinicHoursDialogFragment(), HealthCocoConstants.TAG_CLINIC_PROFILE, selectedClinicProfile, REQUEST_CODE_MY_CLINIC, CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_PROFILE_CLINIC_HOURS);
+        } else if (id == R.id.bt_edit_appointment_details) {
+            openDialogFragment(new AddEditAppointmentDetailDialogFragment(), HealthCocoConstants.TAG_CLINIC_PROFILE, selectedClinicProfile, REQUEST_CODE_MY_CLINIC, CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_APPOINTMENT_DETAIL);
+        } else if (id == R.id.bt_enlarged_map) {
+            if (selectedClinicProfile != null && !Util.isNullOrBlank(selectedClinicProfile.getUniqueId())) {
+                openMapViewActivity(CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT, selectedClinicProfile.getUniqueId(), MapType.DOCTOR_PROFILE_CLINIC, 0);
+            }
         }
     }
 

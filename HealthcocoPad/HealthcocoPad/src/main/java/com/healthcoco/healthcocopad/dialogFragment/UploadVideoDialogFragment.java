@@ -154,18 +154,16 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_select_file:
-                mActivity.selectVideoFromGallery(this);
-//                openDialogFragment(DialogType.SELECT_IMAGE, this);
-                break;
-            case R.id.bt_save:
-                Util.checkNetworkStatus(mActivity);
-                validateData();
-                break;
-            case R.id.tv_category:
-                openSelectCategoryFragment();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.tv_select_file) {
+            mActivity.selectVideoFromGallery(this);
+            // openDialogFragment(DialogType.SELECT_IMAGE, this);
+        } else if (id == R.id.bt_save) {
+            Util.checkNetworkStatus(mActivity);
+            validateData();
+        } else if (id == R.id.tv_category) {
+            openSelectCategoryFragment();
         }
     }
 

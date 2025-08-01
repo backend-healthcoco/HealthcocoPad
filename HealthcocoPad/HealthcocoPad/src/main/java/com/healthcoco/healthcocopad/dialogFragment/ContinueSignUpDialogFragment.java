@@ -109,16 +109,15 @@ public class ContinueSignUpDialogFragment extends HealthCocoDialogFragment imple
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_join:
-                validateData();
-                break;
-            case R.id.edit_city:
-                if (!Util.isNullOrEmptyList(citiesResponse))
-                    openListPopUp(CommonListDialogType.CITY, citiesResponse);
-                else
-                    getCitiesList(true);
-                break;
+        if (v.getId() == R.id.bt_join) {
+            validateData();
+
+        } else if (v.getId() == R.id.edit_city) {
+            if (!Util.isNullOrEmptyList(citiesResponse)) {
+                openListPopUp(CommonListDialogType.CITY, citiesResponse);
+            } else {
+                getCitiesList(true);
+            }
         }
     }
 

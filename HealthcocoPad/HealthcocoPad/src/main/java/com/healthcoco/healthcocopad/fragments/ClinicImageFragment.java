@@ -94,10 +94,10 @@ public class ClinicImageFragment extends HealthCocoFragment implements DownloadF
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_clinic_image:
-                mActivity.openEnlargedImageDialogFragment(clinicImage.getImageUrl());
-                break;
+        int id = v.getId();
+
+        if (id == R.id.iv_clinic_image) {
+            mActivity.openEnlargedImageDialogFragment(clinicImage.getImageUrl());
         }
     }
 }

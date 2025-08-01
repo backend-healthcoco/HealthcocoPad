@@ -144,19 +144,23 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_advance_search:
-                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DISEASE,
-                        AddUpdateNameDialogType.DISEASE, this, user, "", REQUEST_CODE_DISEASED_LIST);
-                break;
-            case R.id.container_right_action:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    addMedicalFamilyHistory();
-                } else {
-                    Util.showToast(mActivity, getResources().getString(R.string.user_offline));
-                }
-                break;
+        if (v.getId() == R.id.bt_advance_search) {
+            mActivity.openAddUpdateNameDialogFragment(
+                    WebServiceType.ADD_DISEASE,
+                    AddUpdateNameDialogType.DISEASE,
+                    this,
+                    user,
+                    "",
+                    REQUEST_CODE_DISEASED_LIST
+            );
+
+        } else if (v.getId() == R.id.container_right_action) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                addMedicalFamilyHistory();
+            } else {
+                Util.showToast(mActivity, getResources().getString(R.string.user_offline));
+            }
         }
     }
 

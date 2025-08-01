@@ -68,14 +68,12 @@ public class FeedbackFragment extends HealthCocoFragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    validateData();
-                else
-                    onNetworkUnavailable(null);
-                break;
+        if (v.getId() == R.id.container_right_action) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline)
+                validateData();
+            else
+                onNetworkUnavailable(null);
         }
     }
 

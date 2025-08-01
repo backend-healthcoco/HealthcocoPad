@@ -164,64 +164,64 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_cancel:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    showConfirmationAlert(v.getId(), null, mActivity.getResources().getString(R.string.confirm_cancel_appointment));
-                } else
-                    onNetworkUnavailable(null);
-                break;
-            case R.id.bt_remind:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    remindForAppointment();
-                } else
-                    onNetworkUnavailable(null);
-                break;
-            case R.id.bt_confirm:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    String fromTime = "";
-                    String toTime = "";
-                    String formattedMergedFromToTime = "";
-                    WorkingHours workingHours = appointment.getTime();
-                    if (workingHours != null) {
-                        fromTime = DateTimeUtil.getFormattedTime(0, Math.round(workingHours.getFromTime()));
-                        toTime = DateTimeUtil.getFormattedTime(0, Math.round(workingHours.getToTime()));
-                    }
-                    if (!Util.isNullOrBlank(fromTime) && !Util.isNullOrBlank(toTime)) {
-                        formattedMergedFromToTime = mActivity.getResources().getString(R.string.from_with_spaces)
-                                + fromTime
-                                + mActivity.getResources().getString(R.string.to_with_spaces)
-                                + toTime;
-                    }
-                    showConfirmationAlert(v.getId(), DateTimeUtil
-                            .getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointment.getFromDate()), mActivity.getResources()
-                            .getString(R.string.are_you_sure_confirm_appointment)
-                            + formattedMergedFromToTime.trim() + "?");
-                } else
-                    onNetworkUnavailable(null);
-                break;
-            case R.id.bt_reschedule:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    openAddAppointmentScreen();
-                } else
-                    onNetworkUnavailable(null);
-                break;
-            case R.id.bt_send_whatsapp:
-                String msg = "Patient Detail: " + "\n "
-                        + Util.getValidatedValue(selectedPatient.getFirstName()) + " " + Util.getValidatedValue(selectedPatient.getLastName()) + "\n "
-                        + Util.getValidatedValue(selectedPatient.getGender()) + " " + Util.getValidatedValue(Util.getFormattedAge(selectedPatient.getDob())) + "\n "
-                        + "Your appointment with " + appointment.getDoctorName()
-                        + " has been scheduled @ "
-                        + DateTimeUtil.getFormattedTime(0, Math.round(appointment.getTime().getFromTime())) + ", "
-                        + DateTimeUtil.getFormattedDateTime(PatientAppointmentDetailFragment.DATE_FORMAT_USED_IN_THIS_SCREEN, appointment.getFromDate())
-                        + ", " + " at" + "  " + appointment.getLocationName() + "\n "
-                        + "Powered by Healthcoco";
-                mActivity.sendMsgToWhatsapp(msg, selectedPatient.getMobileNumber());
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_cancel) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                showConfirmationAlert(v.getId(), null, mActivity.getResources().getString(R.string.confirm_cancel_appointment));
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_remind) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                remindForAppointment();
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_confirm) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                String fromTime = "";
+                String toTime = "";
+                String formattedMergedFromToTime = "";
+                WorkingHours workingHours = appointment.getTime();
+                if (workingHours != null) {
+                    fromTime = DateTimeUtil.getFormattedTime(0, Math.round(workingHours.getFromTime()));
+                    toTime = DateTimeUtil.getFormattedTime(0, Math.round(workingHours.getToTime()));
+                }
+                if (!Util.isNullOrBlank(fromTime) && !Util.isNullOrBlank(toTime)) {
+                    formattedMergedFromToTime = mActivity.getResources().getString(R.string.from_with_spaces)
+                            + fromTime
+                            + mActivity.getResources().getString(R.string.to_with_spaces)
+                            + toTime;
+                }
+                showConfirmationAlert(v.getId(),
+                        DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointment.getFromDate()),
+                        mActivity.getResources().getString(R.string.are_you_sure_confirm_appointment)
+                                + formattedMergedFromToTime.trim() + "?");
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_reschedule) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                openAddAppointmentScreen();
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_send_whatsapp) {
+            String msg = "Patient Detail: " + "\n "
+                    + Util.getValidatedValue(selectedPatient.getFirstName()) + " " + Util.getValidatedValue(selectedPatient.getLastName()) + "\n "
+                    + Util.getValidatedValue(selectedPatient.getGender()) + " " + Util.getValidatedValue(Util.getFormattedAge(selectedPatient.getDob())) + "\n "
+                    + "Your appointment with " + appointment.getDoctorName()
+                    + " has been scheduled @ "
+                    + DateTimeUtil.getFormattedTime(0, Math.round(appointment.getTime().getFromTime())) + ", "
+                    + DateTimeUtil.getFormattedDateTime(PatientAppointmentDetailFragment.DATE_FORMAT_USED_IN_THIS_SCREEN, appointment.getFromDate())
+                    + ", " + " at" + "  " + appointment.getLocationName() + "\n "
+                    + "Powered by Healthcoco";
+            mActivity.sendMsgToWhatsapp(msg, selectedPatient.getMobileNumber());
         }
     }
 
@@ -325,13 +325,10 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (viewId) {
-                    case R.id.bt_confirm:
-                        confirmAppointment();
-                        break;
-                    case R.id.bt_cancel:
-                        cancelAppointment();
-                        break;
+                if (viewId == R.id.bt_confirm) {
+                    confirmAppointment();
+                } else if (viewId == R.id.bt_cancel) {
+                    cancelAppointment();
                 }
             }
         });

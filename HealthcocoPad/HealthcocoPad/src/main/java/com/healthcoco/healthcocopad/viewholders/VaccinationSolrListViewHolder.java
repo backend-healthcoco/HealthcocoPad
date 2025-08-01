@@ -72,10 +72,10 @@ public class VaccinationSolrListViewHolder extends HealthcocoComonRecylcerViewHo
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_due_date:
-                openDatePickerDialog((TextView) v);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.tv_due_date) {
+            openDatePickerDialog((TextView) v);
         }
     }
 

@@ -103,10 +103,8 @@ public class GlobalRecordAccessDialogFragment extends HealthCocoDialogFragment i
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_generate_otp:
-                generateOtp();
-                break;
+        if (v.getId() == R.id.bt_generate_otp) {
+            generateOtp();
         }
     }
 

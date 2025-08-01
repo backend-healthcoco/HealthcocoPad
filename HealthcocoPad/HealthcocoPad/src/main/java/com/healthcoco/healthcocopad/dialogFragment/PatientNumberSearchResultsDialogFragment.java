@@ -126,22 +126,23 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_register_new_patient:
-                if (list.size() < 9) {
-                    if (!isFromHomeActivity)
-                        openAddNewPatientDialog(AddUpdateNameDialogType.ADD_NEW_PATIENT_NAME, this, "", 0);
-                    else if (isForMobileNoEdit) {
-                        mActivity.showLoading(false);
-                        WebDataServiceImpl.getInstance(mApp).updatePatientMobileNumber(Boolean.class, WebServiceType.UPDATE_PATINET_MOBILE_NUMBER,
-                                user, selectedPatient.getUserId(), null, mobileNumber, this, this);
-                    } else
-                        openRegistrationFragment(false, "");
-                } else
-                    Util.showAlert(mActivity, R.string.alert_nine_patients_already_registered);
-                break;
-        }
+        int id = v.getId();
 
+        if (id == R.id.bt_register_new_patient) {
+            if (list.size() < 9) {
+                if (!isFromHomeActivity) {
+                    openAddNewPatientDialog(AddUpdateNameDialogType.ADD_NEW_PATIENT_NAME, this, "", 0);
+                } else if (isForMobileNoEdit) {
+                    mActivity.showLoading(false);
+                    WebDataServiceImpl.getInstance(mApp).updatePatientMobileNumber(Boolean.class, WebServiceType.UPDATE_PATINET_MOBILE_NUMBER,
+                            user, selectedPatient.getUserId(), null, mobileNumber, this, this);
+                } else {
+                    openRegistrationFragment(false, "");
+                }
+            } else {
+                Util.showAlert(mActivity, R.string.alert_nine_patients_already_registered);
+            }
+        }
     }
 
     protected void openAddNewPatientDialog(AddUpdateNameDialogType dialogType,

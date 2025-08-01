@@ -479,29 +479,23 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         hideSoftKeyboard();
-        switch (view.getId()) {
-            case R.id.bt_menu:
-                if (sliding_pane_layout.isOpen()) {
-                    sliding_pane_layout.closePane();
-                } else {
-                    sliding_pane_layout.openPane();
+        if (view.getId() == R.id.bt_menu) {
+            if (sliding_pane_layout.isOpen()) {
+                sliding_pane_layout.closePane();
+            } else {
+                sliding_pane_layout.openPane();
+            }
+        } else if (view.getId() == R.id.container_right_action) {
+            if (selectedFramentType == FragmentType.CONTACTS) {
+                if (contactsFragment != null) {
+                    drawerLayout.openDrawer(GravityCompat.END);
                 }
-                break;
-            case R.id.container_right_action:
-                switch (selectedFramentType) {
-                    case CONTACTS:
-                        if (contactsFragment != null)
-                            drawerLayout.openDrawer(GravityCompat.END);
-                        break;
-                    case CALENDAR:
-                        CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager().findFragmentByTag(CalendarFragment.class.getSimpleName());
-                        if (calendarFragment != null) {
-//                            calendarFragment.showOptionsWindow(v);
-                        }
-                        break;
+            } else if (selectedFramentType == FragmentType.CALENDAR) {
+                CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager().findFragmentByTag(CalendarFragment.class.getSimpleName());
+                if (calendarFragment != null) {
+                    // calendarFragment.showOptionsWindow(v);
                 }
-            default:
-                break;
+            }
         }
     }
 

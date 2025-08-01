@@ -269,15 +269,14 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-                validateData();
-                break;
-            default:
-                break;
-            case R.id.tv_date:
-                openDatePickerDialog();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.container_right_action) {
+            validateData();
+        } else if (id == R.id.tv_date) {
+            openDatePickerDialog();
+        } else {
+            // default case: do nothing
         }
     }
 

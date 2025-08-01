@@ -126,12 +126,13 @@ public class RegistrationDetailListViewHolder extends LinearLayout implements Vi
     @Override
     public void onClick(View v) {
         clearPreviousAlerts();
-        switch (v.getId()) {
-            case R.id.tv_medical_council:
-                itemClickListener.onMedicalCouncilClicked(tvMedicalCouncil, objData);
-                break;
-            case R.id.bt_delete:
-                itemClickListener.onDeleteRegistrationDetailClicked(this, objData);
+        int id = v.getId();
+
+        if (id == R.id.tv_medical_council) {
+            itemClickListener.onMedicalCouncilClicked(tvMedicalCouncil, objData);
+
+        } else if (id == R.id.bt_delete) {
+            itemClickListener.onDeleteRegistrationDetailClicked(this, objData);
         }
     }
 

@@ -3,7 +3,6 @@ package com.orm;
 import android.database.Cursor;
 
 import com.orm.app.ClientApp;
-import com.orm.dsl.BuildConfig;
 import com.orm.model.TestRecord;
 
 import org.junit.Before;
@@ -21,7 +20,7 @@ import static junit.framework.Assert.*;
  * @author jonatan.salas
  */
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(sdk = 18, constants = BuildConfig.class, application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
+@Config(sdk = 18  , application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
 public final class SugarDataSourceTest {
     private SugarDataSource<TestRecord> recordSugarDataSource;
 

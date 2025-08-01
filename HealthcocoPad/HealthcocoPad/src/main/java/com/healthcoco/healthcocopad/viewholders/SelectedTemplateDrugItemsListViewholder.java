@@ -55,13 +55,13 @@ public class SelectedTemplateDrugItemsListViewholder extends HealthCocoViewHolde
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_delete:
-                templateListener.onDeleteItemClicked(objData);
-                break;
-            case R.id.container_drug_dose:
-                templateListener.onDrugItemClicked(objData);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_delete) {
+            templateListener.onDeleteItemClicked(objData);
+
+        } else if (id == R.id.container_drug_dose) {
+            templateListener.onDrugItemClicked(objData);
         }
     }
 }

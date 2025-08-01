@@ -551,10 +551,8 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fl_bt_add_visit:
-                openAddVisitFragment();
-                break;
+        if (v.getId() == R.id.fl_bt_add_visit) {
+            openAddVisitFragment();
         }
     }
 

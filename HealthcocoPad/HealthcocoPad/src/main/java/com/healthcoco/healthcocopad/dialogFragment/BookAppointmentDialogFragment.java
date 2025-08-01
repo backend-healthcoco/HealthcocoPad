@@ -288,16 +288,23 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         btSelectPatient.setOnClickListener(this);
         tvSelectedTime.setOnClickListener(this);
         editMobileNumber.setDrawableClickListener(this);
-        switch (bookAppointmentFromScreenType) {
-            case CALENDAR_LIST_ADD_NEW:
-                containerPatientProfileHeader.setOnClickListener(this);
-                break;
-            case APPOINTMENTS_QUEUE_ADD_NEW:
-                containerPatientProfileHeader.setOnClickListener(this);
-                break;
-            default:
-                parentAddSelectPatient.setVisibility(View.GONE);
-                break;
+        // switch (bookAppointmentFromScreenType) {
+        //     case CALENDAR_LIST_ADD_NEW:
+        //         containerPatientProfileHeader.setOnClickListener(this);
+        //         break;
+        //     case APPOINTMENTS_QUEUE_ADD_NEW:
+        //         containerPatientProfileHeader.setOnClickListener(this);
+        //         break;
+        //     default:
+        //         parentAddSelectPatient.setVisibility(View.GONE);
+        //         break;
+        // }
+        if (bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_ADD_NEW) {
+            containerPatientProfileHeader.setOnClickListener(this);
+        } else if (bookAppointmentFromScreenType == BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW) {
+            containerPatientProfileHeader.setOnClickListener(this);
+        } else {
+            parentAddSelectPatient.setVisibility(View.GONE);
         }
         btAddNewPatient.setOnClickListener(this);
         btClearMobileNumber.setOnClickListener(this);
@@ -471,57 +478,61 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     public void onResponse(VolleyResponseBean response) {
         if (response.getWebServiceType() != null) {
             LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
-            switch (response.getWebServiceType()) {
-                case FRAGMENT_INITIALISATION:
-                    if (user != null && !Util.isNullOrBlank(user.getUniqueId())) {
-                        tvSelectedDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN));
-                        initData();
-                        initSelectedAppointment();
-                        initPatientProfile();
-                        if (!Util.isNullOrEmptyList(registeredDoctorProfileList))
-                            fromHashMapAndRefresh(registeredDoctorProfileList);
-                        return;
-                    }
-                    break;
-                case ADD_APPOINTMENT:
-                    if (response.isValidData(response) && response.getData() instanceof CalendarEvents) {
-                        CalendarEvents calendarEvents = (CalendarEvents) response.getData();
-                        calendarEvents.setIsAddedOnSuccess(true);
-                        if (bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_ADD_NEW
-                                || bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_RESCHEDULE ||
-                                bookAppointmentFromScreenType == BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW) {
-                            LocalDataServiceImpl.getInstance(mApp).addCalendarEventsUpdated(calendarEvents);
-                            Util.sendBroadcast(mApp, ContactsListFragment.INTENT_GET_CONTACT_LIST_SERVER);
-                        } else
-                            LocalDataServiceImpl.getInstance(mApp).addAppointment(calendarEvents);
-                        Util.showToast(mActivity, R.string.appointment_created);
-                        sendBroadcasts(calendarEvents.getAppointmentId());
-//                        getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_BOOK_APPOINTMENT, null);
-                        getDialog().dismiss();
-                    }
-                    break;
-
-                case SEARCH_PATIENTS:
-                    if (!Util.isNullOrEmptyList(response.getDataList())) {
-                        ArrayList<AlreadyRegisteredPatientsResponse> list = (ArrayList<AlreadyRegisteredPatientsResponse>) (ArrayList<?>) response
-                                .getDataList();
-                        LocalDataServiceImpl.getInstance(mApp).addAlreadyRegisteredPatients(list);
-                        showSearchedPatientsListPopUp(list);
-                    } else {
-                        autotvPatientName.setAdapter(null);
-                    }
-                    loadingExistingPatientsList.setVisibility(View.GONE);
+            // switch (response.getWebServiceType()) {
+            //     case FRAGMENT_INITIALISATION:
+            //         ...
+            //     case ADD_APPOINTMENT:
+            //         ...
+            //     case SEARCH_PATIENTS:
+            //         ...
+            //     case GET_CHECK_PNUM_EXIST:
+            //         ...
+            //     default:
+            //         break;
+            // }
+            if (response.getWebServiceType() == WebServiceType.FRAGMENT_INITIALISATION) {
+                if (user != null && !Util.isNullOrBlank(user.getUniqueId())) {
+                    tvSelectedDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN));
+                    initData();
+                    initSelectedAppointment();
+                    initPatientProfile();
+                    if (!Util.isNullOrEmptyList(registeredDoctorProfileList))
+                        fromHashMapAndRefresh(registeredDoctorProfileList);
                     return;
-                case GET_CHECK_PNUM_EXIST:
-                    if (response.getData() instanceof Boolean) {
-                        boolean isDataSuccess = (boolean) response.getData();
-                        if (isDataSuccess) {
-                            showExistedPnumAlert();
-                        } else bookAppointment();
-                    }
-                    break;
-                default:
-                    break;
+                }
+            } else if (response.getWebServiceType() == WebServiceType.ADD_APPOINTMENT) {
+                if (response.isValidData(response) && response.getData() instanceof CalendarEvents) {
+                    CalendarEvents calendarEvents = (CalendarEvents) response.getData();
+                    calendarEvents.setIsAddedOnSuccess(true);
+                    if (bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_ADD_NEW
+                            || bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_RESCHEDULE ||
+                            bookAppointmentFromScreenType == BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW) {
+                        LocalDataServiceImpl.getInstance(mApp).addCalendarEventsUpdated(calendarEvents);
+                        Util.sendBroadcast(mApp, ContactsListFragment.INTENT_GET_CONTACT_LIST_SERVER);
+                    } else
+                        LocalDataServiceImpl.getInstance(mApp).addAppointment(calendarEvents);
+                    Util.showToast(mActivity, R.string.appointment_created);
+                    sendBroadcasts(calendarEvents.getAppointmentId());
+                    getDialog().dismiss();
+                }
+            } else if (response.getWebServiceType() == WebServiceType.SEARCH_PATIENTS) {
+                if (!Util.isNullOrEmptyList(response.getDataList())) {
+                    ArrayList<AlreadyRegisteredPatientsResponse> list = (ArrayList<AlreadyRegisteredPatientsResponse>) (ArrayList<?>) response
+                            .getDataList();
+                    LocalDataServiceImpl.getInstance(mApp).addAlreadyRegisteredPatients(list);
+                    showSearchedPatientsListPopUp(list);
+                } else {
+                    autotvPatientName.setAdapter(null);
+                }
+                loadingExistingPatientsList.setVisibility(View.GONE);
+                return;
+            } else if (response.getWebServiceType() == WebServiceType.GET_CHECK_PNUM_EXIST) {
+                if (response.getData() instanceof Boolean) {
+                    boolean isDataSuccess = (boolean) response.getData();
+                    if (isDataSuccess) {
+                        showExistedPnumAlert();
+                    } else bookAppointment();
+                }
             }
         }
         mActivity.hideLoading();
@@ -607,20 +618,25 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
 
     private void sendBroadcasts(String aptId) {
         Intent intent = new Intent();
-        switch (bookAppointmentFromScreenType) {
-            case NOTIFICATION_APPOINTMENTS_LIST_RESCHEDULE:
-                intent.setAction(NotificationResponseDataFragment.INTENT_GET_NOTIFICATION_APPOINTMENT_LIST_LOCAL);
-                break;
-            case APPOINTMENTS_QUEUE_RESCHEDULE:
-                intent.setAction(QueueFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
-                break;
-            default:
-                intent.setAction(PatientAppointmentDetailFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
-                break;
+        // switch (bookAppointmentFromScreenType) {
+        //     case NOTIFICATION_APPOINTMENTS_LIST_RESCHEDULE:
+        //         intent.setAction(NotificationResponseDataFragment.INTENT_GET_NOTIFICATION_APPOINTMENT_LIST_LOCAL);
+        //         break;
+        //     case APPOINTMENTS_QUEUE_RESCHEDULE:
+        //         intent.setAction(QueueFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
+        //         break;
+        //     default:
+        //         intent.setAction(PatientAppointmentDetailFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
+        //         break;
+        // }
+        if (bookAppointmentFromScreenType == BookAppointmentFromScreenType.NOTIFICATION_APPOINTMENTS_LIST_RESCHEDULE) {
+            intent.setAction(NotificationResponseDataFragment.INTENT_GET_NOTIFICATION_APPOINTMENT_LIST_LOCAL);
+        } else if (bookAppointmentFromScreenType == BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_RESCHEDULE) {
+            intent.setAction(QueueFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
+        } else {
+            intent.setAction(PatientAppointmentDetailFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
         }
-
         intent.putExtra(TAG_APPOINTMENT_ID, aptId);
-//        if (intent != null && intent.getAction() != null)
         LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         sendBroadcastToCalendarFragment();
     }
@@ -639,27 +655,29 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     @Override
     public VolleyResponseBean doInBackground(VolleyResponseBean response) {
         VolleyResponseBean volleyResponseBean = null;
-        switch (response.getLocalBackgroundTaskType()) {
-            case GET_FRAGMENT_INITIALISATION_DATA:
-                volleyResponseBean = new VolleyResponseBean();
-                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
-                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-                if (doctor != null && doctor.getUser() != null) {
-                    user = doctor.getUser();
-//                    isMobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
-                    if (!Util.isNullOrBlank(appointmentId)) {
-                        selectedAppointment = LocalDataServiceImpl.getInstance(mApp).getAppointment(appointmentId);
-                        if (!Util.isNullOrBlank(selectedAppointment.getPatientId()))
-                            HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selectedAppointment.getPatientId();
-                    }
-                    if (bookAppointmentFromScreenType != BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW)
-                        selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatientNew(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-                    registeredDoctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
-                    doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
-                    if (doctorClinicProfile != null && doctorClinicProfile.getMobileNumberOptional() != null)
-                        isMobileNumberOptional = doctorClinicProfile.getMobileNumberOptional();
+        // switch (response.getLocalBackgroundTaskType()) {
+        //     case GET_FRAGMENT_INITIALISATION_DATA:
+        //         ...
+        //         break;
+        // }
+        if (response.getLocalBackgroundTaskType() == LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA) {
+            volleyResponseBean = new VolleyResponseBean();
+            volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+            if (doctor != null && doctor.getUser() != null) {
+                user = doctor.getUser();
+                if (!Util.isNullOrBlank(appointmentId)) {
+                    selectedAppointment = LocalDataServiceImpl.getInstance(mApp).getAppointment(appointmentId);
+                    if (!Util.isNullOrBlank(selectedAppointment.getPatientId()))
+                        HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selectedAppointment.getPatientId();
                 }
-                break;
+                if (bookAppointmentFromScreenType != BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW)
+                    selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatientNew(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                registeredDoctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
+                doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                if (doctorClinicProfile != null && doctorClinicProfile.getMobileNumberOptional() != null)
+                    isMobileNumberOptional = doctorClinicProfile.getMobileNumberOptional();
+            }
         }
         if (volleyResponseBean == null)
             volleyResponseBean = new VolleyResponseBean();
@@ -674,42 +692,52 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_selected_date:
-                openDatePickerDialog((TextView) v);
-                break;
-            case R.id.tv_selected_time:
-                openTimePickerDialog(null, (TextView) v);
-                break;
-            case R.id.container_patient_profile_header:
-            case R.id.bt_select_patient:
-                openContactsListScreen();
-                break;
-            case R.id.bt_save:
-                if (isPnumChange)
-                    checkForPnumExist();
-                else if (user != null) {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        validateData();
-                    } else
-                        Util.showToast(mActivity, R.string.user_offline);
-                }
-                break;
-            case R.id.bt_clear_mobile_number:
-                editMobileNumber.setText("");
-                break;
-            case R.id.bt_add_new_patient:
-                showDetailsAddNewPatient(true);
-                break;
-            case R.id.bt_register_new_patient:
-                autotvPatientName.setVisibility(View.VISIBLE);
-                autotvPatientName.setEnabled(true);
-                requestFocusOnEditText(autotvPatientName);
-                break;
-            case R.id.tv_birthday:
-                openBirthDatePickerDialog();
-                break;
+        // switch (v.getId()) {
+        //     case R.id.tv_selected_date:
+        //         ...
+        //     case R.id.tv_selected_time:
+        //         ...
+        //     case R.id.container_patient_profile_header:
+        //     case R.id.bt_select_patient:
+        //         ...
+        //     case R.id.bt_save:
+        //         ...
+        //     case R.id.bt_clear_mobile_number:
+        //         ...
+        //     case R.id.bt_add_new_patient:
+        //         ...
+        //     case R.id.bt_register_new_patient:
+        //         ...
+        //     case R.id.tv_birthday:
+        //         ...
+        // }
+        int id = v.getId();
+        if (id == R.id.tv_selected_date) {
+            openDatePickerDialog((TextView) v);
+        } else if (id == R.id.tv_selected_time) {
+            openTimePickerDialog(null, (TextView) v);
+        } else if (id == R.id.container_patient_profile_header || id == R.id.bt_select_patient) {
+            openContactsListScreen();
+        } else if (id == R.id.bt_save) {
+            if (isPnumChange)
+                checkForPnumExist();
+            else if (user != null) {
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    validateData();
+                } else
+                    Util.showToast(mActivity, R.string.user_offline);
+            }
+        } else if (id == R.id.bt_clear_mobile_number) {
+            editMobileNumber.setText("");
+        } else if (id == R.id.bt_add_new_patient) {
+            showDetailsAddNewPatient(true);
+        } else if (id == R.id.bt_register_new_patient) {
+            autotvPatientName.setVisibility(View.VISIBLE);
+            autotvPatientName.setEnabled(true);
+            requestFocusOnEditText(autotvPatientName);
+        } else if (id == R.id.tv_birthday) {
+            openBirthDatePickerDialog();
         }
     }
 
@@ -962,28 +990,33 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
 
     @Override
     public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-            case R.id.edit_pnum:
-                if (selectedPatient == null)
+        // switch (v.getId()) {
+        //     case R.id.edit_pnum:
+        //         ...
+        //     case R.id.autotv_patient_name:
+        //         ...
+        //     case R.id.edit_mobile_number:
+        //         ...
+        // }
+        int id = v.getId();
+        if (id == R.id.edit_pnum) {
+            if (selectedPatient == null)
+                isPnumChange = true;
+            else if (selectedPatient != null)
+                if (!s.equals(selectedPatient.getPnum())) {
                     isPnumChange = true;
-                else if (selectedPatient != null)
-                    if (!s.equals(selectedPatient.getPnum())) {
-                        isPnumChange = true;
-                    }
-                break;
-            case R.id.autotv_patient_name:
-                if (!Util.isNullOrBlank(s) && containerPatientProfileHeader.getVisibility() == View.VISIBLE)
-                    showSelectedPatientHeader(false);
-                break;
-            case R.id.edit_mobile_number:
-                LogUtils.LOGD(TAG, "Edit Mobile Number");
-                autotvPatientName.setText("");
-                HealthCocoConstants.SELECTED_PATIENTS_USER_ID = null;
-                if (Util.isValidMobileNo(s)) {
-                    mActivity.hideSoftKeyboard();
-                    getExistingPatientsList(s);
                 }
-                break;
+        } else if (id == R.id.autotv_patient_name) {
+            if (!Util.isNullOrBlank(s) && containerPatientProfileHeader.getVisibility() == View.VISIBLE)
+                showSelectedPatientHeader(false);
+        } else if (id == R.id.edit_mobile_number) {
+            LogUtils.LOGD(TAG, "Edit Mobile Number");
+            autotvPatientName.setText("");
+            HealthCocoConstants.SELECTED_PATIENTS_USER_ID = null;
+            if (Util.isValidMobileNo(s)) {
+                mActivity.hideSoftKeyboard();
+                getExistingPatientsList(s);
+            }
         }
     }
 
@@ -994,22 +1027,25 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
 
     @Override
     public void onItemSelected(PopupWindowType popupWindowType, Object object) {
-        switch (popupWindowType) {
-            case APPOINTMENT_SLOT:
-                if (object != null && object instanceof AppointmentSlotsType) {
-                    AppointmentSlotsType appointmentSlotsType = (AppointmentSlotsType) object;
-                    String formattedString = Math.round(appointmentSlotsType.getTime()) + " " + Util.getValidatedValue(appointmentSlotsType.getUnits().getValueToDisplay());
-                    tvAppointmentSlotDuration.setText(formattedString);
-                    tvAppointmentSlotDuration.setTag(appointmentSlotsType.getTime());
-                }
-                break;
-            case DOCTOR_LIST:
-                if (object instanceof RegisteredDoctorProfile) {
-                    RegisteredDoctorProfile doctorProfile = (RegisteredDoctorProfile) object;
-                    tvDoctorName.setText(doctorProfile.getFirstNameWithTitle());
-                    user.setUniqueId(doctorProfile.getUserId());
-                }
-                break;
+        // switch (popupWindowType) {
+        //     case APPOINTMENT_SLOT:
+        //         ...
+        //     case DOCTOR_LIST:
+        //         ...
+        // }
+        if (popupWindowType == PopupWindowType.APPOINTMENT_SLOT) {
+            if (object != null && object instanceof AppointmentSlotsType) {
+                AppointmentSlotsType appointmentSlotsType = (AppointmentSlotsType) object;
+                String formattedString = Math.round(appointmentSlotsType.getTime()) + " " + Util.getValidatedValue(appointmentSlotsType.getUnits().getValueToDisplay());
+                tvAppointmentSlotDuration.setText(formattedString);
+                tvAppointmentSlotDuration.setTag(appointmentSlotsType.getTime());
+            }
+        } else if (popupWindowType == PopupWindowType.DOCTOR_LIST) {
+            if (object instanceof RegisteredDoctorProfile) {
+                RegisteredDoctorProfile doctorProfile = (RegisteredDoctorProfile) object;
+                tvDoctorName.setText(doctorProfile.getFirstNameWithTitle());
+                user.setUniqueId(doctorProfile.getUserId());
+            }
         }
     }
 
@@ -1046,10 +1082,13 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
 
     @Override
     public void onClick(DrawablePosition target) {
-        switch (target) {
-            case RIGHT:
-                requestPermission();
-                break;
+        // switch (target) {
+        //     case RIGHT:
+        //         requestPermission();
+        //         break;
+        // }
+        if (target == DrawableClickListener.DrawablePosition.RIGHT) {
+            requestPermission();
         }
     }
 

@@ -263,12 +263,10 @@ public class DrugListFragment extends HealthCocoFragment implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_add_drug:
-                AddNewDrugDialogFragment newDrugDialogFragment = new AddNewDrugDialogFragment(this);
-                newDrugDialogFragment.show(mActivity.getSupportFragmentManager(),
-                        newDrugDialogFragment.getClass().getSimpleName());
-                break;
+        if (v.getId() == R.id.bt_add_drug) {
+            AddNewDrugDialogFragment newDrugDialogFragment = new AddNewDrugDialogFragment(this);
+            newDrugDialogFragment.show(mActivity.getSupportFragmentManager(),
+                    newDrugDialogFragment.getClass().getSimpleName());
         }
     }
 

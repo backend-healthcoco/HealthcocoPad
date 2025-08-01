@@ -147,28 +147,31 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tab_my_profile:
-                viewPager.setCurrentItem(0);
-                break;
-            case R.id.tab_my_clinic:
-                if (!isClickedOnce) {
-                    myClinicFragment.refreshMapLocation();
-                    isClickedOnce = true;
-                }
-                viewPager.setCurrentItem(1);
-                break;
-            case R.id.bt_edit:
-                openDialogFragment(new AddEditDoctorProfileDialogFragment(FragmentType.PROFILE), AddEditDoctorProfileDialogFragment.TAG_DOCTOR_PROFILE_DETAIL, doctorProfile, REQUEST_CODE_DOCTOR_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_PROFILE_DETAILS);
-                break;
-            case R.id.iv_image:
-                if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getImageUrl()))
-                    mActivity.openEnlargedImageDialogFragment(doctorProfile.getImageUrl());
-                break;
-            case R.id.iv_doctor_cover_photo:
-                if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getCoverImageUrl()))
-                    mActivity.openEnlargedImageDialogFragment(doctorProfile.getCoverImageUrl());
-                break;
+        int id = v.getId();
+        if (id == R.id.tab_my_profile) {
+            viewPager.setCurrentItem(0);
+        } else if (id == R.id.tab_my_clinic) {
+            if (!isClickedOnce) {
+                myClinicFragment.refreshMapLocation();
+                isClickedOnce = true;
+            }
+            viewPager.setCurrentItem(1);
+        } else if (id == R.id.bt_edit) {
+            openDialogFragment(
+                    new AddEditDoctorProfileDialogFragment(FragmentType.PROFILE),
+                    AddEditDoctorProfileDialogFragment.TAG_DOCTOR_PROFILE_DETAIL,
+                    doctorProfile,
+                    REQUEST_CODE_DOCTOR_PROFILE,
+                    CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_PROFILE_DETAILS
+            );
+        } else if (id == R.id.iv_image) {
+            if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getImageUrl())) {
+                mActivity.openEnlargedImageDialogFragment(doctorProfile.getImageUrl());
+            }
+        } else if (id == R.id.iv_doctor_cover_photo) {
+            if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getCoverImageUrl())) {
+                mActivity.openEnlargedImageDialogFragment(doctorProfile.getCoverImageUrl());
+            }
         }
     }
 

@@ -560,37 +560,31 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_selected_date:
-                openDatePickerDialog((TextView) v);
-                break;
-            case R.id.tv_selected_time:
-                openTimePickerDialog(null, (TextView) v);
-                break;
-            case R.id.container_patient_profile_header:
-            case R.id.bt_select_patient:
-                openContactsListScreen();
-                break;
-            case R.id.bt_save:
-                if (user != null) {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        validateData();
-                    } else
-                        Util.showToast(mActivity, R.string.user_offline);
+        int id = v.getId();
+
+        if (id == R.id.tv_selected_date) {
+            openDatePickerDialog((TextView) v);
+        } else if (id == R.id.tv_selected_time) {
+            openTimePickerDialog(null, (TextView) v);
+        } else if (id == R.id.container_patient_profile_header || id == R.id.bt_select_patient) {
+            openContactsListScreen();
+        } else if (id == R.id.bt_save) {
+            if (user != null) {
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    validateData();
+                } else {
+                    Util.showToast(mActivity, R.string.user_offline);
                 }
-                break;
-            case R.id.bt_clear_mobile_number:
-                editMobileNumber.setText("");
-                break;
-            case R.id.bt_add_new_patient:
-//                showDetailsAddNewPatient(true);
-                break;
-            case R.id.bt_register_new_patient:
-//                autotvPatientName.setVisibility(View.VISIBLE);
-//                autotvPatientName.setEnabled(true);
-//                requestFocusOnEditText(autotvPatientName);
-                break;
+            }
+        } else if (id == R.id.bt_clear_mobile_number) {
+            editMobileNumber.setText("");
+        } else if (id == R.id.bt_add_new_patient) {
+            // showDetailsAddNewPatient(true);
+        } else if (id == R.id.bt_register_new_patient) {
+            // autotvPatientName.setVisibility(View.VISIBLE);
+            // autotvPatientName.setEnabled(true);
+            // requestFocusOnEditText(autotvPatientName);
         }
     }
 
@@ -768,19 +762,19 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
 
     @Override
     public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-            case R.id.autotv_patient_name:
-                if (!Util.isNullOrBlank(s) && containerPatientProfileHeader.getVisibility() == View.VISIBLE)
-                    showSelectedPatientHeader(false);
-                break;
-            case R.id.edit_mobile_number:
-                LogUtils.LOGD(TAG, "Edit Mobile Number");
-                autotvPatientName.setText("");
-                HealthCocoConstants.SELECTED_PATIENTS_USER_ID = null;
-                if (Util.isValidMobileNo(s)) {
-                    getExistingPatientsList(s);
-                }
-                break;
+        int id = v.getId();
+
+        if (id == R.id.autotv_patient_name) {
+            if (!Util.isNullOrBlank(s) && containerPatientProfileHeader.getVisibility() == View.VISIBLE) {
+                showSelectedPatientHeader(false);
+            }
+        } else if (id == R.id.edit_mobile_number) {
+            LogUtils.LOGD(TAG, "Edit Mobile Number");
+            autotvPatientName.setText("");
+            HealthCocoConstants.SELECTED_PATIENTS_USER_ID = null;
+            if (Util.isValidMobileNo(s)) {
+                getExistingPatientsList(s);
+            }
         }
     }
 

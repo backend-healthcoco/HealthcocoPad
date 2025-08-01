@@ -1,0 +1,23 @@
+
+ì	
+;
+android*http://schemas.android.com/apk/res/android>
+9
+freshapp'http://schemas.android.com/apk/res-auto>menu*Á
+¸item"b
+'http://schemas.android.com/apk/res-autoshowAsActionalways|collapseActionView"	(Ýˆø2:8
+"™
+*http://schemas.android.com/apk/res/androidtitle'@string/freshchat_menu_item_search_faqs"	(áƒ„22
+0²…Èø&string/freshchat_menu_item_search_faqs0"~
+*http://schemas.android.com/apk/res/androidicon?attr/freshchatSearchIcon"	(‚€„2&
+$þ„øattr/freshchatSearchIcon0"¯
+*http://schemas.android.com/apk/res/androidid4@+id/freshchat_categories_menu_item_search_solutions"	(Ð„2>
+<Ò…¤ø2id/freshchat_categories_menu_item_search_solutions0	=*§
+žitem"O
+'http://schemas.android.com/apk/res-autoshowAsActionalways"(Ýˆø2:8"—
+*http://schemas.android.com/apk/res/androidtitle&@string/freshchat_menu_item_contact_us"(áƒ„21
+/°…Èø%string/freshchat_menu_item_contact_us0"„
+*http://schemas.android.com/apk/res/androidicon?attr/freshchatContactUsIcon"(‚€„2)
+'Á„øattr/freshchatContactUsIcon0"£
+*http://schemas.android.com/apk/res/androidid.@+id/freshchat_categories_menu_item_contact_us"(Ð„28
+6Ñ…¤ø,id/freshchat_categories_menu_item_contact_us0*>

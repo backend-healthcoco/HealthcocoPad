@@ -125,12 +125,9 @@ public class CommonUiPermissionsFragment extends HealthCocoFragment implements A
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-                updateUiPermissions();
-                break;
+        if (v.getId() == R.id.container_right_action) {
+            updateUiPermissions();
         }
-
     }
 
     private void updateUiPermissions() {

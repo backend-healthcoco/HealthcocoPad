@@ -188,24 +188,18 @@ public class UpdateVaccineBrandGroupFragment extends HealthCocoFragment implemen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_update_vaccine:
-                validateData();
-                break;
-            case R.id.tv_due_date:
-                openDatePickerDialog((TextView) v);
-                break;
-            case R.id.tv_given_date:
-                openDatePickerDialog((TextView) v);
-                break;
-            case R.id.tv_add_note:
-                String note = null;
-                for (VaccineRequest vaccineRequest :
-                        requestLinkedHashMapForValidate.values()) {
-                    note = vaccineRequest.getNote();
-                }
-                openAddEditVaccineNoteDialogFragment(note);
-                break;
+        if (v.getId() == R.id.bt_update_vaccine) {
+            validateData();
+
+        } else if (v.getId() == R.id.tv_due_date || v.getId() == R.id.tv_given_date) {
+            openDatePickerDialog((TextView) v);
+
+        } else if (v.getId() == R.id.tv_add_note) {
+            String note = null;
+            for (VaccineRequest vaccineRequest : requestLinkedHashMapForValidate.values()) {
+                note = vaccineRequest.getNote();
+            }
+            openAddEditVaccineNoteDialogFragment(note);
         }
     }
 

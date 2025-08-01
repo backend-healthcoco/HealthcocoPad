@@ -161,10 +161,8 @@ public class PatientCardDialogFragment extends HealthCocoDialogFragment implemen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_print_patient_card:
-                validateData();
-                break;
+        if (v.getId() == R.id.bt_print_patient_card) {
+            validateData();
         }
     }
 

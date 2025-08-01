@@ -205,12 +205,10 @@ public class KioskFragment extends HealthCocoFragment implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.layout_left:
-                break;
-            case R.id.bt_kiosk_lock:
-                kioskTabListener.onHomeButtonClick(KioskScreenType.PINVIEW.ordinal());
-                break;
+        if (v.getId() == R.id.layout_left) {
+            // No action needed
+        } else if (v.getId() == R.id.bt_kiosk_lock) {
+            kioskTabListener.onHomeButtonClick(KioskScreenType.PINVIEW.ordinal());
         }
     }
 

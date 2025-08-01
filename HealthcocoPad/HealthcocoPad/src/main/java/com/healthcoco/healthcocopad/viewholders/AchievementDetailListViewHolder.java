@@ -108,11 +108,12 @@ public class AchievementDetailListViewHolder extends LinearLayout implements Vie
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_delete:
-                itemClickListener.onDeleteAchievementDetailClicked(this, objData);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_delete) {
+            itemClickListener.onDeleteAchievementDetailClicked(this, objData);
         }
+
     }
 
     private void clearPreviousAlerts() {

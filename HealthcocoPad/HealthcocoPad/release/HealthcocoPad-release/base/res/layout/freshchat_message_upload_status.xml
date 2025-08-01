@@ -1,0 +1,21 @@
+
+ï
+;
+android*http://schemas.android.com/apk/res/android	ImageView"¾
+*http://schemas.android.com/apk/res/androidcontentDescription3@string/freshchat_content_description_upload_status"(ó„„2>
+<ÿ„Èø2string/freshchat_content_description_upload_status0"¶
+*http://schemas.android.com/apk/res/android
+paddingEnd3@dimen/freshchat_message_upload_status_icon_padding"(´‡„2>
+<‚œø2dimen/freshchat_message_upload_status_icon_padding0@"£
+*http://schemas.android.com/apk/res/androidsrc-@drawable/freshchat_ic_message_status_pending"(™‚„28
+6»‚ ø,drawable/freshchat_ic_message_status_pending0"¸
+*http://schemas.android.com/apk/res/androidpaddingRight3@dimen/freshchat_message_upload_status_icon_padding"(Ø„2>
+<‚œø2dimen/freshchat_message_upload_status_icon_padding0@"`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"(ô„2:0þÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0þÿÿÿÿÿÿÿÿ"·
+*http://schemas.android.com/apk/res/androidpaddingLeft3@dimen/freshchat_message_upload_status_icon_padding"(Ö„2>
+<‚œø2dimen/freshchat_message_upload_status_icon_padding0@"¸
+*http://schemas.android.com/apk/res/androidpaddingStart3@dimen/freshchat_message_upload_status_icon_padding"(³‡„2>
+<‚œø2dimen/freshchat_message_upload_status_icon_padding0@"
+*http://schemas.android.com/apk/res/androidid$@+id/freshchat_message_upload_status"(Ð„2.
+,ž†¤ø"id/freshchat_message_upload_status0

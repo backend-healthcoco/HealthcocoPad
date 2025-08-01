@@ -186,31 +186,21 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
         if (anchorView != null && anchorView.getId() == v.getId()) {
             showOptionsWindowAtLeftCenter(v);
         }
-        switch (v.getId()) {
-            case R.id.layout_patient_details:
-                onPatientDatailsClicked();
-//                dismiss();
-                break;
-
-            case R.id.bt_edit_appointment:
-                onEditClicked();
-                dismiss();
-                break;
-
-            case R.id.bt_discard_appointment:
-                onCancelClicked();
-//                dismiss();
-                break;
-
-            case R.id.bt_print_patient_card:
-//                mActivity.openPatientCardFragment(calendarEvents);
-                dismiss();
-                break;
-
-            case R.id.bt_dismiss:
-                dismiss();
-                break;
-
+        int id = v.getId();
+        if (id == R.id.layout_patient_details) {
+            onPatientDatailsClicked();
+            // dismiss();
+        } else if (id == R.id.bt_edit_appointment) {
+            onEditClicked();
+            dismiss();
+        } else if (id == R.id.bt_discard_appointment) {
+            onCancelClicked();
+            // dismiss();
+        } else if (id == R.id.bt_print_patient_card) {
+            // mActivity.openPatientCardFragment(calendarEvents);
+            dismiss();
+        } else if (id == R.id.bt_dismiss) {
+            dismiss();
         }
     }
 

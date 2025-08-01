@@ -372,27 +372,21 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_save:
-                validateData();
-                break;
-            case R.id.bt_delete_diagnostic_test:
-                confirmDeleteDrugAlert(v, R.string.confirm_remove_diagnostic_test);
-                break;
-            case R.id.bt_header_interaction:
-            case R.id.bt_header_two_interaction:
-                confirmDrugInteractionsAlert();
-                LogUtils.LOGD(TAG, "Interactions Clicked");
-                break;
-            case R.id.bt_clear:
-                containerAdviceSuggestionsList.setVisibility(View.GONE);
-                parentLayoutTabs.setVisibility(View.VISIBLE);
+        int id = v.getId();
 
-//                addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
-//                addClinicalNotesVisitNormalFragment = (AddClinicalNotesVisitNormalFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
-                break;
-            default:
-                break;
+        if (id == R.id.bt_save) {
+            validateData();
+        } else if (id == R.id.bt_delete_diagnostic_test) {
+            confirmDeleteDrugAlert(v, R.string.confirm_remove_diagnostic_test);
+        } else if (id == R.id.bt_header_interaction || id == R.id.bt_header_two_interaction) {
+            confirmDrugInteractionsAlert();
+            LogUtils.LOGD(TAG, "Interactions Clicked");
+        } else if (id == R.id.bt_clear) {
+            containerAdviceSuggestionsList.setVisibility(View.GONE);
+            parentLayoutTabs.setVisibility(View.VISIBLE);
+
+//    addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
+//    addClinicalNotesVisitNormalFragment = (AddClinicalNotesVisitNormalFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
         }
     }
 
@@ -415,12 +409,10 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    switch (view.getId()) {
-                        case R.id.bt_delete_diagnostic_test:
-                            DiagnosticTest diagnosticTest = (DiagnosticTest) view.getTag();
-                            selectedDiagnosticTestsList.remove(diagnosticTest.getUniqueId());
-                            notifyDiagnosticsList(new ArrayList<DiagnosticTest>(selectedDiagnosticTestsList.values()));
-                            break;
+                    if (view.getId() == R.id.bt_delete_diagnostic_test) {
+                        DiagnosticTest diagnosticTest = (DiagnosticTest) view.getTag();
+                        selectedDiagnosticTestsList.remove(diagnosticTest.getUniqueId());
+                        notifyDiagnosticsList(new ArrayList<DiagnosticTest>(selectedDiagnosticTestsList.values()));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

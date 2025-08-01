@@ -1,0 +1,17 @@
+
+©
+;
+android*http://schemas.android.com/apk/res/android$LinearLayout"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent"(õ„2:0ÿÿÿÿÿÿÿÿÿ"R
+*http://schemas.android.com/apk/res/androidorientationvertical"(Ä„2:0*Â
+¹TextView"Q
+*http://schemas.android.com/apk/res/androidgravitycenter|left"(¯„2:8"K
+*http://schemas.android.com/apk/res/androidpadding10dp"(Õ„2:h"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ"“
+*http://schemas.android.com/apk/res/android	textColor"@drawable/text_blue_black_selector"(˜„2-
++›† ø!drawable/text_blue_black_selector0"k
+*http://schemas.android.com/apk/res/androidid@+id/tv_group_name"(Ğ„2
+ÛŒ¤øid/tv_group_name0"E
+*http://schemas.android.com/apk/res/androidtext(group name)(Ï‚„B$

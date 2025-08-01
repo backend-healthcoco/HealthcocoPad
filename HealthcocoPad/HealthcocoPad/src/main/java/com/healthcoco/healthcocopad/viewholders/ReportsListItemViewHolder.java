@@ -224,69 +224,75 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_history:
-                if (commonEmrClickListener != null) {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        if (record.getInHistory() != null && record.getInHistory()) {
-                            int msgId = R.string.confirm_remove_reports_from_history;
-                            showConfirmationAlert(v.getId(), null, mActivity.getResources().getString(msgId));
-                        } else
-                            onAddRemoveHistoryClicked(record);
-                    } else onNetworkUnavailable(null);
-                }
-                break;
-            case R.id.bt_open:
-            case R.id.iv_report_type:
-                if (!Util.isNullOrBlank(record.getRecordsUrl()))
-                    mActivity.openEnlargedImageDialogFragment(record.getRecordsUrl());
-                break;
-            case R.id.bt_email:
+        int id = v.getId();
+
+        if (id == R.id.bt_history) {
+            if (commonEmrClickListener != null) {
                 Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_REPORTS, AddUpdateNameDialogType.EMAIL, record.getUniqueId());
-                else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_discard:
-                if (commonEmrClickListener != null) {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        LogUtils.LOGD(TAG, "Discard");
-                        int msgId = R.string.confirm_discard_reports_message;
-                        int titleId = R.string.confirm_discard_reports_title;
-                        showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
-                    } else onNetworkUnavailable(null);
-                }
-                break;
-            case R.id.bt_print:
-            case R.id.tv_print:
-                LogUtils.LOGD(TAG, "Print");
-                if (detailCombinedItemListener != null) {
-                    detailCombinedItemListener.doPrint("");
+                if (HealthCocoConstants.isNetworkOnline) {
+                    if (record.getInHistory() != null && record.getInHistory()) {
+                        int msgId = R.string.confirm_remove_reports_from_history;
+                        showConfirmationAlert(id, null, mActivity.getResources().getString(msgId));
+                    } else {
+                        onAddRemoveHistoryClicked(record);
+                    }
                 } else {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        mActivity.openEnlargedImageDialogFragment(true, record.getRecordsUrl());
-                        mActivity.showLoading(false);
-                        WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_REPORT_PDF_URL, record.getUniqueId(), this, this);
-                    } else onNetworkUnavailable(null);
+                    onNetworkUnavailable(null);
                 }
-                break;
-            case R.id.bt_approve:
+            }
+        } else if (id == R.id.bt_open || id == R.id.iv_report_type) {
+            if (!Util.isNullOrBlank(record.getRecordsUrl())) {
+                mActivity.openEnlargedImageDialogFragment(record.getRecordsUrl());
+            }
+        } else if (id == R.id.bt_email) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_REPORTS, AddUpdateNameDialogType.EMAIL, record.getUniqueId());
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_discard) {
+            if (commonEmrClickListener != null) {
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
-                    changeRecordsState(RecordState.APPROVED_BY_DOCTOR);
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_decline:
+                    LogUtils.LOGD(TAG, "Discard");
+                    int msgId = R.string.confirm_discard_reports_message;
+                    int titleId = R.string.confirm_discard_reports_title;
+                    showConfirmationAlert(id, mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
+                } else {
+                    onNetworkUnavailable(null);
+                }
+            }
+        } else if (id == R.id.bt_print || id == R.id.tv_print) {
+            LogUtils.LOGD(TAG, "Print");
+            if (detailCombinedItemListener != null) {
+                detailCombinedItemListener.doPrint("");
+            } else {
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
-                    changeRecordsState(RecordState.DECLINED_BY_DOCTOR);
-                } else onNetworkUnavailable(null);
-                break;
-            default:
-                break;
+                    mActivity.openEnlargedImageDialogFragment(true, record.getRecordsUrl());
+                    mActivity.showLoading(false);
+                    WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_REPORT_PDF_URL, record.getUniqueId(), this, this);
+                } else {
+                    onNetworkUnavailable(null);
+                }
+            }
+        } else if (id == R.id.bt_approve) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                changeRecordsState(RecordState.APPROVED_BY_DOCTOR);
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_decline) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                changeRecordsState(RecordState.DECLINED_BY_DOCTOR);
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else {
+            // default: do nothing
         }
     }
 
@@ -306,13 +312,10 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (viewId) {
-                    case R.id.bt_discard:
-                        onDiscardedClicked(record);
-                        break;
-                    case R.id.bt_history:
-                        onAddRemoveHistoryClicked(record);
-                        break;
+                if (viewId == R.id.bt_discard) {
+                    onDiscardedClicked(record);
+                } else if (viewId == R.id.bt_history) {
+                    onAddRemoveHistoryClicked(record);
                 }
             }
         });

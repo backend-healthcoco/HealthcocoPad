@@ -331,10 +331,8 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fl_bt_add_appointment:
-                openAddNewAppointmentScreen();
-                break;
+        if (v.getId() == R.id.fl_bt_add_appointment) {
+            openAddNewAppointmentScreen();
         }
     }
 

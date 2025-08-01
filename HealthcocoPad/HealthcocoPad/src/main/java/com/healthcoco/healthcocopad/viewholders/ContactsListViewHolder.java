@@ -110,24 +110,24 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_call:
-                optionsListener.onCallClicked(objData);
-                break;
-            case R.id.bt_discard:
-                optionsListener.onDiscardClicked(objData);
-                break;
-            case R.id.bt_group:
-                optionsListener.onAddToGroupClicked(objData);
-                break;
-            case R.id.bt_prescription:
-                optionsListener.onAddPrescriptionClicked(objData);
-                break;
-            case R.id.container_top:
-                optionsListener.onItemContactDetailClicked(objData);
-                break;
-            default:
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_call) {
+            optionsListener.onCallClicked(objData);
+
+        } else if (id == R.id.bt_discard) {
+            optionsListener.onDiscardClicked(objData);
+
+        } else if (id == R.id.bt_group) {
+            optionsListener.onAddToGroupClicked(objData);
+
+        } else if (id == R.id.bt_prescription) {
+            optionsListener.onAddPrescriptionClicked(objData);
+
+        } else if (id == R.id.container_top) {
+            optionsListener.onItemContactDetailClicked(objData);
+
+// default: do nothing
         }
     }
 

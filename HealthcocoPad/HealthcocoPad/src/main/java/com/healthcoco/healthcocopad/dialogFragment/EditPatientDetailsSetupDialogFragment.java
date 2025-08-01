@@ -199,13 +199,12 @@ public class EditPatientDetailsSetupDialogFragment extends HealthCocoDialogFragm
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_cross:
-                dismiss();
-                break;
-            case R.id.bt_save:
-                validateData();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_cross) {
+            dismiss();
+        } else if (id == R.id.bt_save) {
+            validateData();
         }
     }
 

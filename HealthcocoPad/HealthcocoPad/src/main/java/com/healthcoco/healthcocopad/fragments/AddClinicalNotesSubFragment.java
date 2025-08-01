@@ -975,24 +975,22 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.layout_diagram:
-                Diagram selectedDiagram = (Diagram) v.getTag();
-                if (selectedDiagram != null && !Util.isNullOrBlank(selectedDiagram.getDiagramUrl())) {
-                    openDiagramDetailActivity(selectedDiagram);
-                    selectedDiagramID = selectedDiagram.getUniqueId();
-                }
-                break;
-            case R.id.bt_delete:
-                View parentView = (View) v.getParent();
-                String diagramUniqueId = (String) parentView.getTag();
-                if (parentView != null && !Util.isNullOrBlank(diagramUniqueId)) {
-                    showConfirmationAlert(null, getResources().getString(R.string.confirm_delete_diagram), parentView, diagramUniqueId);
-                }
-                break;
-            case R.id.bt_select_diagram:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.SELECT_DIAGRAM, null, HealthCocoConstants.REQUEST_CODE_ADD_CLINICAL_NOTES);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.layout_diagram) {
+            Diagram selectedDiagram = (Diagram) v.getTag();
+            if (selectedDiagram != null && !Util.isNullOrBlank(selectedDiagram.getDiagramUrl())) {
+                openDiagramDetailActivity(selectedDiagram);
+                selectedDiagramID = selectedDiagram.getUniqueId();
+            }
+        } else if (id == R.id.bt_delete) {
+            View parentView = (View) v.getParent();
+            String diagramUniqueId = (String) parentView.getTag();
+            if (parentView != null && !Util.isNullOrBlank(diagramUniqueId)) {
+                showConfirmationAlert(null, getResources().getString(R.string.confirm_delete_diagram), parentView, diagramUniqueId);
+            }
+        } else if (id == R.id.bt_select_diagram) {
+            openCommonOpenUpActivity(CommonOpenUpFragmentType.SELECT_DIAGRAM, null, HealthCocoConstants.REQUEST_CODE_ADD_CLINICAL_NOTES);
         }
     }
 
@@ -1090,55 +1088,52 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
 
     @Override
     public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-            case R.id.edit_height:
-                if (!Util.isNullOrBlank(s)
-                        && !Util.isNullOrBlank(editWeight.getText().toString())
-                        && !Util.isNullOrBlank(s)) {
-                    float weight = Float.parseFloat(editWeight.getText().toString());
-                    float height = Float.parseFloat(s);
-                    //BMI = weight in KG / square of (height in metre)
-                    float bmiValue = Util.calculateBMI(weight, Float.parseFloat(s) / 100);
+        int id = v.getId();
 
-                    editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
+        if (id == R.id.edit_height) {
+            if (!Util.isNullOrBlank(s)
+                    && !Util.isNullOrBlank(editWeight.getText().toString())
+                    && !Util.isNullOrBlank(s)) {
+                float weight = Float.parseFloat(editWeight.getText().toString());
+                float height = Float.parseFloat(s);
+                // BMI = weight in KG / square of (height in metre)
+                float bmiValue = Util.calculateBMI(weight, height / 100);
 
-                    // BSA = squareroot of (weight X height / 3600)
-                    float bsaValue = Util.calculateBSA(weight, height);
-                    editBsa.setText(Util.getFormattedFloatNumber(bsaValue));
-                } else {
-                    editBmi.setText("");
-                    editBsa.setText("");
-                }
-                break;
-            case R.id.edit_weight:
-                if (!Util.isNullOrBlank(s)
-                        && !Util.isNullOrBlank(editHeight.getText().toString())
-                        && !Util.isNullOrBlank(s)) {
-                    float weight = Float.parseFloat(s);
-                    float height = Float.parseFloat(editHeight.getText().toString());
-                    //BMI = weight in KG / square of (height in metre)
-                    float bmiValue = Util.calculateBMI(weight, height / 100);
-                    editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
+                editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
 
-                    // BSA = squareroot of (weight X height / 3600)
-                    float bsaValue = Util.calculateBSA(weight, height);
-                    editBsa.setText(Util.getFormattedFloatNumber(bsaValue));
-                } else {
-                    editBmi.setText("");
-                    editBsa.setText("");
-                }
-                break;
+                // BSA = square root of (weight X height / 3600)
+                float bsaValue = Util.calculateBSA(weight, height);
+                editBsa.setText(Util.getFormattedFloatNumber(bsaValue));
+            } else {
+                editBmi.setText("");
+                editBsa.setText("");
+            }
+        } else if (id == R.id.edit_weight) {
+            if (!Util.isNullOrBlank(s)
+                    && !Util.isNullOrBlank(editHeight.getText().toString())
+                    && !Util.isNullOrBlank(s)) {
+                float weight = Float.parseFloat(s);
+                float height = Float.parseFloat(editHeight.getText().toString());
+                // BMI = weight in KG / square of (height in metre)
+                float bmiValue = Util.calculateBMI(weight, height / 100);
+                editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
+
+                // BSA = square root of (weight X height / 3600)
+                float bsaValue = Util.calculateBSA(weight, height);
+                editBsa.setText(Util.getFormattedFloatNumber(bsaValue));
+            } else {
+                editBmi.setText("");
+                editBsa.setText("");
+            }
         }
-
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        switch (v.getId()) {
-            case R.id.edit_systolic:
-            case R.id.edit_diastolic:
-                labelBloodPressure.setFocusable(hasFocus);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.edit_systolic || id == R.id.edit_diastolic) {
+            labelBloodPressure.setFocusable(hasFocus);
         }
     }
 }

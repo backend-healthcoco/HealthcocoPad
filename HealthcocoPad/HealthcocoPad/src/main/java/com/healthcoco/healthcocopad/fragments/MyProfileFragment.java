@@ -334,28 +334,57 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.bt_edit_contact:
-                openDialogFragment(new AddEditDoctorContactDialogFragment(), AddEditDoctorContactDialogFragment.TAG_DOCTOR_CONTACT_DETAIL, doctorProfile, REQUEST_CODE_MY_PROFILE);
-                break;
-            case R.id.bt_edit_awards_and_publication:
-                openDialogFragment(new AddEditDoctorAwardAndPublicationDialogFragment(), AddEditDoctorAwardAndPublicationDialogFragment.TAG_DOCTOR_ACHIEVEMENTS, doctorProfile.getAchievements(), REQUEST_CODE_MY_PROFILE);
-                break;
-            case R.id.bt_edit_education:
-                openDialogFragment(new AddEditDoctorEducationDialogFragment(), AddEditDoctorEducationDialogFragment.TAG_DOCTOR_EDUCATION, doctorProfile.getEducation(), REQUEST_CODE_MY_PROFILE);
-                break;
-            case R.id.bt_edit_registration_detail:
-                openDialogFragment(new AddEditDoctorRegistartionDetailDialogFragment(), AddEditDoctorRegistartionDetailDialogFragment.TAG_DOCTOR_REGISTRATION_DETAIL, doctorProfile.getRegistrationDetails(), REQUEST_CODE_MY_PROFILE);
-                break;
-            case R.id.bt_edit_experience:
-                openDialogFragment(new AddEditDoctorExperienceDialogFragment(), AddEditDoctorExperienceDialogFragment.TAG_DOCTOR_EXPERIENCE_DETAIL, doctorProfile.getExperienceDetails(), REQUEST_CODE_MY_PROFILE);
-                break;
-            case R.id.bt_edit_professional_membership:
-                openDialogFragment(new AddEditDoctorMembershipDialogFragment(), AddEditDoctorMembershipDialogFragment.TAG_DOCTOR_MEMBERSHIP_DETAIL, doctorProfile.getProfessionalMemberships(), REQUEST_CODE_MY_PROFILE);
-                break;
-            case R.id.bt_edit_professional_statement:
-                openDialogFragment(new AddEditDoctorStatementDialogFragment(), AddEditDoctorStatementDialogFragment.TAG_DOCTOR_STATEMENT_DETAIL, doctorProfile.getProfessionalStatement(), REQUEST_CODE_MY_PROFILE);
-                break;
+        int id = view.getId();
+
+        if (id == R.id.bt_edit_contact) {
+            openDialogFragment(
+                    new AddEditDoctorContactDialogFragment(),
+                    AddEditDoctorContactDialogFragment.TAG_DOCTOR_CONTACT_DETAIL,
+                    doctorProfile,
+                    REQUEST_CODE_MY_PROFILE
+            );
+        } else if (id == R.id.bt_edit_awards_and_publication) {
+            openDialogFragment(
+                    new AddEditDoctorAwardAndPublicationDialogFragment(),
+                    AddEditDoctorAwardAndPublicationDialogFragment.TAG_DOCTOR_ACHIEVEMENTS,
+                    doctorProfile.getAchievements(),
+                    REQUEST_CODE_MY_PROFILE
+            );
+        } else if (id == R.id.bt_edit_education) {
+            openDialogFragment(
+                    new AddEditDoctorEducationDialogFragment(),
+                    AddEditDoctorEducationDialogFragment.TAG_DOCTOR_EDUCATION,
+                    doctorProfile.getEducation(),
+                    REQUEST_CODE_MY_PROFILE
+            );
+        } else if (id == R.id.bt_edit_registration_detail) {
+            openDialogFragment(
+                    new AddEditDoctorRegistartionDetailDialogFragment(),
+                    AddEditDoctorRegistartionDetailDialogFragment.TAG_DOCTOR_REGISTRATION_DETAIL,
+                    doctorProfile.getRegistrationDetails(),
+                    REQUEST_CODE_MY_PROFILE
+            );
+        } else if (id == R.id.bt_edit_experience) {
+            openDialogFragment(
+                    new AddEditDoctorExperienceDialogFragment(),
+                    AddEditDoctorExperienceDialogFragment.TAG_DOCTOR_EXPERIENCE_DETAIL,
+                    doctorProfile.getExperienceDetails(),
+                    REQUEST_CODE_MY_PROFILE
+            );
+        } else if (id == R.id.bt_edit_professional_membership) {
+            openDialogFragment(
+                    new AddEditDoctorMembershipDialogFragment(),
+                    AddEditDoctorMembershipDialogFragment.TAG_DOCTOR_MEMBERSHIP_DETAIL,
+                    doctorProfile.getProfessionalMemberships(),
+                    REQUEST_CODE_MY_PROFILE
+            );
+        } else if (id == R.id.bt_edit_professional_statement) {
+            openDialogFragment(
+                    new AddEditDoctorStatementDialogFragment(),
+                    AddEditDoctorStatementDialogFragment.TAG_DOCTOR_STATEMENT_DETAIL,
+                    doctorProfile.getProfessionalStatement(),
+                    REQUEST_CODE_MY_PROFILE
+            );
         }
     }
 

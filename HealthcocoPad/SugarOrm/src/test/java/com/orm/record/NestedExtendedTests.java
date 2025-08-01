@@ -1,7 +1,6 @@
 package com.orm.record;
 
 import com.orm.app.ClientApp;
-import com.orm.dsl.BuildConfig;
 import com.orm.model.NestedExtendedModel;
 import com.orm.model.RelationshipExtendedModel;
 import com.orm.model.SimpleExtendedModel;
@@ -20,7 +19,7 @@ import static com.orm.SugarRecord.listAll;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(sdk = 18, constants = BuildConfig.class, application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
+@Config(sdk = 18  , application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
 public final class NestedExtendedTests {
 
     @Test

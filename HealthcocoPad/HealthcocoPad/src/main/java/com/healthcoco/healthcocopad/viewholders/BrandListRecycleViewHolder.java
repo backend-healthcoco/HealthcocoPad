@@ -60,21 +60,18 @@ public class BrandListRecycleViewHolder extends HealthcocoComonRecylcerViewHolde
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.layout_item:
-                if (!cbSelectBrand.isChecked())
-                    cbSelectBrand.setChecked(true);
-                else cbSelectBrand.setChecked(false);
-                selectedBrandListener.isBrandSelect(cbSelectBrand.isChecked(), vaccineBrandResponse.getVaccineBrandId(), vaccineBrandResponse);
-                break;
-            case R.id.cb_select_brand:
-                if (!cbSelectBrand.isChecked())
-                    cbSelectBrand.setChecked(true);
-                else cbSelectBrand.setChecked(false);
-                selectedBrandListener.isBrandSelect(cbSelectBrand.isChecked(), vaccineBrandResponse.getVaccineBrandId(), vaccineBrandResponse);
-                break;
-            default:
-                break;
+        int id = v.getId();
+
+        if (id == R.id.layout_item || id == R.id.cb_select_brand) {
+            if (!cbSelectBrand.isChecked()) {
+                cbSelectBrand.setChecked(true);
+            } else {
+                cbSelectBrand.setChecked(false);
+            }
+            selectedBrandListener.isBrandSelect(cbSelectBrand.isChecked(), vaccineBrandResponse.getVaccineBrandId(), vaccineBrandResponse);
+
+        } else {
+            // default: do nothing
         }
     }
 

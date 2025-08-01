@@ -428,20 +428,25 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_advance_search:
-                switch (nameHideActivateType) {
+        int id = v.getId();
 
-                    case HISTORY:
-                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_CUSTOM_HISTORY, AddUpdateNameDialogType.HISTORY, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
-                        break;
-
-                    case TREATMENT:
-                        mActivity.openAddNewTreatmentsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, null);
-                        break;
-
-                }
-                break;
+        if (id == R.id.bt_advance_search) {
+            if (nameHideActivateType == NameHideActivateType.HISTORY) {
+                mActivity.openAddUpdateNameDialogFragment(
+                        WebServiceType.ADD_CUSTOM_HISTORY,
+                        AddUpdateNameDialogType.HISTORY,
+                        this,
+                        user,
+                        "",
+                        HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST
+                );
+            } else if (nameHideActivateType == NameHideActivateType.TREATMENT) {
+                mActivity.openAddNewTreatmentsFragment(
+                        this,
+                        HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST,
+                        null
+                );
+            }
         }
     }
 

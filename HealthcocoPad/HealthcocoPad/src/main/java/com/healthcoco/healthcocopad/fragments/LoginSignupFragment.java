@@ -125,13 +125,11 @@ public class LoginSignupFragment extends HealthCocoFragment implements View.OnCl
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.bt_sign_in:
-                openDialogFragment(new LoginDialogFragment());
-                break;
-            case R.id.bt_join:
-                openDialogFragment(new ContactUsDialogFragment());
-                break;
+        int id = view.getId();
+        if (id == R.id.bt_sign_in) {
+            openDialogFragment(new LoginDialogFragment());
+        } else if (id == R.id.bt_join) {
+            openDialogFragment(new ContactUsDialogFragment());
         }
     }
 

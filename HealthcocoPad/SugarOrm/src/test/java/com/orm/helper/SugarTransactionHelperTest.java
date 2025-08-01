@@ -2,7 +2,6 @@ package com.orm.helper;
 
 import com.orm.app.ClientApp;
 import com.orm.SugarContext;
-import com.orm.dsl.BuildConfig;
 import com.orm.helper.SugarTransactionHelper;
 import com.orm.model.TestRecord;
 
@@ -23,7 +22,7 @@ import static junit.framework.Assert.assertNull;
  * @author jonatan.salas
  */
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(sdk = 18, constants = BuildConfig.class, application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
+@Config(sdk = 18  , application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
 public final class SugarTransactionHelperTest {
     private List<TestRecord> recordList = new ArrayList<>();
     private TestRecord record1 = new TestRecord();

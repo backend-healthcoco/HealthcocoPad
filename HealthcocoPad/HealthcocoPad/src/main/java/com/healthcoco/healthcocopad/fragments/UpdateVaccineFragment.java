@@ -110,14 +110,14 @@ public class UpdateVaccineFragment extends HealthCocoFragment implements SelectV
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.cb_select_all_vaccine:
-                setSelectAllSelected(cbSelectAllVaccine.isChecked());
-                adapter.notifyDataSetChanged();
-                break;
-            case R.id.bt_update_vaccine:
-                validateData();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.cb_select_all_vaccine) {
+            setSelectAllSelected(cbSelectAllVaccine.isChecked());
+            adapter.notifyDataSetChanged();
+
+        } else if (id == R.id.bt_update_vaccine) {
+            validateData();
         }
     }
 

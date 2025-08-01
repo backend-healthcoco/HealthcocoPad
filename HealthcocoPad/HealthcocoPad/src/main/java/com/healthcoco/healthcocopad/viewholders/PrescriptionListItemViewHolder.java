@@ -299,108 +299,133 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_history:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    if (prescription.getInHistory() != null && prescription.getInHistory()) {
-                        int msgId = R.string.confirm_remove_prescription_from_history;
-                        showConfirmationAlert(v.getId(), null, mActivity.getResources().getString(msgId));
-                    } else
-                        onAddRemoveHistoryClicked();
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_sms:
-                if (selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getMobileNumber())) {
-                    if (detailCombinedItemListener != null)
-                        detailCombinedItemListener.sendSms(Util.getValidatedValue(selectedPatient.getMobileNumber()));
-                    else
-                        showConfirmationAlert(v.getId(), null, mActivity.getResources().getString(R.string.confirm_sms_prescription) + selectedPatient.getMobileNumber() + "?");
-                } else
-                    Util.showToast(mActivity, mActivity.getResources().getString(R.string.mobile_no_not_found) + selectedPatient.getLocalPatientName());
-                break;
-            case R.id.bt_email:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    if (detailCombinedItemListener != null)
-                        detailCombinedItemListener.sendEmail("");
-                    else
-                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_PRESCRIPTION,
-                                AddUpdateNameDialogType.EMAIL, prescription.getUniqueId(), prescription.getDoctorId(),
-                                prescription.getLocationId(), prescription.getHospitalId());
-                else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_options:
-                popupWindow.showOptionsWindow(v);
-                break;
-            case R.id.tv_discard:
-                LogUtils.LOGD(TAG, "Discard");
-                if (commonEmrClickListener != null) {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        int msgId = R.string.confirm_discard_prescription_message;
-                        int titleId = R.string.confirm_discard_prescription_title;
-                        showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
-                    } else onNetworkUnavailable(null);
-                }
-                break;
-            case R.id.bt_print:
-            case R.id.tv_print:
-                LogUtils.LOGD(TAG, "Print");
-                if (detailCombinedItemListener != null) {
-                    detailCombinedItemListener.doPrint("");
-                } else {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        mActivity.showLoading(false);
-                        WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_PRESCRIPTION_PDF_URL, prescription.getUniqueId(), this, this);
-                    } else onNetworkUnavailable(null);
-                }
-                popupWindow.dismiss();
+        int id = v.getId();
 
-                break;
-            case R.id.tv_save_as_template:
-                LogUtils.LOGD(TAG, "save template");
-                if (commonEmrClickListener != null) {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline)
-                        openNewTemplatesFragment();
-                    else onNetworkUnavailable(null);
+        if (id == R.id.bt_history) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                if (prescription.getInHistory() != null && prescription.getInHistory()) {
+                    int msgId = R.string.confirm_remove_prescription_from_history;
+                    showConfirmationAlert(id, null, mActivity.getResources().getString(msgId));
+                } else {
+                    onAddRemoveHistoryClicked();
                 }
-                popupWindow.dismiss();
-                break;
-            case R.id.bt_edit:
-            case R.id.tv_edit:
+            } else {
+                onNetworkUnavailable(null);
+            }
+
+        } else if (id == R.id.bt_sms) {
+            if (selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getMobileNumber())) {
+                if (detailCombinedItemListener != null) {
+                    detailCombinedItemListener.sendSms(Util.getValidatedValue(selectedPatient.getMobileNumber()));
+                } else {
+                    showConfirmationAlert(id, null,
+                            mActivity.getResources().getString(R.string.confirm_sms_prescription) + selectedPatient.getMobileNumber() + "?");
+                }
+            } else {
+                Util.showToast(mActivity,
+                        mActivity.getResources().getString(R.string.mobile_no_not_found) + selectedPatient.getLocalPatientName());
+            }
+
+        } else if (id == R.id.bt_email) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                if (detailCombinedItemListener != null) {
+                    detailCombinedItemListener.sendEmail("");
+                } else {
+                    mActivity.openAddUpdateNameDialogFragment(
+                            WebServiceType.SEND_EMAIL_PRESCRIPTION,
+                            AddUpdateNameDialogType.EMAIL,
+                            prescription.getUniqueId(),
+                            prescription.getDoctorId(),
+                            prescription.getLocationId(),
+                            prescription.getHospitalId());
+                }
+            } else {
+                onNetworkUnavailable(null);
+            }
+
+        } else if (id == R.id.bt_options) {
+            popupWindow.showOptionsWindow(v);
+
+        } else if (id == R.id.tv_discard) {
+            LogUtils.LOGD(TAG, "Discard");
+            if (commonEmrClickListener != null) {
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
-                    if (detailCombinedItemListener != null) {
-                        detailCombinedItemListener.editVisit("");
-                    } else {
-                        openAddNewPrescriptionScreen(false);
-                    }
-                } else
+                    int msgId = R.string.confirm_discard_prescription_message;
+                    int titleId = R.string.confirm_discard_prescription_title;
+                    showConfirmationAlert(id,
+                            mActivity.getResources().getString(titleId),
+                            mActivity.getResources().getString(msgId));
+                } else {
                     onNetworkUnavailable(null);
-                popupWindow.dismiss();
-                break;
-            case R.id.bt_clone:
+                }
+            }
+
+        } else if (id == R.id.bt_print || id == R.id.tv_print) {
+            LogUtils.LOGD(TAG, "Print");
+            if (detailCombinedItemListener != null) {
+                detailCombinedItemListener.doPrint("");
+            } else {
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
-                    if (detailCombinedItemListener != null) {
-                        detailCombinedItemListener.editVisit("");
-                    } else {
-                        openAddNewPrescriptionScreen(true);
-                    }
-                } else
+                    mActivity.showLoading(false);
+                    WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class,
+                            WebServiceType.GET_PRESCRIPTION_PDF_URL,
+                            prescription.getUniqueId(), this, this);
+                } else {
                     onNetworkUnavailable(null);
-                popupWindow.dismiss();
-                break;
-            case R.id.tv_whatsapp:
-                sendWhatsappMsg();
-                popupWindow.dismiss();
-                break;
-            default:
-                break;
+                }
+            }
+            popupWindow.dismiss();
+
+        } else if (id == R.id.tv_save_as_template) {
+            LogUtils.LOGD(TAG, "save template");
+            if (commonEmrClickListener != null) {
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    openNewTemplatesFragment();
+                } else {
+                    onNetworkUnavailable(null);
+                }
+            }
+            popupWindow.dismiss();
+
+        } else if (id == R.id.bt_edit || id == R.id.tv_edit) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                if (detailCombinedItemListener != null) {
+                    detailCombinedItemListener.editVisit("");
+                } else {
+                    openAddNewPrescriptionScreen(false);
+                }
+            } else {
+                onNetworkUnavailable(null);
+            }
+            popupWindow.dismiss();
+
+        } else if (id == R.id.bt_clone) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                if (detailCombinedItemListener != null) {
+                    detailCombinedItemListener.editVisit("");
+                } else {
+                    openAddNewPrescriptionScreen(true);
+                }
+            } else {
+                onNetworkUnavailable(null);
+            }
+            popupWindow.dismiss();
+
+        } else if (id == R.id.tv_whatsapp) {
+            sendWhatsappMsg();
+            popupWindow.dismiss();
+
+        } else {
+            // No action for other cases
         }
+
     }
 
     private void sendWhatsappMsg() {
@@ -512,21 +537,26 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (viewId) {
-                    case R.id.tv_discard:
-                        onDiscardedClicked();
-                        popupWindow.dismiss();
-                        break;
-                    case R.id.bt_history:
-                        onAddRemoveHistoryClicked();
-                        break;
-                    case R.id.bt_sms:
-                        mActivity.showLoading(false);
-                        WebDataServiceImpl.getInstance(mApp).sendSms(WebServiceType.SEND_SMS_PRESCRIPTION, prescription.getUniqueId(),
-                                user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
-                                selectedPatient.getMobileNumber(), PrescriptionListItemViewHolder.this, PrescriptionListItemViewHolder.this);
+                if (viewId == R.id.tv_discard) {
+                    onDiscardedClicked();
+                    popupWindow.dismiss();
 
-                        break;
+                } else if (viewId == R.id.bt_history) {
+                    onAddRemoveHistoryClicked();
+
+                } else if (viewId == R.id.bt_sms) {
+                    mActivity.showLoading(false);
+                    WebDataServiceImpl.getInstance(mApp).sendSms(
+                            WebServiceType.SEND_SMS_PRESCRIPTION,
+                            prescription.getUniqueId(),
+                            user.getUniqueId(),
+                            user.getForeignLocationId(),
+                            user.getForeignHospitalId(),
+                            selectedPatient.getMobileNumber(),
+                            PrescriptionListItemViewHolder.this,
+                            PrescriptionListItemViewHolder.this
+                    );
+
                 }
             }
         });

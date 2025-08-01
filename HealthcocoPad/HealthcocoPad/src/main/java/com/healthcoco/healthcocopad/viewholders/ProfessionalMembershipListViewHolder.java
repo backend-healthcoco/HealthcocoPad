@@ -76,13 +76,13 @@ public class ProfessionalMembershipListViewHolder extends LinearLayout implement
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_delete:
-                membershipDetailItemListener.onDeleteProfessionalMembershipDetailClicked(this, objData);
-                break;
-            case R.id.tv_professional_membership:
-                membershipDetailItemListener.onProfessionalMembershipClicked(tvProfessionalMembership, objData);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_delete) {
+            membershipDetailItemListener.onDeleteProfessionalMembershipDetailClicked(this, objData);
+
+        } else if (id == R.id.tv_professional_membership) {
+            membershipDetailItemListener.onProfessionalMembershipClicked(tvProfessionalMembership, objData);
         }
     }
 

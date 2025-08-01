@@ -1,0 +1,89 @@
+
+»+
+;
+android*http://schemas.android.com/apk/res/androidDRelativeLayout"¤
+*http://schemas.android.com/apk/res/android
+background)?attr/bugseeStandardDialogBackgroundColor"(Ô„26
+4ƒø(attr/bugseeStandardDialogBackgroundColor0"R
+*http://schemas.android.com/apk/res/androidorientationvertical"(Ä„2:0"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent"(õ„2:0ÿÿÿÿÿÿÿÿÿ"q
+*http://schemas.android.com/apk/res/androidid@+id/contentContainer"(Ğ„2
+¼ƒ¤øid/contentContainer0*ü
+óTextView"S
+*http://schemas.android.com/apk/res/androidlayout_marginEnd8dp"(¶‡„2:h"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ"L
+*http://schemas.android.com/apk/res/androidtextSize20sp"(•„2:h‚("P
+*http://schemas.android.com/apk/res/android
+fontFamilysans-serif-medium(¬‡„"¡
+*http://schemas.android.com/apk/res/android	textColor(?attr/bugseeStandardDialogTitleTextColor"(˜„25
+3‡ø'attr/bugseeStandardDialogTitleTextColor0"T
+*http://schemas.android.com/apk/res/androidlayout_marginTop14dp"(ø„2:h"V
+*http://schemas.android.com/apk/res/androidlayout_marginStart17dp"(µ‡„2:h""[
+*http://schemas.android.com/apk/res/androidid
+@+id/title"(Ğ„2
+¿‹¤øid/title01*€
+÷TextView"d
+*http://schemas.android.com/apk/res/androidlayout_below	@id/title"(…ƒ„2
+¿‹¤øid/title0"S
+*http://schemas.android.com/apk/res/androidlayout_marginEnd8dp"(¶‡„2:h"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ"L
+*http://schemas.android.com/apk/res/androidtextSize16sp"(•„2:h‚ "I
+*http://schemas.android.com/apk/res/android
+fontFamily
+sans-serif(¬‡„"§
+*http://schemas.android.com/apk/res/android	textColor+?attr/bugseeStandardDialogSubtitleTextColor"(˜„28
+6†ø*attr/bugseeStandardDialogSubtitleTextColor0"T
+*http://schemas.android.com/apk/res/androidlayout_marginTop12dp"(ø„2:h"i
+*http://schemas.android.com/apk/res/androidlayout_alignStart	@id/title"(¹‡„2
+¿‹¤øid/title0"g
+*http://schemas.android.com/apk/res/androidid@+id/description"(Ğ„2
+Óƒ¤øid/description0**›
+’TextView"z
+*http://schemas.android.com/apk/res/androidlayout_toStartOf@id/positiveButton",(·‡„2
+á‰¤øid/positiveButton0"S
+*http://schemas.android.com/apk/res/androidlayout_marginEnd8dp",(¶‡„2:h"O
+*http://schemas.android.com/apk/res/androidpaddingRight8dp",(Ø„2:h"`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content",(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content",(õ„2:0şÿÿÿÿÿÿÿÿ"L
+*http://schemas.android.com/apk/res/androidtextSize14sp",(•„2:h‚"©
+*http://schemas.android.com/apk/res/android	textColor,?attr/bugseeStandardDialogNegButtonTextColor",(˜„29
+7„ø+attr/bugseeStandardDialogNegButtonTextColor0"V
+*http://schemas.android.com/apk/res/androidlayout_marginBottom8dp",(ú„2:h"
+*http://schemas.android.com/apk/res/android
+background'@drawable/bugsee_standard_dialog_button",(Ô„22
+0Î ø&drawable/bugsee_standard_dialog_button0"P
+*http://schemas.android.com/apk/res/androidpaddingBottom7dp",(Ù„2:h"P
+*http://schemas.android.com/apk/res/android
+fontFamilysans-serif-medium(¬‡„"N
+*http://schemas.android.com/apk/res/androidpaddingLeft8dp",(Ö„2:h"y
+*http://schemas.android.com/apk/res/androidlayout_alignTop@id/positiveButton",(ˆƒ„2
+á‰¤øid/positiveButton0"m
+*http://schemas.android.com/apk/res/androidid@+id/negativeButton",(Ğ„2
+©‰¤øid/negativeButton0"N
+*http://schemas.android.com/apk/res/android
+paddingTop11dp",(×„2:h,G*˜
+TextView"S
+*http://schemas.android.com/apk/res/androidlayout_marginEnd8dp";(¶‡„2:h"O
+*http://schemas.android.com/apk/res/androidpaddingRight8dp";(Ø„2:h"`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content";(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content";(õ„2:0şÿÿÿÿÿÿÿÿ"X
+*http://schemas.android.com/apk/res/androidlayout_alignParentEndtrue";(¼‡„2:@"L
+*http://schemas.android.com/apk/res/androidtextSize14sp";(•„2:h‚"©
+*http://schemas.android.com/apk/res/android	textColor,?attr/bugseeStandardDialogPosButtonTextColor";(˜„29
+7…ø+attr/bugseeStandardDialogPosButtonTextColor0"p
+*http://schemas.android.com/apk/res/androidlayout_below@id/description";(…ƒ„2
+Óƒ¤øid/description0"
+*http://schemas.android.com/apk/res/android
+background'@drawable/bugsee_standard_dialog_button";(Ô„22
+0Î ø&drawable/bugsee_standard_dialog_button0"P
+*http://schemas.android.com/apk/res/androidpaddingBottom7dp";(Ù„2:h"P
+*http://schemas.android.com/apk/res/android
+fontFamilysans-serif-medium(¬‡„"N
+*http://schemas.android.com/apk/res/androidpaddingLeft8dp";(Ö„2:h"m
+*http://schemas.android.com/apk/res/androidid@+id/positiveButton";(Ğ„2
+á‰¤øid/positiveButton0"N
+*http://schemas.android.com/apk/res/android
+paddingTop11dp";(×„2:h;GD

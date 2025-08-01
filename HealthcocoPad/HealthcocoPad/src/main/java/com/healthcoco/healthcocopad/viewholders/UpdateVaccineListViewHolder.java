@@ -101,20 +101,17 @@ public class UpdateVaccineListViewHolder extends HealthcocoComonRecylcerViewHold
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_due_date:
-                openDatePickerDialog((TextView) v);
-                break;
-            case R.id.tv_given_date:
-                openDatePickerDialog((TextView) v);
-                break;
-            case R.id.tv_add_note:
-                openAddEditVaccineNoteDialogFragment(vaccineResponse.getNote());
-                break;
-            case R.id.iv_cancel_date:
-                tvGivenDate.setText("");
-                ivCancelDate.setVisibility(View.GONE);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.tv_due_date || id == R.id.tv_given_date) {
+            openDatePickerDialog((TextView) v);
+
+        } else if (id == R.id.tv_add_note) {
+            openAddEditVaccineNoteDialogFragment(vaccineResponse.getNote());
+
+        } else if (id == R.id.iv_cancel_date) {
+            tvGivenDate.setText("");
+            ivCancelDate.setVisibility(View.GONE);
         }
     }
 

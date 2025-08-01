@@ -335,10 +335,8 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_add_template:
-                openAddNewTemplatesFragment(null);
-                break;
+        if (v.getId() == R.id.bt_add_template) {
+            openAddNewTemplatesFragment(null);
         }
     }
 

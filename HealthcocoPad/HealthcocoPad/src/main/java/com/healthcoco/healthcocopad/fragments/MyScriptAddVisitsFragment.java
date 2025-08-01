@@ -515,22 +515,22 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         HealthcocoOnSelectionChanged onSelectionChangeListener = null;
         if (onSelectionChangedListener != null)
             onSelectionChangeListener = new HealthcocoOnSelectionChanged(editText, onSelectionChangedListener);
-        switch (editText.getId()) {
-            case R.id.edit_body_temperature:
-            case R.id.edit_weight:
-            case R.id.edit_heart_rate:
-            case R.id.edit_systolic:
-            case R.id.edit_diastolic:
-            case R.id.edit_resp_rate:
-            case R.id.edit_spo2:
-            case R.id.edit_duration_common:
-            case R.id.edit_duration:
-                mWidget.configure("en_US", "cur_number");
-                break;
-            default:
-                mWidget.configure("en_US", "cur_text");
-                break;
+        int id = editText.getId();
+
+        if (id == R.id.edit_body_temperature
+                || id == R.id.edit_weight
+                || id == R.id.edit_heart_rate
+                || id == R.id.edit_systolic
+                || id == R.id.edit_diastolic
+                || id == R.id.edit_resp_rate
+                || id == R.id.edit_spo2
+                || id == R.id.edit_duration_common
+                || id == R.id.edit_duration) {
+            mWidget.configure("en_US", "cur_number");
+        } else {
+            mWidget.configure("en_US", "cur_text");
         }
+
         mWidget.setText(editText.getText().toString());
         mWidget.setOnConfiguredListener(onSelectionChangeListener);
         mWidget.setOnTextChangedListener(onSelectionChangeListener);
@@ -639,87 +639,66 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_close:
-                mActivity.onBackPressed();
-                break;
-            case R.id.bt_clinical_note:
-                hideKeyboardOrWidgetIfVisible();
-                showHideClinicalNotesLayout();
-                break;
-            case R.id.bt_prescription:
-                svScrollView.requestChildFocus(parentPrescription, parentPrescription);
-                if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.DRUGS) {
-                    addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.DRUGS);
-                }
-                break;
-          /*  case R.id.bt_prescription:
-                svScrollView.requestChildFocus(parentPrescription, parentPrescription);
-                if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.DRUGS) {
-                    addVisibileUiType(VisitsUiType.TEMPLATES);
-//                    templateListFragment.refreshTagOfEditText(SuggestionType.LAB_TESTS);
-                }
-                break;*/
-            case R.id.bt_lab_tests:
-                svScrollView.requestChildFocus(parentDiagnosticTests, parentDiagnosticTests);
-                if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.LAB_TESTS) {
-                    addVisibileUiType(VisitsUiType.LAB_TEST);
-                    addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.LAB_TESTS);
-                }
-                break;
-            case R.id.bt_templates:
-                addClinicalNotesFragment.openTemplatesListFragment();
-                break;
-            case R.id.bt_diagrams:
-                addClinicalNotesFragment.openDiagramsListFragment();
-                break;
-            case R.id.bt_advice:
-                selectedSuggestionType = null;
-                showHideAdviceLayout();
-                break;
+        int id = v.getId();
 
-            case R.id.bt_keyboard:
-//                showHideKeyboardLayout();
-                break;
-            case R.id.bt_del:
-                onDeleteButtonClick();
-                break;
-            case R.id.bt_space:
-                onSpaceButtonClick();
-                break;
-            case R.id.bt_enter:
-                onEnterClick();
-                break;
-            case R.id.tv_candidate_one:
-            case R.id.tv_candidate_two:
-            case R.id.tv_candidate_three:
-                onCandidateButtonClick(v);
-                break;
-            case R.id.tv_previous_arrow:
-                int upId = mActivity.getCurrentFocus().getNextFocusUpId();
-                if (upId != View.NO_ID) {
-                    view.findViewById(upId).requestFocus();
-                }
-                System.out.println("Back");
-                initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus(), this);
-                break;
-            case R.id.tv_next_arrow:
-                int downId = mActivity.getCurrentFocus().getNextFocusDownId();
-                if (downId != View.NO_ID) {
-                    view.findViewById(downId).requestFocus();
-                    System.out.println("Next");
-                }
-                initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus(), this);
-                break;
-            case R.id.bt_save:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    validateData();
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.fl_bt_swap:
-                showToggleConfirmationAlert();
-                break;
+        if (id == R.id.bt_close) {
+            mActivity.onBackPressed();
+        } else if (id == R.id.bt_clinical_note) {
+            hideKeyboardOrWidgetIfVisible();
+            showHideClinicalNotesLayout();
+        } else if (id == R.id.bt_prescription) {
+            svScrollView.requestChildFocus(parentPrescription, parentPrescription);
+            if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.DRUGS) {
+                addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.DRUGS);
+            }
+        } else if (id == R.id.bt_lab_tests) {
+            svScrollView.requestChildFocus(parentDiagnosticTests, parentDiagnosticTests);
+            if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.LAB_TESTS) {
+                addVisibileUiType(VisitsUiType.LAB_TEST);
+                addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.LAB_TESTS);
+            }
+        } else if (id == R.id.bt_templates) {
+            addClinicalNotesFragment.openTemplatesListFragment();
+        } else if (id == R.id.bt_diagrams) {
+            addClinicalNotesFragment.openDiagramsListFragment();
+        } else if (id == R.id.bt_advice) {
+            selectedSuggestionType = null;
+            showHideAdviceLayout();
+        } else if (id == R.id.bt_keyboard) {
+            // showHideKeyboardLayout();
+        } else if (id == R.id.bt_del) {
+            onDeleteButtonClick();
+        } else if (id == R.id.bt_space) {
+            onSpaceButtonClick();
+        } else if (id == R.id.bt_enter) {
+            onEnterClick();
+        } else if (id == R.id.tv_candidate_one
+                || id == R.id.tv_candidate_two
+                || id == R.id.tv_candidate_three) {
+            onCandidateButtonClick(v);
+        } else if (id == R.id.tv_previous_arrow) {
+            int upId = mActivity.getCurrentFocus().getNextFocusUpId();
+            if (upId != View.NO_ID) {
+                view.findViewById(upId).requestFocus();
+            }
+            System.out.println("Back");
+            initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus(), this);
+        } else if (id == R.id.tv_next_arrow) {
+            int downId = mActivity.getCurrentFocus().getNextFocusDownId();
+            if (downId != View.NO_ID) {
+                view.findViewById(downId).requestFocus();
+                System.out.println("Next");
+            }
+            initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus(), this);
+        } else if (id == R.id.bt_save) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                validateData();
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.fl_bt_swap) {
+            showToggleConfirmationAlert();
         }
     }
 
@@ -1266,19 +1245,18 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         int index = mWidget.getCursorIndex();
         boolean replaced = false;
         View view = mActivity.getCurrentFocus();
-        switch (view.getId()) {
-            case R.id.edit_body_temperature:
-            case R.id.edit_weight:
-            case R.id.edit_heart_rate:
-            case R.id.edit_systolic:
-            case R.id.edit_diastolic:
-            case R.id.edit_resp_rate:
-            case R.id.edit_spo2:
-//                replaced = mWidget.replaceCharacters(index, index, "");
-                break;
-            default:
-                replaced = mWidget.replaceCharacters(index, index, "\n");
-                break;
+        int id = view.getId();
+
+        if (id == R.id.edit_body_temperature
+                || id == R.id.edit_weight
+                || id == R.id.edit_heart_rate
+                || id == R.id.edit_systolic
+                || id == R.id.edit_diastolic
+                || id == R.id.edit_resp_rate
+                || id == R.id.edit_spo2) {
+            // replaced = mWidget.replaceCharacters(index, index, "");
+        } else {
+            replaced = mWidget.replaceCharacters(index, index, "\n");
         }
         if (replaced) {
             mWidget.setCursorIndex(index + 1);

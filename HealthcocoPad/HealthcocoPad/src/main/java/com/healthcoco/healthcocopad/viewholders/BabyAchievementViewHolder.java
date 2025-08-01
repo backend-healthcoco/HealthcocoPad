@@ -66,10 +66,10 @@ public class BabyAchievementViewHolder extends HealthcocoComonRecylcerViewHolder
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_update_achievement:
-                babyAchievementsListItemListener.updateBabyAchievements(objDta);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.tv_update_achievement) {
+            babyAchievementsListItemListener.updateBabyAchievements(objDta);
         }
     }
 }

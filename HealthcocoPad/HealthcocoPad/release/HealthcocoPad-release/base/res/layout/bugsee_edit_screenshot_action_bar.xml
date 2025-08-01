@@ -1,0 +1,43 @@
+
+‘
+;
+android*http://schemas.android.com/apk/res/android*FrameLayout"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent"(õ„2:0ÿÿÿÿÿÿÿÿÿ*ò
+é	ImageView"
+*http://schemas.android.com/apk/res/androidsrc@drawable/bugsee_icon_close"(™‚„2&
+$¿ ødrawable/bugsee_icon_close0"œ
+*http://schemas.android.com/apk/res/android
+background&@drawable/bugsee_action_bar_background"(Ô„21
+/– ø%drawable/bugsee_action_bar_background0"P
+*http://schemas.android.com/apk/res/androidpaddingRight12dp"(Ø„2:h"`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent"(õ„2:0ÿÿÿÿÿÿÿÿÿ"O
+*http://schemas.android.com/apk/res/androidpaddingLeft12dp"(Ö„2:h"m
+*http://schemas.android.com/apk/res/androidid@+id/negativeButton"(Ğ„2
+©‰¤øid/negativeButton0"e
+*http://schemas.android.com/apk/res/androidlayout_gravitystart|center_vertical"(³„2:8“€€F*¾
+µ	ImageView"
+*http://schemas.android.com/apk/res/androidsrc"@drawable/bugsee_anteater_red_icon"(™‚„2-
++š ø!drawable/bugsee_anteater_red_icon0"`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ"S
+*http://schemas.android.com/apk/res/androidlayout_gravitycenter"(³„2:8;*É	
+À	TextView"T
+*http://schemas.android.com/apk/res/androidlayout_marginEnd16dp" (¶‡„2:h "U
+*http://schemas.android.com/apk/res/androidgravitycenter_vertical" (¯„2:8"œ
+*http://schemas.android.com/apk/res/android
+background&@drawable/bugsee_action_bar_background" (Ô„21
+/– ø%drawable/bugsee_action_bar_background0"O
+*http://schemas.android.com/apk/res/androidpaddingRight6dp" (Ø„2:h"`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content" (ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent" (õ„2:0ÿÿÿÿÿÿÿÿÿ"L
+*http://schemas.android.com/apk/res/androidtextSize16sp" (•„2:h‚ "P
+*http://schemas.android.com/apk/res/android
+fontFamilysans-serif-medium(¬‡„"N
+*http://schemas.android.com/apk/res/androidpaddingLeft6dp" (Ö„2:h"
+*http://schemas.android.com/apk/res/android	textColor?attr/bugseeActionBarTextColor" (˜„2+
+)ù€øattr/bugseeActionBarTextColor0"m
+*http://schemas.android.com/apk/res/androidid@+id/positiveButton" (Ğ„2
+á‰¤øid/positiveButton0"c
+*http://schemas.android.com/apk/res/androidlayout_gravityend|center_vertical" (³„2:8•€€ F*

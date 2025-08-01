@@ -270,14 +270,17 @@ public class SettingsNameEditDeleteFragment extends HealthCocoFragment implement
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_advance_search:
-                switch (settingsItemType) {
-                    case GROUPS:
-                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", HealthCocoConstants.REQUEST_CODE_GROUPS_LIST);
-                        break;
-                }
-                break;
+        if (v.getId() == R.id.bt_advance_search) {
+            if (settingsItemType == SettingsItemType.GROUPS) {
+                mActivity.openAddUpdateNameDialogFragment(
+                        WebServiceType.ADD_NEW_GROUP,
+                        AddUpdateNameDialogType.GROUPS,
+                        this,
+                        user,
+                        "",
+                        HealthCocoConstants.REQUEST_CODE_GROUPS_LIST
+                );
+            }
         }
     }
 

@@ -1,7 +1,6 @@
 package com.orm.record;
 
 import com.orm.app.ClientApp;
-import com.orm.dsl.BuildConfig;
 import com.orm.model.FloatFieldAnnotatedModel;
 import com.orm.model.FloatFieldExtendedModel;
 
@@ -18,7 +17,7 @@ import static org.junit.Assert.assertNull;
 
 @SuppressWarnings("all")
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(sdk = 18, constants = BuildConfig.class, application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
+@Config(sdk = 18  , application = ClientApp.class, packageName = "com.orm.model", manifest = Config.NONE)
 public final class FloatFieldTests {
     Float aFloat = Float.valueOf(25F);
 

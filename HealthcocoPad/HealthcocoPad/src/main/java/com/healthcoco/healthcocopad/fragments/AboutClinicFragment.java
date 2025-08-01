@@ -261,11 +261,15 @@ public class AboutClinicFragment extends HealthCocoFragment implements View.OnCl
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.bt_enlarged_map:
-                if (selectedClinicProfile != null && !Util.isNullOrBlank(selectedClinicProfile.getUniqueId()))
-                    openMapViewActivity(CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT, selectedClinicProfile.getUniqueId(), MapType.DOCTOR_PROFILE_CLINIC, 0);
-                break;
+        if (view.getId() == R.id.bt_enlarged_map) {
+            if (selectedClinicProfile != null && !Util.isNullOrBlank(selectedClinicProfile.getUniqueId())) {
+                openMapViewActivity(
+                        CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT,
+                        selectedClinicProfile.getUniqueId(),
+                        MapType.DOCTOR_PROFILE_CLINIC,
+                        0
+                );
+            }
         }
     }
 

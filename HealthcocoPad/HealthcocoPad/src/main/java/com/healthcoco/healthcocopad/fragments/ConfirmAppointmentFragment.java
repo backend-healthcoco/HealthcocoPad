@@ -218,16 +218,17 @@ public class ConfirmAppointmentFragment extends HealthCocoFragment implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_submit:
-                if (user != null) {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        validateData();
-                    } else
-                        Util.showToast(mActivity, R.string.user_offline);
+        int id = v.getId();
+
+        if (id == R.id.tv_submit) {
+            if (user != null) {
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    validateData();
+                } else {
+                    Util.showToast(mActivity, R.string.user_offline);
                 }
-                break;
+            }
         }
     }
 

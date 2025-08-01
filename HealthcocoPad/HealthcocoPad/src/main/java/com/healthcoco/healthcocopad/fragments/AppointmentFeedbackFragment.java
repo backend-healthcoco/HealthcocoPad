@@ -116,31 +116,19 @@ public class AppointmentFeedbackFragment extends HealthCocoFragment implements R
                     feedbackType.getVisibleViewIdsHashMap().keySet()) {
                 View visibleView = view.findViewById(visibleViewId);
                 visibleView.setVisibility(View.VISIBLE);
-                switch (visibleViewId) {
-                   /* case R.id.layout_patient_header:
-                        initExistingPatientsPopupWindow(this);
-                        break;*/
-                    case R.id.parent_clinic_name:
-                        switch (feedbackType) {
-                            case DOCTOR:
-                                tvClinicName.setHint(R.string.select);
-                                tvClinicName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_drug, 0);
-                                tvClinicName.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.grey_background_updated));
-                                break;
-                            default:
-                                tvClinicName.setHint(R.string.clinic_name_visited);
-                                tvClinicName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                                tvClinicName.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.white));
-                                break;
-                        }
-                        break;
-                    case R.id.parent_health_problem_treatment:
-                        switch (feedbackType) {
-                            default:
-                                editHealthProblemTreatment.setHint(R.string.eg_stomach_body_pain);
-                                break;
-                        }
-                        break;
+                if (visibleViewId == R.id.parent_clinic_name) {
+                    if (feedbackType == FeedbackType.DOCTOR) {
+                        tvClinicName.setHint(R.string.select);
+                        tvClinicName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_drug, 0);
+                        tvClinicName.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.grey_background_updated));
+                    } else {
+                        tvClinicName.setHint(R.string.clinic_name_visited);
+                        tvClinicName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                        tvClinicName.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.white));
+                    }
+                } else if (visibleViewId == R.id.parent_health_problem_treatment) {
+                    // Only default case present
+                    editHealthProblemTreatment.setHint(R.string.eg_stomach_body_pain);
                 }
             }
         }
@@ -194,23 +182,18 @@ public class AppointmentFeedbackFragment extends HealthCocoFragment implements R
             for (Integer visibleParentId :
                     feedbackType.getVisibleViewIdsHashMap().keySet()) {
                 Integer titleTextId = feedbackType.getVisibleViewIdsHashMap().get(visibleParentId);
-                switch (visibleParentId) {
-                    case R.id.parent_rating_five_star:
-                        TextView tvTitleOverallExperienceStarRating = (TextView) view.findViewById(R.id.tv_title_overall_experience);
-                        tvTitleOverallExperienceStarRating.setText(String.format(getResources().getString(titleTextId), nameForFeedback));
-                        break;
-                    case R.id.parent_clinic_name:
-                        TextView tvTitleClinicPharmacyName = (TextView) view.findViewById(R.id.tv_title_clinic_name);
-                        tvTitleClinicPharmacyName.setText(String.format(getResources().getString(titleTextId), nameForFeedback));
-                        break;
-                    case R.id.parent_health_problem_treatment:
-                        TextView tvTitleHealthProblem = (TextView) view.findViewById(R.id.tv_title_for_which_health_problem);
-                        tvTitleHealthProblem.setText(titleTextId);
-                        break;
-                    case R.id.parent_experience:
-                        TextView tvTitleExperience = (TextView) view.findViewById(R.id.tv_title_experience);
-                        tvTitleExperience.setText(String.format(getResources().getString(titleTextId), nameForFeedback));
-                        break;
+                if (visibleParentId == R.id.parent_rating_five_star) {
+                    TextView tvTitleOverallExperienceStarRating = (TextView) view.findViewById(R.id.tv_title_overall_experience);
+                    tvTitleOverallExperienceStarRating.setText(String.format(getResources().getString(titleTextId), nameForFeedback));
+                } else if (visibleParentId == R.id.parent_clinic_name) {
+                    TextView tvTitleClinicPharmacyName = (TextView) view.findViewById(R.id.tv_title_clinic_name);
+                    tvTitleClinicPharmacyName.setText(String.format(getResources().getString(titleTextId), nameForFeedback));
+                } else if (visibleParentId == R.id.parent_health_problem_treatment) {
+                    TextView tvTitleHealthProblem = (TextView) view.findViewById(R.id.tv_title_for_which_health_problem);
+                    tvTitleHealthProblem.setText(titleTextId);
+                } else if (visibleParentId == R.id.parent_experience) {
+                    TextView tvTitleExperience = (TextView) view.findViewById(R.id.tv_title_experience);
+                    tvTitleExperience.setText(String.format(getResources().getString(titleTextId), nameForFeedback));
                 }
             }
         }
@@ -226,13 +209,10 @@ public class AppointmentFeedbackFragment extends HealthCocoFragment implements R
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId) {
-            case R.id.rb_like:
-                refreshQuestionAnswersList(LikeUnlikeType.LIKE);
-                break;
-            case R.id.rb_unlike:
-                refreshQuestionAnswersList(LikeUnlikeType.UNLIKE);
-                break;
+        if (checkedId == R.id.rb_like) {
+            refreshQuestionAnswersList(LikeUnlikeType.LIKE);
+        } else if (checkedId == R.id.rb_unlike) {
+            refreshQuestionAnswersList(LikeUnlikeType.UNLIKE);
         }
     }
 
@@ -282,10 +262,8 @@ public class AppointmentFeedbackFragment extends HealthCocoFragment implements R
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-                validateData();
-                break;
+        if (v.getId() == R.id.container_right_action) {
+            validateData();
         }
     }
 
@@ -318,33 +296,35 @@ public class AppointmentFeedbackFragment extends HealthCocoFragment implements R
     private Object getValidatedMessageForVisibleViews() {
         for (Integer visibleViewId :
                 feedbackType.getVisibleViewIdsHashMap().keySet()) {
-            switch (visibleViewId) {
-                case R.id.parent_rating_five_star:
-                    if (ratingBarFeedback.getRating() <= 0)
-                        return String.format(getResources().getString(R.string.please_rate_your_experience_with), Util.getValidatedValueOrBlankTrimming(tvNameForFeedback));
-                    break;
-                case R.id.parent_clinic_name:
-                    if (Util.isNullOrBlank(Util.getValidatedValueOrNull(tvClinicName)))
-                        return R.string.please_select_clinic_name_you_visited;
-                    break;
-                case R.id.parent_health_problem_treatment:
-                    if (Util.isNullOrBlank(Util.getValidatedValueOrNull(editHealthProblemTreatment)))
-                        return R.string.please_tell_us_the_problem_for_which_you_visited;
-                    break;
-                case R.id.parent_what_can_be_improved:
-                    if (questionAnswer == null || Util.isNullOrEmptyList(questionAnswer.getAnswers())) {
-                        if (ratingBarFeedback.getRating() < MINIMUM_RATING_VALUE)
-                            return R.string.please_select_one_or_more_reasons_for_improvement;
-                        else
-                            return R.string.please_select_reasons_for_happy;
+            if (visibleViewId == R.id.parent_rating_five_star) {
+                if (ratingBarFeedback.getRating() <= 0) {
+                    return String.format(
+                            getResources().getString(R.string.please_rate_your_experience_with),
+                            Util.getValidatedValueOrBlankTrimming(tvNameForFeedback)
+                    );
+                }
+            } else if (visibleViewId == R.id.parent_clinic_name) {
+                if (Util.isNullOrBlank(Util.getValidatedValueOrNull(tvClinicName))) {
+                    return R.string.please_select_clinic_name_you_visited;
+                }
+            } else if (visibleViewId == R.id.parent_health_problem_treatment) {
+                if (Util.isNullOrBlank(Util.getValidatedValueOrNull(editHealthProblemTreatment))) {
+                    return R.string.please_tell_us_the_problem_for_which_you_visited;
+                }
+            } else if (visibleViewId == R.id.parent_what_can_be_improved) {
+                if (questionAnswer == null || Util.isNullOrEmptyList(questionAnswer.getAnswers())) {
+                    if (ratingBarFeedback.getRating() < MINIMUM_RATING_VALUE) {
+                        return R.string.please_select_one_or_more_reasons_for_improvement;
+                    } else {
+                        return R.string.please_select_reasons_for_happy;
                     }
-                    break;
-                case R.id.parent_experience:
-                    if (Util.isNullOrBlank(Util.getValidatedValueOrNull(editExperience)))
-                        return R.string.msg_share_some_experience;
-                    else if (Util.getValidatedValueOrNull(editExperience).length() < DEFAULT_EXPERIENCE_LENGTH)
-                        return R.string.hint_recommendation_experience_message;
-                    break;
+                }
+            } else if (visibleViewId == R.id.parent_experience) {
+                if (Util.isNullOrBlank(Util.getValidatedValueOrNull(editExperience))) {
+                    return R.string.msg_share_some_experience;
+                } else if (Util.getValidatedValueOrNull(editExperience).length() < DEFAULT_EXPERIENCE_LENGTH) {
+                    return R.string.hint_recommendation_experience_message;
+                }
             }
         }
         return null;

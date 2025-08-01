@@ -179,15 +179,14 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_save:
-                hideKeyboard(view);
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    validateData();
-                else
-                    Util.showToast(mActivity, getResources().getString(R.string.user_offline));
-                break;
+        if (v.getId() == R.id.bt_save) {
+            hideKeyboard(view);
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                validateData();
+            } else {
+                Util.showToast(mActivity, getResources().getString(R.string.user_offline));
+            }
         }
     }
 

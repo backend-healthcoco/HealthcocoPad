@@ -118,13 +118,12 @@ public class UpdateBabyAchievementsFragment extends HealthCocoDialogFragment imp
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_save:
-                validateData();
-                break;
-            case R.id.tv_achievement_date:
-                openDatePickerDialog();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_save) {
+            validateData();
+        } else if (id == R.id.tv_achievement_date) {
+            openDatePickerDialog();
         }
     }
 

@@ -1155,92 +1155,63 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_advance_search:
-                switch (nameHideActivateType) {
-                    case REFERENCE:
-                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_REFERENCE, AddUpdateNameDialogType.REFERENCE, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
-                        break;
-                    case DIRECTION:
-                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DIRECTION, AddUpdateNameDialogType.DIRECTION, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
-                        break;
-                    case FREQUENCY:
-                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DOSAGE, AddUpdateNameDialogType.FREQUENCY, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
-                        break;
-                    case HISTORY:
-                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_CUSTOM_HISTORY, AddUpdateNameDialogType.HISTORY, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
-                        break;
-                    case DRUG:
-                        mActivity.openAddNewDrugFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, null);
-                        break;
-                    case TREATMENT:
-                        mActivity.openAddNewTreatmentsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, null);
-                        break;
-                    case PRESENT_COMPLAINT:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PRESENT_COMPLAINT);
-                        break;
-                    case COMPLAINT:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.COMPLAINTS);
-                        break;
-                    case HISTORY_OF_PRESENT_COMPLAINT:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.HISTORY_OF_PRESENT_COMPLAINT);
-                        break;
-                    case MENSTRUAL_HISTORY:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.MENSTRUAL_HISTORY);
-                        break;
-                    case OBSTETRIC_HISTORY:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.OBSTETRIC_HISTORY);
-                        break;
-                    case GENERAL_EXAMINATION:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.GENERAL_EXAMINATION);
-                        break;
-                    case SYSTEMIC_EXAMINATION:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.SYSTEMIC_EXAMINATION);
-                        break;
-                    case OBSERVATION:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.OBSERVATION);
-                        break;
-                    case INVESTIGATIONS:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.INVESTIGATION);
-                        break;
-                    case PROVISIONAL_DIAGNOSIS:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PROVISIONAL_DIAGNOSIS);
-                        break;
-                    case DIAGNOSIS:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.DIAGNOSIS);
-                        break;
-                    case ECG:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.ECG_DETAILS);
-                        break;
-                    case ECHO:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.ECHO);
-                        break;
-                    case XRAY:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.X_RAY_DETAILS);
-                        break;
-                    case HOLTER:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.HOLTER);
-                        break;
-                    case INDICATION_OF_USG:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.INDICATION_OF_USG);
-                        break;
-                    case NOTES:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.NOTES);
-                        break;
-                    case PA:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PA);
-                        break;
-                    case PS:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PS);
-                        break;
-                    case PV:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PV);
-                        break;
-                    case PROCEDURE_NOTE:
-                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PROCEDURES);
-                        break;
-                }
-                break;
+        int id = v.getId();
+        if (id == R.id.bt_advance_search) {
+            if (nameHideActivateType == NameHideActivateType.REFERENCE) {
+                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_REFERENCE, AddUpdateNameDialogType.REFERENCE, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+            } else if (nameHideActivateType == NameHideActivateType.DIRECTION) {
+                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DIRECTION, AddUpdateNameDialogType.DIRECTION, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+            } else if (nameHideActivateType == NameHideActivateType.FREQUENCY) {
+                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DOSAGE, AddUpdateNameDialogType.FREQUENCY, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+            } else if (nameHideActivateType == NameHideActivateType.HISTORY) {
+                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_CUSTOM_HISTORY, AddUpdateNameDialogType.HISTORY, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+            } else if (nameHideActivateType == NameHideActivateType.DRUG) {
+                mActivity.openAddNewDrugFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, null);
+            } else if (nameHideActivateType == NameHideActivateType.TREATMENT) {
+                mActivity.openAddNewTreatmentsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, null);
+            } else if (nameHideActivateType == NameHideActivateType.PRESENT_COMPLAINT) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PRESENT_COMPLAINT);
+            } else if (nameHideActivateType == NameHideActivateType.COMPLAINT) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.COMPLAINTS);
+            } else if (nameHideActivateType == NameHideActivateType.HISTORY_OF_PRESENT_COMPLAINT) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.HISTORY_OF_PRESENT_COMPLAINT);
+            } else if (nameHideActivateType == NameHideActivateType.MENSTRUAL_HISTORY) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.MENSTRUAL_HISTORY);
+            } else if (nameHideActivateType == NameHideActivateType.OBSTETRIC_HISTORY) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.OBSTETRIC_HISTORY);
+            } else if (nameHideActivateType == NameHideActivateType.GENERAL_EXAMINATION) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.GENERAL_EXAMINATION);
+            } else if (nameHideActivateType == NameHideActivateType.SYSTEMIC_EXAMINATION) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.SYSTEMIC_EXAMINATION);
+            } else if (nameHideActivateType == NameHideActivateType.OBSERVATION) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.OBSERVATION);
+            } else if (nameHideActivateType == NameHideActivateType.INVESTIGATIONS) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.INVESTIGATION);
+            } else if (nameHideActivateType == NameHideActivateType.PROVISIONAL_DIAGNOSIS) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PROVISIONAL_DIAGNOSIS);
+            } else if (nameHideActivateType == NameHideActivateType.DIAGNOSIS) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.DIAGNOSIS);
+            } else if (nameHideActivateType == NameHideActivateType.ECG) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.ECG_DETAILS);
+            } else if (nameHideActivateType == NameHideActivateType.ECHO) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.ECHO);
+            } else if (nameHideActivateType == NameHideActivateType.XRAY) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.X_RAY_DETAILS);
+            } else if (nameHideActivateType == NameHideActivateType.HOLTER) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.HOLTER);
+            } else if (nameHideActivateType == NameHideActivateType.INDICATION_OF_USG) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.INDICATION_OF_USG);
+            } else if (nameHideActivateType == NameHideActivateType.NOTES) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.NOTES);
+            } else if (nameHideActivateType == NameHideActivateType.PA) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PA);
+            } else if (nameHideActivateType == NameHideActivateType.PS) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PS);
+            } else if (nameHideActivateType == NameHideActivateType.PV) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PV);
+            } else if (nameHideActivateType == NameHideActivateType.PROCEDURE_NOTE) {
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PROCEDURES);
+            }
         }
     }
 

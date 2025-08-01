@@ -1,0 +1,5 @@
+com.orm.dsl.test.SugarOrm-androidTest-0 /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/build/generated/res/resValues/androidTest/debug
+com.orm.dsl.test.SugarOrm-mergeDebugAndroidTestResources-1 /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+com.orm.dsl.test.SugarOrm-mergeDebugAndroidTestResources-2 /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+com.orm.dsl.test.SugarOrm-debugAndroidTest-3 /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources
+com.orm.dsl.test.SugarOrm-debug-4 /home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/SugarOrm/build/intermediates/packaged_res/debug/packageDebugResources

@@ -177,14 +177,16 @@ public class AddEditAppointmentDetailDialogFragment extends HealthCocoDialogFrag
     @Override
     public void onClick(View v) {
         Util.checkNetworkStatus(mActivity);
-        switch (v.getId()) {
-            case R.id.bt_save:
-                if (HealthCocoConstants.isNetworkOnline)
-                    validateData();
-                else
-                    Util.showToast(mActivity, R.string.user_offline);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_save) {
+            if (HealthCocoConstants.isNetworkOnline) {
+                validateData();
+            } else {
+                Util.showToast(mActivity, R.string.user_offline);
+            }
         }
+
     }
 
     private void validateData() {

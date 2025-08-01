@@ -101,19 +101,17 @@ public class HealthcocoBottomSheetDialog extends com.healthcoco.healthcocopad.cu
         if (anchorView != null && anchorView.getId() == v.getId() && !Util.isNullOrEmptyList(list)) {
             showOptionsWindow(v);
         } else {
-            switch (v.getId()) {
-                case R.id.tv_all:
-                    Object tag = v.getTag();
-                    if (v instanceof TextView && tag instanceof String) {
-                        TextView tvText = (TextView) v;
-                        String text = (String) tag;
-                        tvText.setText(text);
-                        tvText.setSelected(true);
-                    }
-                    if (popupWindowListener != null)
-                        popupWindowListener.onItemSelected(popupWindowType, tag);
-                    dismiss();
-                    break;
+            if (v.getId() == R.id.tv_all) {
+                Object tag = v.getTag();
+                if (v instanceof TextView && tag instanceof String) {
+                    TextView tvText = (TextView) v;
+                    String text = (String) tag;
+                    tvText.setText(text);
+                    tvText.setSelected(true);
+                }
+                if (popupWindowListener != null)
+                    popupWindowListener.onItemSelected(popupWindowType, tag);
+                dismiss();
             }
         }
     }

@@ -131,13 +131,12 @@ public class HeaderItemViewHolder extends HealthCocoViewHolder implements View.O
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_text_style_bold:
-                tvTextStyleBold.setSelected(!tvTextStyleBold.isSelected());
-                break;
-            case R.id.tv_text_style_ittalic:
-                tvTextStyleIttalic.setSelected(!tvTextStyleIttalic.isSelected());
-                break;
+        int id = v.getId();
+
+        if (id == R.id.tv_text_style_bold) {
+            tvTextStyleBold.setSelected(!tvTextStyleBold.isSelected());
+        } else if (id == R.id.tv_text_style_ittalic) {
+            tvTextStyleIttalic.setSelected(!tvTextStyleIttalic.isSelected());
         }
     }
 

@@ -634,48 +634,42 @@ public class ContactsListFragment extends HealthCocoFragment implements
     @Override
     public void onClick(View v) {
         hideKeyboard(view);
-        switch (v.getId()) {
-            case R.id.bt_add_patient:
-                if (!isInHomeActivity) {
-                    mActivity.openAddUpdateNameDialogFragment(null, AddUpdateNameDialogType.ADD_PATIENT_MOBILE_NUMBER, this, user, "", 0);
-                } else {
-                    openPatientMobileNumberDialogFragment();
-                    contactsListAdapter.notifyDataSetChanged();
-                }
-                break;
-            case R.id.container_middle_action:
-                if (changeViewType == ChangeViewType.GRID_VIEW)
-                    changeView(ChangeViewType.LIST_VIEW);
-                else
-                    changeView(ChangeViewType.GRID_VIEW);
-//                if (lvContacts.getVisibility() == View.GONE) {
-//                    changeViewType = ChangeViewType.LIST_VIEW;
-//
-//                } else if (containerLv.getVisibility() == View.VISIBLE) {
-//                    gvContacts.setVisibility(View.VISIBLE);
-//                    containerLv.setVisibility(View.GONE);
-//                    changeViewType = ChangeViewType.GRID_VIEW;
-//
-//                }
-                break;
-            case R.id.bt_add_to_group:
-                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", REQUEST_CODE_CONTACTS_DETAIL);
-                break;
-            case R.id.bt_advance_search:
-                clearSearchResults();
-                parentEditSearch.setVisibility(View.GONE);
-                childEditSearch.setVisibility(View.VISIBLE);
-                break;
-            case R.id.bt_cancel:
-            case R.id.bt_clear:
-                clearSearchResults();
-                childEditSearch.setVisibility(View.GONE);
-                parentEditSearch.setVisibility(View.VISIBLE);
-                break;
-            case R.id.bt_search:
-                break;
-            default:
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_add_patient) {
+            if (!isInHomeActivity) {
+                mActivity.openAddUpdateNameDialogFragment(null, AddUpdateNameDialogType.ADD_PATIENT_MOBILE_NUMBER, this, user, "", 0);
+            } else {
+                openPatientMobileNumberDialogFragment();
+                contactsListAdapter.notifyDataSetChanged();
+            }
+        } else if (id == R.id.container_middle_action) {
+            if (changeViewType == ChangeViewType.GRID_VIEW)
+                changeView(ChangeViewType.LIST_VIEW);
+            else
+                changeView(ChangeViewType.GRID_VIEW);
+
+//    // Old logic (commented):
+//    if (lvContacts.getVisibility() == View.GONE) {
+//        changeViewType = ChangeViewType.LIST_VIEW;
+//    } else if (containerLv.getVisibility() == View.VISIBLE) {
+//        gvContacts.setVisibility(View.VISIBLE);
+//        containerLv.setVisibility(View.GONE);
+//        changeViewType = ChangeViewType.GRID_VIEW;
+//    }
+
+        } else if (id == R.id.bt_add_to_group) {
+            mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", REQUEST_CODE_CONTACTS_DETAIL);
+        } else if (id == R.id.bt_advance_search) {
+            clearSearchResults();
+            parentEditSearch.setVisibility(View.GONE);
+            childEditSearch.setVisibility(View.VISIBLE);
+        } else if (id == R.id.bt_cancel || id == R.id.bt_clear) {
+            clearSearchResults();
+            childEditSearch.setVisibility(View.GONE);
+            parentEditSearch.setVisibility(View.VISIBLE);
+        } else if (id == R.id.bt_search) {
+            // No action specified
         }
     }
 

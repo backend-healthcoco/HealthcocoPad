@@ -213,12 +213,9 @@ public class VaccinationListViewHolder extends HealthcocoComonRecylcerViewHolder
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_update_vaccine:
-                mActivity.openCommonOpenUpActivityUsingParcel(CommonOpenUpFragmentType.UPDATE_VACCINE, HealthCocoConstants.REQUEST_CODE_VACCINATION_DATA,
-                        new String[]{TAG_VACCINE_DATA}, new Object[]{obj});
-                break;
-
+        if (v.getId() == R.id.tv_update_vaccine) {
+            mActivity.openCommonOpenUpActivityUsingParcel(CommonOpenUpFragmentType.UPDATE_VACCINE, HealthCocoConstants.REQUEST_CODE_VACCINATION_DATA,
+                    new String[]{TAG_VACCINE_DATA}, new Object[]{obj});
         }
     }
 }

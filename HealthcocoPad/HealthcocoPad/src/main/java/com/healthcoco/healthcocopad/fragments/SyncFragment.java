@@ -212,15 +212,15 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_sync_all:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    if (!Util.isSyncActive)
-                        syncAll();
-                    else
-                        Util.showToast(mActivity, R.string.user_offline);
-                break;
+        if (v.getId() == R.id.bt_sync_all) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                if (!Util.isSyncActive) {
+                    syncAll();
+                } else {
+                    Util.showToast(mActivity, R.string.user_offline);
+                }
+            }
         }
     }
 

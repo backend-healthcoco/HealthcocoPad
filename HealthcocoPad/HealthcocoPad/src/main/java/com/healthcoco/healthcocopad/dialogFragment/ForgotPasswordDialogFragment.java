@@ -93,19 +93,16 @@ public class ForgotPasswordDialogFragment extends HealthCocoDialogFragment imple
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_reset:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    validateData();
-                else
-                    Util.showToast(mActivity, getResources().getString(R.string.user_offline));
-                break;
-            case R.id.bt_cancel:
-                getDialog().cancel();
-                break;
-            default:
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_reset) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline)
+                validateData();
+            else
+                Util.showToast(mActivity, getResources().getString(R.string.user_offline));
+        } else if (id == R.id.bt_cancel) {
+            getDialog().cancel();
         }
     }
 

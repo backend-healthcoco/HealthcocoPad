@@ -1,0 +1,36 @@
+
+¡
+;
+android*http://schemas.android.com/apk/res/android
+4
+app'http://schemas.android.com/apk/res-autoFrameLayout"Q
+*http://schemas.android.com/apk/res/android
+background#fff"(Ô„2:`ÿÿÿÿ"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent"(õ„2:0ÿÿÿÿÿÿÿÿÿ*†
+ı7com.healthcoco.healthcocopad.calendar.weekview.WeekView"x
+'http://schemas.android.com/apk/res-autoheaderRowBackgroundColor@color/toolbar"(Ÿ…ø2
+Ü†˜øcolor/toolbar0"
+'http://schemas.android.com/apk/res-autoheaderRowPadding@dimen/text_size_menu_notif_no"( …ø2)
+'ö‡œødimen/text_size_menu_notif_no0@"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent"(õ„2:0ÿÿÿÿÿÿÿÿÿ"
+'http://schemas.android.com/apk/res-autoheaderColumnTextColor@color/toolbar_text"(…ø2
+İ†˜øcolor/toolbar_text0"\
+'http://schemas.android.com/apk/res-autotodayBackgroundColor#d5e6f4"(¢Šø2:PôÍ×ş"Q
+'http://schemas.android.com/apk/res-autoeventCornerRadius0dp"(¤ƒø2:h"J
+'http://schemas.android.com/apk/res-auto	columnGap3dp"(š‚ø2:h"r
+'http://schemas.android.com/apk/res-autotodayHeaderTextColor@color/accent"(£Šø2
+™€˜øcolor/accent0"y
+'http://schemas.android.com/apk/res-autoeventTextColor@android:color/white"(§ƒø2
+‹€˜android:color/white0"[
+'http://schemas.android.com/apk/res-autodayBackgroundColor	#05000000"(Ô‚ø2:H€€€("p
+'http://schemas.android.com/apk/res-autonowLineColor@color/red_error"(ã‡ø2
+Ê†˜øcolor/red_error0"`
+'http://schemas.android.com/apk/res-autoheaderColumnBackground	#ffffffff"(›…ø2:Hÿÿÿÿ"N
+'http://schemas.android.com/apk/res-auto
+hourHeight300dp"(´…ø2:hØ"Q
+'http://schemas.android.com/apk/res-autonowLineThickness2dp"(ä‡ø2:h"L
+'http://schemas.android.com/apk/res-autoshowNowLinetrue"(äˆø2:@"a
+*http://schemas.android.com/apk/res/androidid@+id/weekView"(Ğ„2
+¡¤øid/weekView04

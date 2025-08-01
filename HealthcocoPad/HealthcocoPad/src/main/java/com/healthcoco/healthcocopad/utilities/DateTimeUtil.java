@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.utilities;
 
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.bean.DOB;
@@ -219,8 +220,20 @@ public class DateTimeUtil {
 
     public static long getLongFromFormattedDayMonthYearFormatString(String format, String displayedDate) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat(format);
-            return sdf.parse(displayedDate).getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+            long timeInMillis = sdf.parse(displayedDate).getTime();
+            Calendar calendar1 = getCalendarInstance();
+            calendar1.setTimeInMillis(timeInMillis);
+
+            Calendar calendar2 = getCalendarInstance();
+            calendar2.set(Calendar.DAY_OF_MONTH, calendar1.get(Calendar.DAY_OF_MONTH));
+            calendar2.set(Calendar.MONTH, calendar1.get(Calendar.MONTH));
+            calendar2.set(Calendar.YEAR, calendar1.get(Calendar.YEAR));
+
+            Log.d(TAG, "Format : " + format + " Formatted displayedDate : " + displayedDate + " Converted time inMilis : " + calendar2.getTimeInMillis());
+            LogUtils.LOGD(TAG, "Format : " + format + " Formatted displayedDate : " + displayedDate + " Converted time inMilis : " + calendar2.getTimeInMillis());
+            return calendar2.getTimeInMillis();
         } catch (Exception e) {
             e.printStackTrace();
         }

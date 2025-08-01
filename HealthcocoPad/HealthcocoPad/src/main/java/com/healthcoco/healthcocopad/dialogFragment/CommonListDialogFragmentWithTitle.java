@@ -416,10 +416,8 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-                performRightAction();
-                break;
+        if (v.getId() == R.id.container_right_action) {
+            performRightAction();
         }
     }
 

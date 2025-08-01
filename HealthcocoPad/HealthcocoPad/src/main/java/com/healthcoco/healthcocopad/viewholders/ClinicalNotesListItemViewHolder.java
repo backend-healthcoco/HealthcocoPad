@@ -928,64 +928,69 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_history:
-                if (commonEMRItemClickListener != null) {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        if (clinicalNote.getInHistory() != null && clinicalNote.getInHistory()) {
-                            int msgId = R.string.confirm_remove_clinical_notes_from_history;
-                            showConfirmationAlert(v.getId(), null, mActivity.getResources().getString(msgId));
-                        } else
-                            onAddRemoveHistoryClicked(clinicalNote);
-                    } else onNetworkUnavailable(null);
-                }
-                break;
-            case R.id.bt_edit:
+        int id = v.getId();
+
+        if (id == R.id.bt_history) {
+            if (commonEMRItemClickListener != null) {
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
-                    if (detailCombinedItemListener != null) {
-                        detailCombinedItemListener.editVisit("");
+                    if (clinicalNote.getInHistory() != null && clinicalNote.getInHistory()) {
+                        int msgId = R.string.confirm_remove_clinical_notes_from_history;
+                        showConfirmationAlert(id, null, mActivity.getResources().getString(msgId));
                     } else {
-                        openAddClinicalNotesFragment(clinicalNote.getUniqueId());
+                        onAddRemoveHistoryClicked(clinicalNote);
                     }
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_email:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    if (detailCombinedItemListener != null)
-                        detailCombinedItemListener.sendEmail("");
-                    else
-                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_CLINICAL_NOTES,
-                                AddUpdateNameDialogType.EMAIL, clinicalNote.getUniqueId(), clinicalNote.getDoctorId(),
-                                clinicalNote.getLocationId(), clinicalNote.getHospitalId());
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_discard:
-                LogUtils.LOGD(TAG, "Discard");
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    int msgId = R.string.confirm_discard_clinical_notes_message;
-                    int titleId = R.string.confirm_discard_clinical_notes_title;
-                    showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
-                } else onNetworkUnavailable(null);
-                break;
-            case R.id.bt_print:
-            case R.id.tv_print:
-                LogUtils.LOGD(TAG, "Print");
-                if (detailCombinedItemListener != null) {
-                    detailCombinedItemListener.doPrint("");
                 } else {
-                    Util.checkNetworkStatus(mActivity);
-                    if (HealthCocoConstants.isNetworkOnline) {
-                        mActivity.showLoading(false);
-                        WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_CLINICAL_NOTES_PDF_URL, clinicalNote.getUniqueId(), this, this);
-                    } else onNetworkUnavailable(null);
+                    onNetworkUnavailable(null);
                 }
-                break;
-            default:
-                break;
+            }
+        } else if (id == R.id.bt_edit) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                if (detailCombinedItemListener != null) {
+                    detailCombinedItemListener.editVisit("");
+                } else {
+                    openAddClinicalNotesFragment(clinicalNote.getUniqueId());
+                }
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_email) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                if (detailCombinedItemListener != null) {
+                    detailCombinedItemListener.sendEmail("");
+                } else {
+                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_CLINICAL_NOTES,
+                            AddUpdateNameDialogType.EMAIL, clinicalNote.getUniqueId(), clinicalNote.getDoctorId(),
+                            clinicalNote.getLocationId(), clinicalNote.getHospitalId());
+                }
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_discard) {
+            LogUtils.LOGD(TAG, "Discard");
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                int msgId = R.string.confirm_discard_clinical_notes_message;
+                int titleId = R.string.confirm_discard_clinical_notes_title;
+                showConfirmationAlert(id, mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
+            } else {
+                onNetworkUnavailable(null);
+            }
+        } else if (id == R.id.bt_print || id == R.id.tv_print) {
+            LogUtils.LOGD(TAG, "Print");
+            if (detailCombinedItemListener != null) {
+                detailCombinedItemListener.doPrint("");
+            } else {
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    mActivity.showLoading(false);
+                    WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_CLINICAL_NOTES_PDF_URL, clinicalNote.getUniqueId(), this, this);
+                } else {
+                    onNetworkUnavailable(null);
+                }
+            }
         }
     }
 
@@ -1070,13 +1075,10 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (viewId) {
-                    case R.id.bt_discard:
-                        onDiscardedClicked(clinicalNote);
-                        break;
-                    case R.id.bt_history:
-                        onAddRemoveHistoryClicked(clinicalNote);
-                        break;
+                if (viewId == R.id.bt_discard) {
+                    onDiscardedClicked(clinicalNote);
+                } else if (viewId == R.id.bt_history) {
+                    onAddRemoveHistoryClicked(clinicalNote);
                 }
             }
         });

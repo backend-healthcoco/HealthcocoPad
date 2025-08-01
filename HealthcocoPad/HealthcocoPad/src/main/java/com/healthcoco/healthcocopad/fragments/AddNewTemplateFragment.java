@@ -232,15 +232,11 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-                validateData();
-                break;
-            case R.id.bt_header_interaction:
-            case R.id.bt_header_two_interaction:
-                confirmDrugInteractionsAlert();
-                LogUtils.LOGD(TAG, "Interactions Clicked");
-                break;
+        if (v.getId() == R.id.container_right_action) {
+            validateData();
+        } else if (v.getId() == R.id.bt_header_interaction || v.getId() == R.id.bt_header_two_interaction) {
+            confirmDrugInteractionsAlert();
+            LogUtils.LOGD(TAG, "Interactions Clicked");
         }
     }
 

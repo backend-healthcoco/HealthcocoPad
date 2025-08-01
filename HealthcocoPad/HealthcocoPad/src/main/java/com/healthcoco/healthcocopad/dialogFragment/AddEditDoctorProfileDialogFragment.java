@@ -354,38 +354,34 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.bt_edit_profile_image:
-                doctorImageType = DoctorImageType.PROFILE_IMAGE;
-                openDialogFragment(DialogType.SELECT_IMAGE, this);
-                break;
-            case R.id.bt_edit_cover_image:
-                doctorImageType = DoctorImageType.COVER_IMAGE;
-                openDialogFragment(DialogType.SELECT_IMAGE, this);
-                break;
+        int id = view.getId();
 
-            case R.id.bt_add_speciality:
-                if (isValidSpecialityItem())
-                    addSpecialityItem(null);
-                else
-                    Util.showToast(mActivity, R.string.please_select_speciality);
-                break;
-            case R.id.tv_speciality:
-                if (view instanceof TextView)
-                    selectedSpecialityTextView = (TextView) view;
-                if (!Util.isNullOrEmptyList(specialitiesList)) {
-                    commonListDialogFragment = openCommonListDialogFragment(this, CommonListDialogType.SPECIALITY, specialitiesList);
-                } else Util.showToast(mActivity, R.string.no_specialisations_found);
-                break;
-            case R.id.bt_delete:
-                showConfirmationAlert(view);
-                break;
-            case R.id.bt_save:
-                validateData();
-                break;
-            case R.id.tv_dob:
-                openBirthDatePickerDialog();
-                break;
+        if (id == R.id.bt_edit_profile_image) {
+            doctorImageType = DoctorImageType.PROFILE_IMAGE;
+            openDialogFragment(DialogType.SELECT_IMAGE, this);
+        } else if (id == R.id.bt_edit_cover_image) {
+            doctorImageType = DoctorImageType.COVER_IMAGE;
+            openDialogFragment(DialogType.SELECT_IMAGE, this);
+        } else if (id == R.id.bt_add_speciality) {
+            if (isValidSpecialityItem()) {
+                addSpecialityItem(null);
+            } else {
+                Util.showToast(mActivity, R.string.please_select_speciality);
+            }
+        } else if (id == R.id.tv_speciality) {
+            if (view instanceof TextView)
+                selectedSpecialityTextView = (TextView) view;
+            if (!Util.isNullOrEmptyList(specialitiesList)) {
+                commonListDialogFragment = openCommonListDialogFragment(this, CommonListDialogType.SPECIALITY, specialitiesList);
+            } else {
+                Util.showToast(mActivity, R.string.no_specialisations_found);
+            }
+        } else if (id == R.id.bt_delete) {
+            showConfirmationAlert(view);
+        } else if (id == R.id.bt_save) {
+            validateData();
+        } else if (id == R.id.tv_dob) {
+            openBirthDatePickerDialog();
         }
     }
 

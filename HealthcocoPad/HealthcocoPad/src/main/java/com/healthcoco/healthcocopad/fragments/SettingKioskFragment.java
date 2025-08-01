@@ -134,11 +134,12 @@ public class SettingKioskFragment extends HealthCocoFragment implements GsonRequ
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-//                addPrintSettings();
-                break;
+        int id = v.getId();
+
+        if (id == R.id.container_right_action) {
+            // addPrintSettings();
         }
+
     }
 
 

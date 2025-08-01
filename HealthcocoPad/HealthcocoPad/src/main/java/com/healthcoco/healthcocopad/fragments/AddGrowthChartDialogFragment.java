@@ -134,13 +134,11 @@ public class AddGrowthChartDialogFragment extends HealthCocoDialogFragment imple
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_save:
-                validateData();
-                break;
-            case R.id.tv_date:
-                openDatePickerDialog();
-                break;
+        int id = v.getId();
+        if (id == R.id.bt_save) {
+            validateData();
+        } else if (id == R.id.tv_date) {
+            openDatePickerDialog();
         }
     }
 
@@ -258,40 +256,40 @@ public class AddGrowthChartDialogFragment extends HealthCocoDialogFragment imple
 
     @Override
     public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-            case R.id.edit_height_cm:
-                if (!Util.isNullOrBlank(s)
-                        && !Util.isNullOrBlank(editWeight.getText().toString())
-                        && !Util.isNullOrBlank(s)) {
-                    float weight = Float.parseFloat(editWeight.getText().toString());
-                    float height = Float.parseFloat(s);
-                    //BMI = weight in KG / square of (height in metre)
-                    float bmiValue = Util.calculateBMI(weight, Float.parseFloat(s) / 100);
+        int id = v.getId();
 
-                    editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
+        if (id == R.id.edit_height_cm) {
+            if (!Util.isNullOrBlank(s)
+                    && !Util.isNullOrBlank(editWeight.getText().toString())
+                    && !Util.isNullOrBlank(s)) {
+                float weight = Float.parseFloat(editWeight.getText().toString());
+                float height = Float.parseFloat(s);
+                // BMI = weight in KG / square of (height in metre)
+                float bmiValue = Util.calculateBMI(weight, height / 100f);
+                editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
 
-                    // BSA = squareroot of (weight X height / 3600)
-                    float bsaValue = Util.calculateBSA(weight, height);
-                } else {
-                    editBmi.setText("");
-                }
-                break;
-            case R.id.edit_weight_kilograms:
-                if (!Util.isNullOrBlank(s)
-                        && !Util.isNullOrBlank(editHeight.getText().toString())
-                        && !Util.isNullOrBlank(s)) {
-                    float weight = Float.parseFloat(s);
-                    float height = Float.parseFloat(editHeight.getText().toString());
-                    //BMI = weight in KG / square of (height in metre)
-                    float bmiValue = Util.calculateBMI(weight, height / 100);
-                    editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
+                // BSA = square root of (weight X height / 3600)
+                float bsaValue = Util.calculateBSA(weight, height);
+                // You may want to use bsaValue somewhere
+            } else {
+                editBmi.setText("");
+            }
+        } else if (id == R.id.edit_weight_kilograms) {
+            if (!Util.isNullOrBlank(s)
+                    && !Util.isNullOrBlank(editHeight.getText().toString())
+                    && !Util.isNullOrBlank(s)) {
+                float weight = Float.parseFloat(s);
+                float height = Float.parseFloat(editHeight.getText().toString());
+                // BMI = weight in KG / square of (height in metre)
+                float bmiValue = Util.calculateBMI(weight, height / 100f);
+                editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
 
-                    // BSA = squareroot of (weight X height / 3600)
-                    float bsaValue = Util.calculateBSA(weight, height);
-                } else {
-                    editBmi.setText("");
-                }
-                break;
+                // BSA = square root of (weight X height / 3600)
+                float bsaValue = Util.calculateBSA(weight, height);
+                // You may want to use bsaValue somewhere
+            } else {
+                editBmi.setText("");
+            }
         }
     }
 

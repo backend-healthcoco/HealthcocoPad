@@ -129,11 +129,9 @@ public class GrowthChartListFragment extends HealthCocoFragment implements View.
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fb_add_growth_chart:
-                openDialogFragment(new AddGrowthChartDialogFragment(), HealthCocoConstants.REQUEST_CODE_GROWTH_CHART_LIST);
-//                openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_GROWTH_CHART, null, null, HealthCocoConstants.REQUEST_CODE_GROWTH_CHART_LIST);
-                break;
+        if (v.getId() == R.id.fb_add_growth_chart) {
+            openDialogFragment(new AddGrowthChartDialogFragment(), HealthCocoConstants.REQUEST_CODE_GROWTH_CHART_LIST);
+            //
         }
     }
 

@@ -166,15 +166,13 @@ public class DoctorDetailsFragment extends HealthCocoFragment implements GsonReq
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_image:
-                if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getImageUrl()))
-                    mActivity.openEnlargedImageDialogFragment(doctorProfile.getImageUrl());
-                break;
-            case R.id.iv_doctor_cover_photo:
-                if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getCoverImageUrl()))
-                    mActivity.openEnlargedImageDialogFragment(doctorProfile.getCoverImageUrl());
-                break;
+        int id = v.getId();
+        if (id == R.id.iv_image) {
+            if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getImageUrl()))
+                mActivity.openEnlargedImageDialogFragment(doctorProfile.getImageUrl());
+        } else if (id == R.id.iv_doctor_cover_photo) {
+            if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getCoverImageUrl()))
+                mActivity.openEnlargedImageDialogFragment(doctorProfile.getCoverImageUrl());
         }
     }
 

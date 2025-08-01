@@ -124,12 +124,9 @@ public class SelectCategoryDialogFragment extends HealthCocoDialogFragment imple
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_save:
-                updateCategory();
-                break;
+        if (v.getId() == R.id.bt_save) {
+            updateCategory();
         }
-
     }
 
     private void updateCategory() {

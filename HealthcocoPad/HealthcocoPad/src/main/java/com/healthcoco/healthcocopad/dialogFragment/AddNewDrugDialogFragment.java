@@ -200,22 +200,18 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_save:
-                validateData();
-                break;
-            case R.id.tv_drug_duration_unit:
-                commonListDialog = openCommonListWithTitleDialogFragment(this, CommonListDialogType.DURATION, receivedDurationUnitList);
-                break;
-            case R.id.tv_drug_dosage:
-                commonListDialog = openCommonListWithTitleDialogFragment(this, CommonListDialogType.FREQUENCY, receivedFrequencyDosageList);
-                break;
-            case R.id.tv_drug_direction:
-                commonListDialog = openCommonListWithTitleDialogFragment(this, CommonListDialogType.DIRECTION, receivedDirectionsList);
-                break;
-            default:
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_save) {
+            validateData();
+        } else if (id == R.id.tv_drug_duration_unit) {
+            commonListDialog = openCommonListWithTitleDialogFragment(this, CommonListDialogType.DURATION, receivedDurationUnitList);
+        } else if (id == R.id.tv_drug_dosage) {
+            commonListDialog = openCommonListWithTitleDialogFragment(this, CommonListDialogType.FREQUENCY, receivedFrequencyDosageList);
+        } else if (id == R.id.tv_drug_direction) {
+            commonListDialog = openCommonListWithTitleDialogFragment(this, CommonListDialogType.DIRECTION, receivedDirectionsList);
         }
+
     }
 
     private void validateData() {

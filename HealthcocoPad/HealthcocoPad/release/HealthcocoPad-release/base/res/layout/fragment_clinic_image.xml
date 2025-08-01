@@ -1,0 +1,28 @@
+
+¢
+;
+android*http://schemas.android.com/apk/res/android$FrameLayout"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent"(õ„2:0ÿÿÿÿÿÿÿÿÿ"R
+*http://schemas.android.com/apk/res/androidorientationvertical"(Ä„2:0*Æ
+½ProgressBar"M
+*http://schemas.android.com/apk/res/android
+visibilitygone"(Ü„2:0"
+*http://schemas.android.com/apk/res/androidlayout_width@dimen/round_progress_bar_size"(ô„2+
+)¢‡œødimen/round_progress_bar_size0À€"‘
+*http://schemas.android.com/apk/res/androidlayout_height@dimen/round_progress_bar_size"(õ„2+
+)¢‡œødimen/round_progress_bar_size0À€"cstyle#?android:attr/progressBarStyleSmall"21
+/ù€„"android:attr/progressBarStyleSmall0ÿÿ"Š
+*http://schemas.android.com/apk/res/androidprogressDrawable@drawable/progress_loading"(¼‚„2%
+#… ødrawable/progress_loading0"q
+*http://schemas.android.com/apk/res/androidid@+id/progress_loading"(Ğ„2
+ê‰¤øid/progress_loading0"S
+*http://schemas.android.com/apk/res/androidlayout_gravitycenter"(³„2:8%*ó
+ê	ImageView"S
+*http://schemas.android.com/apk/res/androidadjustViewBoundstrue"(‚„2:@"R
+*http://schemas.android.com/apk/res/android	scaleType
+centerCrop"(‚„2:0"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent"(õ„2:0ÿÿÿÿÿÿÿÿÿ"o
+*http://schemas.android.com/apk/res/androidid@+id/iv_clinic_image"(Ğ„2
+ø†¤øid/iv_clinic_image0*$

@@ -183,14 +183,14 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_options:
-                break;
-            case R.id.fl_bt_add_rx:
-                openAddNewPrescriptionScreen();
-                break;
-            default:
-                break;
+        int id = v.getId();
+
+        if (id == R.id.bt_options) {
+            // no action
+        } else if (id == R.id.fl_bt_add_rx) {
+            openAddNewPrescriptionScreen();
+        } else {
+            // no action
         }
     }
 

@@ -218,14 +218,15 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.container_right_action:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    getBothUserUIPermissionsFromServer(true);
-                else
-                    onNetworkUnavailable(null);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.container_right_action) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                getBothUserUIPermissionsFromServer(true);
+            } else {
+                onNetworkUnavailable(null);
+            }
         }
     }
 

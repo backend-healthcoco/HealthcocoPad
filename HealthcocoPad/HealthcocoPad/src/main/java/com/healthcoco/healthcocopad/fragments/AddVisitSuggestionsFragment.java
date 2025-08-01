@@ -515,63 +515,55 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_add_new:
-                if (suggestionType != null) {
-                    switch (suggestionType) {
-                        case DRUGS:
-                            AddNewDrugDialogFragment newDrugDialogFragment = new AddNewDrugDialogFragment(this);
-                            newDrugDialogFragment.show(mActivity.getSupportFragmentManager(),
-                                    newDrugDialogFragment.getClass().getSimpleName());
-                            break;
+        int id = v.getId();
 
-                        case COMPLAINTS:
-                        case OBSERVATION:
-                        case INVESTIGATION:
-                        case DIAGNOSIS:
-                        case PRESENT_COMPLAINT:
-                        case HISTORY_OF_PRESENT_COMPLAINT:
-                        case MENSTRUAL_HISTORY:
-                        case OBSTETRIC_HISTORY:
-                        case PROVISIONAL_DIAGNOSIS:
-                        case GENERAL_EXAMINATION:
-                        case SYSTEMIC_EXAMINATION:
-                        case NOTES:
-                        case ECG_DETAILS:
-                        case ECHO:
-                        case X_RAY_DETAILS:
-                        case HOLTER:
-                        case PA:
-                        case PS:
-                        case PV:
-                        case INDICATION_OF_USG:
-                        case EARS_EXAM:
-                        case NOSE_EXAM:
-                        case ORAL_CAVITY_THROAT_EXAM:
-                        case INDIRECT_LARYGOSCOPY_EXAM:
-                        case NECK_EXAM:
-                        case PC_EARS:
-                        case PC_NOSE:
-                        case PC_ORAL_CAVITY:
-                        case PC_THROAT:
-                        case PROCEDURES:
-                        case ADVICE:
-                            openAddNewSuggestionDailogFragment();
-                            break;
-//                    case PRESENT_COMPLAINT:
-//                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DIAGNOSTIC_TESTS, AddUpdateNameDialogType.ADD_DIAGNOSTIC_TEST, this, user, null, HealthCocoConstants.RESULT_CODE_DIAGNOSTICS_TESTS);
-                        default:
-                            break;
-                    }
+        if (id == R.id.bt_add_new) {
+            if (suggestionType != null) {
+                switch (suggestionType) {
+                    case DRUGS:
+                        AddNewDrugDialogFragment newDrugDialogFragment = new AddNewDrugDialogFragment(this);
+                        newDrugDialogFragment.show(mActivity.getSupportFragmentManager(),
+                                newDrugDialogFragment.getClass().getSimpleName());
+                        break;
+
+                    case COMPLAINTS:
+                    case OBSERVATION:
+                    case INVESTIGATION:
+                    case DIAGNOSIS:
+                    case PRESENT_COMPLAINT:
+                    case HISTORY_OF_PRESENT_COMPLAINT:
+                    case MENSTRUAL_HISTORY:
+                    case OBSTETRIC_HISTORY:
+                    case PROVISIONAL_DIAGNOSIS:
+                    case GENERAL_EXAMINATION:
+                    case SYSTEMIC_EXAMINATION:
+                    case NOTES:
+                    case ECG_DETAILS:
+                    case ECHO:
+                    case X_RAY_DETAILS:
+                    case HOLTER:
+                    case PA:
+                    case PS:
+                    case PV:
+                    case INDICATION_OF_USG:
+                    case EARS_EXAM:
+                    case NOSE_EXAM:
+                    case ORAL_CAVITY_THROAT_EXAM:
+                    case INDIRECT_LARYGOSCOPY_EXAM:
+                    case NECK_EXAM:
+                    case PC_EARS:
+                    case PC_NOSE:
+                    case PC_ORAL_CAVITY:
+                    case PC_THROAT:
+                    case PROCEDURES:
+                    case ADVICE:
+                        openAddNewSuggestionDailogFragment();
+                        break;
+
+                    default:
+                        break;
                 }
-                break;
-            case R.id.bt_clear:
-                if (visitToggleStateFromPreferences) {
-                    MyScriptAddVisitsFragment myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
-                    if (myScriptAddVisitsFragment != null)
-                        myScriptAddVisitsFragment.onClearButtonClick();
-                } else clearSearchEditText();
-                break;
+            }
         }
     }
 

@@ -143,36 +143,37 @@ public class ContactUsDialogFragment extends HealthCocoDialogFragment implements
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.tv_speciality:
-                if (!Util.isNullOrEmptyList(specialitiesResponse))
-                    openListPopUp(CommonListDialogType.SPECIALITY, specialitiesResponse);
-                else
-                    getSpecialitiesList(true);
-                break;
-            case R.id.bt_get_started:
-                validateData();
-                break;
-            case R.id.bt_alreay_have_an_account:
-                openLoginDialogFragment();
-                break;
-            case R.id.bt_cancel:
-                getDialog().cancel();
-                break;
-            case R.id.tv_terms_of_service:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
-                } else Util.showToast(mActivity, R.string.user_offline);
-                break;
-            case R.id.tv_privacy_policy:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.PRIVACY_POLICY.ordinal(), 0);
-                } else Util.showToast(mActivity, R.string.user_offline);
-                break;
-            default:
-                break;
+        int id = view.getId();
+
+        if (id == R.id.tv_speciality) {
+            if (!Util.isNullOrEmptyList(specialitiesResponse))
+                openListPopUp(CommonListDialogType.SPECIALITY, specialitiesResponse);
+            else
+                getSpecialitiesList(true);
+        } else if (id == R.id.bt_get_started) {
+            validateData();
+        } else if (id == R.id.bt_alreay_have_an_account) {
+            openLoginDialogFragment();
+        } else if (id == R.id.bt_cancel) {
+            getDialog().cancel();
+        } else if (id == R.id.tv_terms_of_service) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE,
+                        WebViewFragments.TAG_WEB_VIEW_TYPE,
+                        WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
+            } else {
+                Util.showToast(mActivity, R.string.user_offline);
+            }
+        } else if (id == R.id.tv_privacy_policy) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY,
+                        WebViewFragments.TAG_WEB_VIEW_TYPE,
+                        WebViewType.PRIVACY_POLICY.ordinal(), 0);
+            } else {
+                Util.showToast(mActivity, R.string.user_offline);
+            }
         }
     }
 

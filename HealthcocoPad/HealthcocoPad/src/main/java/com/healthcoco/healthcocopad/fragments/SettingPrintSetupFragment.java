@@ -204,59 +204,56 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_edit_page_setup:
-                EditPageSetupDialogFragment editPageSetupDialogFragment = new EditPageSetupDialogFragment(this);
-                editPageSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
-                        editPageSetupDialogFragment.getClass().getSimpleName());
-                break;
-            case R.id.bt_edit_content_setup:
-                EditContentSetupDialogFragment editContentSetupDialogFragment = new EditContentSetupDialogFragment(this);
-                editContentSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
-                        editContentSetupDialogFragment.getClass().getSimpleName());
-                break;
+        if (v.getId() == R.id.bt_edit_page_setup) {
+            EditPageSetupDialogFragment editPageSetupDialogFragment = new EditPageSetupDialogFragment(this);
+            editPageSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
+                    editPageSetupDialogFragment.getClass().getSimpleName());
 
-            case R.id.bt_edit_header_setup:
-                EditHeaderSetupDialogFragment editHeaderSetupDialogFragment = new EditHeaderSetupDialogFragment(this);
-                editHeaderSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
-                        editHeaderSetupDialogFragment.getClass().getSimpleName());
-                break;
+        } else if (v.getId() == R.id.bt_edit_content_setup) {
+            EditContentSetupDialogFragment editContentSetupDialogFragment = new EditContentSetupDialogFragment(this);
+            editContentSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
+                    editContentSetupDialogFragment.getClass().getSimpleName());
 
-            case R.id.bt_edit_footer_setup:
-                EditFooterSetupDialogFragment editFooterSetupDialogFragment = new EditFooterSetupDialogFragment(this);
-                editFooterSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
-                        editFooterSetupDialogFragment.getClass().getSimpleName());
-                break;
-            case R.id.bt_edit_patient_details:
-                EditPatientDetailsSetupDialogFragment editPatientDetailsSetupDialogFragment = new EditPatientDetailsSetupDialogFragment(this);
-                editPatientDetailsSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
-                        editPatientDetailsSetupDialogFragment.getClass().getSimpleName());
-                break;
-            case R.id.bt_edit_general_notes:
-                Bundle args = new Bundle();
-                args.putString(TAG_GENERAL_NOTES, printSettings.getGeneralNotes());
-                AddEditGeneralNotesDialogFragment dialogFragment = new AddEditGeneralNotesDialogFragment();
-                dialogFragment.setArguments(args);
-                dialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_ADD_EDIT_PRINT_SETTING);
-                dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
-                break;
-            case R.id.container_right_action:
-                addPrintSettings();
-                break;
-            case R.id.iv_header_image:
-                if (printSettings != null &&
-                        printSettings.getHeaderSetup() != null &&
-                        !Util.isNullOrBlank(printSettings.getHeaderSetup().getHeaderImageUrl()))
-                    mActivity.openEnlargedImageDialogFragment(printSettings.getHeaderSetup().getHeaderImageUrl());
-                break;
-            case R.id.iv_footer_image:
-                if (printSettings != null &&
-                        printSettings.getFooterSetup() != null &&
-                        !Util.isNullOrBlank(printSettings.getFooterSetup().getFooterImageUrl()))
-                    mActivity.openEnlargedImageDialogFragment(printSettings.getFooterSetup().getFooterImageUrl());
-                break;
+        } else if (v.getId() == R.id.bt_edit_header_setup) {
+            EditHeaderSetupDialogFragment editHeaderSetupDialogFragment = new EditHeaderSetupDialogFragment(this);
+            editHeaderSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
+                    editHeaderSetupDialogFragment.getClass().getSimpleName());
+
+        } else if (v.getId() == R.id.bt_edit_footer_setup) {
+            EditFooterSetupDialogFragment editFooterSetupDialogFragment = new EditFooterSetupDialogFragment(this);
+            editFooterSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
+                    editFooterSetupDialogFragment.getClass().getSimpleName());
+
+        } else if (v.getId() == R.id.bt_edit_patient_details) {
+            EditPatientDetailsSetupDialogFragment editPatientDetailsSetupDialogFragment = new EditPatientDetailsSetupDialogFragment(this);
+            editPatientDetailsSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
+                    editPatientDetailsSetupDialogFragment.getClass().getSimpleName());
+
+        } else if (v.getId() == R.id.bt_edit_general_notes) {
+            Bundle args = new Bundle();
+            args.putString(TAG_GENERAL_NOTES, printSettings.getGeneralNotes());
+            AddEditGeneralNotesDialogFragment dialogFragment = new AddEditGeneralNotesDialogFragment();
+            dialogFragment.setArguments(args);
+            dialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_ADD_EDIT_PRINT_SETTING);
+            dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
+
+        } else if (v.getId() == R.id.container_right_action) {
+            addPrintSettings();
+
+        } else if (v.getId() == R.id.iv_header_image) {
+            if (printSettings != null &&
+                    printSettings.getHeaderSetup() != null &&
+                    !Util.isNullOrBlank(printSettings.getHeaderSetup().getHeaderImageUrl())) {
+                mActivity.openEnlargedImageDialogFragment(printSettings.getHeaderSetup().getHeaderImageUrl());
+            }
+
+        } else if (v.getId() == R.id.iv_footer_image) {
+            if (printSettings != null &&
+                    printSettings.getFooterSetup() != null &&
+                    !Util.isNullOrBlank(printSettings.getFooterSetup().getFooterImageUrl())) {
+                mActivity.openEnlargedImageDialogFragment(printSettings.getFooterSetup().getFooterImageUrl());
+            }
         }
-
     }
 
     private void addPrintSettings() {

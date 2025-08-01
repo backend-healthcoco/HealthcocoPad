@@ -44,10 +44,10 @@ public class SelectedBrandListViewHolder extends HealthcocoComonRecylcerViewHold
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_cancel_selected_brand:
-                selectedBrandListener.isBrandCancel(vaccineBrandResponse.getVaccineBrandId(), vaccineBrandResponse);
-                break;
+        int id = v.getId();
+
+        if (id == R.id.iv_cancel_selected_brand) {
+            selectedBrandListener.isBrandCancel(vaccineBrandResponse.getVaccineBrandId(), vaccineBrandResponse);
         }
     }
 }
